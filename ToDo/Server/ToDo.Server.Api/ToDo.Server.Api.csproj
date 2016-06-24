@@ -175,6 +175,11 @@
     <Compile Include="Models\Note\NoteRequestModel.cs" />
     <Compile Include="Models\Note\NoteResponseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -190,15 +195,20 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\ToDo.Models.csproj">
-      <Project>{D751CFEE-8CEF-4DBB-8DC6-5492EBB956F3}</Project>
-      <Name>ToDo.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ToDo.Data\ToDo.Data.csproj">
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\ToDo.Data\ToDo.Data.csproj">
       <Project>{c1a6da9e-07de-46c4-869f-35920d517b44}</Project>
       <Name>ToDo.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Data\ToDo.Models\ToDo.Data.Models.csproj">
+      <Project>{d751cfee-8cef-4dbb-8dc6-5492ebb956f3}</Project>
+      <Name>ToDo.Data.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

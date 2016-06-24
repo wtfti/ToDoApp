@@ -1,4 +1,4 @@
-﻿namespace ToDo.Models
+﻿namespace ToDo.Data.Models
 {
     using System;
     using System.ComponentModel.DataAnnotations;

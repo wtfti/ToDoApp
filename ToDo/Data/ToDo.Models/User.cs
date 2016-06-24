@@ -1,4 +1,4 @@
-﻿namespace ToDo.Models
+﻿namespace ToDo.Data.Models
 {
     using System.Security.Claims;
     using System.Threading.Tasks;

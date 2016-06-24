@@ -1,11 +1,11 @@
 ﻿namespace ToDo.Api
 {
     using Data;
+    using Data.Models;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using Microsoft.AspNet.Identity.Owin;
     using Microsoft.Owin;
-    using ToDo.Models;
 
     public class ApplicationUserManager : UserManager<User>
     {

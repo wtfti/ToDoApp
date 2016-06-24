@@ -4,8 +4,8 @@
     using System.Linq;
     using System.Web.Http;
     using Data;
+    using Data.Models;
     using Models.Note;
-    using ToDo.Models;
 
     [Authorize]
     public class NoteController : BaseController

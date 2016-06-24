@@ -3,12 +3,11 @@
     using System.Net.Http;
     using System.Threading.Tasks;
     using System.Web.Http;
+    using Data.Models;
     using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.Owin;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.Cookies;
     using Models.Account;
-    using ToDo.Models;
 
     public class AccountController : BaseController
     {

@@ -11,6 +11,10 @@
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        [Compare("Password", ErrorMessage = "Password and confirmation password are not same")]
+        public string ConfirmPassword { get; set; }
         //Todo fix password to create hash
 
         [Required]

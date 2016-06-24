@@ -1,27 +1,59 @@
 ﻿namespace ToDo.Api.Controllers
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
     using System.Web.Http;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.Owin;
+    using Microsoft.Owin.Security;
+    using Microsoft.Owin.Security.Cookies;
     using Models.Account;
+    using ToDo.Models;
 
-    public class AccountController : ApiController
+    public class AccountController : BaseController
     {
+        public AccountController()
+        {
+            
+        }
+
+        public AccountController(ApplicationUserManager applicationUserManager)
+            : base(applicationUserManager)
+        {
+            
+        }
+
+        private IAuthenticationManager Authentication => this.Request.GetOwinContext().Authentication;
+
         [HttpPost]
         [AllowAnonymous]
-        public IHttpActionResult Register(RegisterModel registerModel)
+        public async Task<IHttpActionResult> Register(RegisterModel registerModel)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.BadRequest();
+                return this.BadRequest(this.ModelState);
             }
 
-            return this.Ok("created brao");
-        }
+            var user = new User()
+            {
+                UserName = registerModel.Email,
+                Email = registerModel.Email
+            };
 
-        public IHttpActionResult Login()
+            IdentityResult result = await this.UserManager.CreateAsync(user, registerModel.Password);
+
+            if (!result.Succeeded)
+            {
+                return this.BadRequest("Cannot create user");
+            }
+
+            return this.Ok("Successfully create user");
+        }
+        
+        public IHttpActionResult Logout()
         {
-            return this.Ok();
+            this.Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            return Ok("Successfully logout");
         }
     }
 }

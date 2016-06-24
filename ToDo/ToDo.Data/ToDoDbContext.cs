@@ -1,5 +1,6 @@
 ﻿namespace ToDo.Data
 {
+    using System.Data.Entity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using Models;
 
@@ -15,5 +16,7 @@
         {
             return new ToDoDbContext();
         }
+
+        public virtual IDbSet<Note> Notes { get; set; }
     }
 }

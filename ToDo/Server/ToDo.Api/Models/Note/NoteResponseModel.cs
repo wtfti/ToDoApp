@@ -1,14 +1,10 @@
-﻿namespace ToDo.Models
+﻿namespace ToDo.Api.Models.Note
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class Note
+    public class NoteResponseModel
     {
-        public int Id { get; set; }
-
-        public string UserId { get; set; }
-
         [Required]
         [MinLength(3, ErrorMessage = "Title lenght must be between 3 and 30 long")]
         [MaxLength(30, ErrorMessage = "Title lenght must be between 3 and 30 long")]
@@ -20,10 +16,8 @@
         public string Content { get; set; }
 
         [Required]
-        public DateTime? CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public DateTime? ExpiredOn { get; set; }
-
-        public bool IsExpired { get; set; }
     }
 }

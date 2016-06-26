@@ -53,7 +53,7 @@
         public IHttpActionResult Logout()
         {
             this.Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-            return Ok(MessageConstants.LogoutMessage);
+            return this.Ok(MessageConstants.LogoutMessage);
         }
     }
 }

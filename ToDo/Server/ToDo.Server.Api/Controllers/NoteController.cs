@@ -4,36 +4,31 @@
     using System.Globalization;
     using System.Linq;
     using System.Web.Http;
-    using Data;
-    using Data.Models;
     using Models.Note;
     using Server.Common;
+    using Services.Data;
 
     [Authorize]
     public class NoteController : BaseController
     {
-        private readonly ToDoDbContext db;
+        private readonly INotesService notesService;
 
         public NoteController()
         {
-            this.db = new ToDoDbContext();
+            this.notesService = new NotesServices();
         }
 
         [HttpPost]
         public IHttpActionResult AddNote(NoteRequestModel note)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
             var user = this.User.Identity.Name;
 
-            var noteDb = new Note()
-            {
-                UserId = user,
-                Title = note.Title,
-                Content = note.Content,
-                CreatedOn = DateTime.Now
-            };
-
-            this.db.Notes.Add(noteDb);
-            this.db.SaveChanges();
+            this.notesService.AddNote(user, note.Title, note.Content);
 
             return this.Ok(MessageConstants.CreateNoteMessage);
         }
@@ -41,60 +36,48 @@
         [HttpPost]
         public IHttpActionResult AddNoteWithExpirationDate(NoteRequestModel note)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
             var user = this.User.Identity.Name;
 
-            var noteDb = new Note()
-            {
-                UserId = user,
-                Title = note.Title,
-                Content = note.Content,
-                CreatedOn = DateTime.Now,
-                ExpiredOn =  note.ExpiredOn
-            };
-
-            this.db.Notes.Add(noteDb);
-            this.db.SaveChanges();
+            this.notesService.AddNote(user, note.Title, note.Content, note.ExpiredOn);
 
             return this.Ok(MessageConstants.CreateNoteMessage);
         }
 
         [HttpGet]
-        public IHttpActionResult GetNotes(int page = 1, int pageSize = 10)
+        public IHttpActionResult GetNotes(int page = 1)
         {
-            var notes = this.db.Notes
-                .Where(a => a.UserId == this.User.Identity.Name)
-                .OrderBy(w => w.Id)
-                .Skip((page * pageSize) - pageSize)
-                .Take(10)
+            var dbNotes = this.notesService
+                .GetNotes(this.User.Identity.Name, page)
                 .Select(NoteResponseModel.FromModel);
 
-            return this.Ok(notes);
+            return this.Ok(dbNotes);
         }
 
         [HttpGet]
-        public IHttpActionResult GetNotesWithExpirateDate(int page = 1, int pageSize = 10)
+        public IHttpActionResult GetNotesWithExpirateDate(int page = 1)
         {
-            var notes = this.db.Notes
-                .Where(a => a.UserId == this.User.Identity.Name && a.ExpiredOn != null)
-                .OrderBy(w => w.Id)
-                .Skip((page * pageSize) - pageSize)
-                .Take(10)
+            var dbNotes = this.notesService
+                .GetNotesWithExpiredDate(this.User.Identity.Name, page)
                 .Select(NoteResponseModel.FromModel);
 
-            return this.Ok(notes);
+            return this.Ok(dbNotes);
         }
 
         [HttpDelete]
         public IHttpActionResult RemoveNoteById(int id)
         {
-            var note = this.db.Notes.FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
             }
 
-            this.db.Notes.Remove(note);
-            this.db.SaveChanges();
+            this.notesService.RemoveNoteById(note);
 
             return this.Ok(MessageConstants.RemoveNoteMessage);
         }
@@ -102,14 +85,13 @@
         [HttpPut]
         public IHttpActionResult ChangeNoteTitle(int id, string newValue)
         {
-            var note = this.db.Notes.FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
             }
 
-            note.Title = newValue;
-            this.db.SaveChanges();
+            this.notesService.ChangeNoteTitle(note, newValue);
 
             return this.Ok(MessageConstants.TitleChangeMessage);
         }
@@ -117,14 +99,13 @@
         [HttpPut]
         public IHttpActionResult ChangeNoteContent(int id, string newValue)
         {
-            var note = this.db.Notes.FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
             }
 
-            note.Content = newValue;
-            this.db.SaveChanges();
+            this.notesService.ChangeNoteContent(note, newValue);
 
             return this.Ok(MessageConstants.ContextChangeMessage);
         }
@@ -132,7 +113,7 @@
         [HttpPut]
         public IHttpActionResult SetNoteExpireDate(int id, string date)
         {
-            var note = this.db.Notes.FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
@@ -146,8 +127,7 @@
                 return this.BadRequest(MessageConstants.InvalidDateMessage);
             }
 
-            note.ExpiredOn = parsedDate;
-            this.db.SaveChanges();
+            this.notesService.ChangeNoteExpireDate(note, parsedDate);
 
             return this.Ok(MessageConstants.SetDateMessage);
         }
@@ -155,7 +135,7 @@
         [HttpPut]
         public IHttpActionResult ChangeExpireDate(int id, string date)
         {
-            var note = this.db.Notes.FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
@@ -169,8 +149,7 @@
                 return this.BadRequest(MessageConstants.InvalidDateMessage);
             }
 
-            note.ExpiredOn = parsedDate;
-            this.db.SaveChanges();
+            this.notesService.ChangeNoteExpireDate(note, parsedDate);
 
             return this.Ok(MessageConstants.ChangeDateMessage);
         }

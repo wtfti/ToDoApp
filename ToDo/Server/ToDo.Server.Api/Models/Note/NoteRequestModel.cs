@@ -16,9 +16,9 @@
         [MaxLength(ValidationConstants.ContentMaxLenght)]
         public string Content { get; set; }
 
-        [Required]
         public DateTime CreatedOn { get; set; }
 
+        [DisplayFormat(DataFormatString = ValidationConstants.ExpireDateFormat, ApplyFormatInEditMode = true)]
         public DateTime ExpiredOn { get; set; }
     }
 }

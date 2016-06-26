@@ -202,6 +202,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Data\ToDo.Data.Common\ToDo.Data.Common.csproj">
+      <Project>{0f58fb47-55ca-4201-80f8-1dd358a83fc7}</Project>
+      <Name>ToDo.Data.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Data\ToDo.Data\ToDo.Data.csproj">
       <Project>{c1a6da9e-07de-46c4-869f-35920d517b44}</Project>
       <Name>ToDo.Data</Name>
@@ -209,6 +213,10 @@
     <ProjectReference Include="..\..\Data\ToDo.Models\ToDo.Data.Models.csproj">
       <Project>{d751cfee-8cef-4dbb-8dc6-5492ebb956f3}</Project>
       <Name>ToDo.Data.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Services\ToDo.Services.Data\ToDo.Services.Data.csproj">
+      <Project>{4ce52b47-a922-41e1-8a2b-d694da886406}</Project>
+      <Name>ToDo.Services.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\ToDo.Server.Common\ToDo.Server.Common.csproj">
       <Project>{28b086d0-abbb-46b4-bc4c-09951c60fe3e}</Project>

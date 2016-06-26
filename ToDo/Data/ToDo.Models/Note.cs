@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using Server.Common;
 
     public class Note
     {
@@ -10,13 +11,13 @@
         public string UserId { get; set; }
 
         [Required]
-        [MinLength(3, ErrorMessage = "Title lenght must be between 3 and 30 long")]
-        [MaxLength(30, ErrorMessage = "Title lenght must be between 3 and 30 long")]
+        [MinLength(ValidationConstants.TitleMinLenght)]
+        [MaxLength(ValidationConstants.TitleMaxLenght)]
         public string Title { get; set; }
 
         [Required]
-        [MinLength(1, ErrorMessage = "Content of note must be between 1 and 100 long")]
-        [MaxLength(100, ErrorMessage = "Content of note must be between 1 and 100 long")]
+        [MinLength(ValidationConstants.ContentMinLenght)]
+        [MaxLength(ValidationConstants.ContentMaxLenght)]
         public string Content { get; set; }
 
         [Required]

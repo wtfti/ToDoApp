@@ -2,17 +2,37 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq.Expressions;
+    using Data.Models;
+    using Server.Common;
 
     public class NoteResponseModel
     {
+        public static Expression<Func<Note, NoteResponseModel>> FromModel
+        {
+            get
+            {
+                return x => new NoteResponseModel()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Content = x.Content,
+                    CreatedOn = x.CreatedOn.Value,
+                    ExpiredOn = x.ExpiredOn
+                };
+            }
+        }
+
+        public int Id { get; set; }
+
         [Required]
-        [MinLength(3, ErrorMessage = "Title lenght must be between 3 and 30 long")]
-        [MaxLength(30, ErrorMessage = "Title lenght must be between 3 and 30 long")]
+        [MinLength(ValidationConstants.TitleMinLenght)]
+        [MaxLength(ValidationConstants.TitleMaxLenght)]
         public string Title { get; set; }
 
         [Required]
-        [MinLength(1, ErrorMessage = "Content of note must be between 1 and 100 long")]
-        [MaxLength(100, ErrorMessage = "Content of note must be between 1 and 100 long")]
+        [MinLength(ValidationConstants.ContentMinLenght)]
+        [MaxLength(ValidationConstants.ContentMaxLenght)]
         public string Content { get; set; }
 
         [Required]

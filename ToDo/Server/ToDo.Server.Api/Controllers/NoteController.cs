@@ -1,11 +1,13 @@
 ﻿namespace ToDo.Api.Controllers
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Http;
     using Data;
     using Data.Models;
     using Models.Note;
+    using Server.Common;
 
     [Authorize]
     public class NoteController : BaseController
@@ -33,7 +35,7 @@
             this.db.Notes.Add(noteDb);
             this.db.SaveChanges();
 
-            return this.Ok("Created note");
+            return this.Ok(MessageConstants.CreateNoteMessage);
         }
 
         [HttpPost]
@@ -53,7 +55,7 @@
             this.db.Notes.Add(noteDb);
             this.db.SaveChanges();
 
-            return this.Ok("Created note");
+            return this.Ok(MessageConstants.CreateNoteMessage);
         }
 
         [HttpGet]
@@ -64,13 +66,7 @@
                 .OrderBy(w => w.Id)
                 .Skip((page * pageSize) - pageSize)
                 .Take(10)
-                .Select(b => new NoteResponseModel()
-                {
-                    Title = b.Title,
-                    Content = b.Content,
-                    CreatedOn = b.CreatedOn.Value,
-                    ExpiredOn = b.ExpiredOn
-                });
+                .Select(NoteResponseModel.FromModel);
 
             return this.Ok(notes);
         }
@@ -83,15 +79,100 @@
                 .OrderBy(w => w.Id)
                 .Skip((page * pageSize) - pageSize)
                 .Take(10)
-                .Select(b => new NoteResponseModel()
-                {
-                    Title = b.Title,
-                    Content = b.Content,
-                    CreatedOn = b.CreatedOn.Value,
-                    ExpiredOn = b.ExpiredOn
-                });
+                .Select(NoteResponseModel.FromModel);
 
             return this.Ok(notes);
+        }
+
+        [HttpDelete]
+        public IHttpActionResult RemoveNoteById(int id)
+        {
+            var note = this.db.Notes.FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            if (note == null)
+            {
+                return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
+            }
+
+            this.db.Notes.Remove(note);
+            this.db.SaveChanges();
+
+            return this.Ok(MessageConstants.RemoveNoteMessage);
+        }
+
+        [HttpPut]
+        public IHttpActionResult ChangeNoteTitle(int id, string newValue)
+        {
+            var note = this.db.Notes.FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            if (note == null)
+            {
+                return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
+            }
+
+            note.Title = newValue;
+            this.db.SaveChanges();
+
+            return this.Ok(MessageConstants.TitleChangeMessage);
+        }
+
+        [HttpPut]
+        public IHttpActionResult ChangeNoteContent(int id, string newValue)
+        {
+            var note = this.db.Notes.FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            if (note == null)
+            {
+                return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
+            }
+
+            note.Content = newValue;
+            this.db.SaveChanges();
+
+            return this.Ok(MessageConstants.ContextChangeMessage);
+        }
+
+        [HttpPut]
+        public IHttpActionResult SetNoteExpireDate(int id, string date)
+        {
+            var note = this.db.Notes.FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            if (note == null)
+            {
+                return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
+            }
+
+            DateTime parsedDate;
+
+            if (!DateTime.TryParseExact(date, ValidationConstants.ExpireDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None,
+                out parsedDate))
+            {
+                return this.BadRequest(MessageConstants.InvalidDateMessage);
+            }
+
+            note.ExpiredOn = parsedDate;
+            this.db.SaveChanges();
+
+            return this.Ok(MessageConstants.SetDateMessage);
+        }
+
+        [HttpPut]
+        public IHttpActionResult ChangeExpireDate(int id, string date)
+        {
+            var note = this.db.Notes.FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            if (note == null)
+            {
+                return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
+            }
+
+            DateTime parsedDate;
+
+            if (!DateTime.TryParseExact(date, ValidationConstants.ExpireDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None,
+                out parsedDate))
+            {
+                return this.BadRequest(MessageConstants.InvalidDateMessage);
+            }
+
+            note.ExpiredOn = parsedDate;
+            this.db.SaveChanges();
+
+            return this.Ok(MessageConstants.ChangeDateMessage);
         }
     }
 }

@@ -210,6 +210,10 @@
       <Project>{d751cfee-8cef-4dbb-8dc6-5492ebb956f3}</Project>
       <Name>ToDo.Data.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ToDo.Server.Common\ToDo.Server.Common.csproj">
+      <Project>{28b086d0-abbb-46b4-bc4c-09951c60fe3e}</Project>
+      <Name>ToDo.Server.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

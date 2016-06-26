@@ -8,6 +8,7 @@
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.Cookies;
     using Models.Account;
+    using Server.Common;
 
     public class AccountController : BaseController
     {
@@ -43,16 +44,16 @@
 
             if (!result.Succeeded)
             {
-                return this.BadRequest("Cannot create user");
+                return this.BadRequest(MessageConstants.UserIsNotAddInDbMessage);
             }
 
-            return this.Ok("Successfully create user");
+            return this.Ok(MessageConstants.CreateUserMessage);
         }
         
         public IHttpActionResult Logout()
         {
             this.Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-            return Ok("Successfully logout");
+            return Ok(MessageConstants.LogoutMessage);
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿namespace ToDo.Services.Data
+﻿namespace ToDo.Services.Data.Contracts
 {
     using System;
     using System.Linq;
-    using Server.Common;
+    using Server.Common.Constants;
     using ToDo.Data.Models;
 
     public interface INotesService

@@ -8,7 +8,7 @@
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.Cookies;
     using Models.Account;
-    using Server.Common;
+    using Server.Common.Constants;
 
     public class AccountController : BaseController
     {

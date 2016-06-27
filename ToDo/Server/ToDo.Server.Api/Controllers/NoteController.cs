@@ -5,27 +5,24 @@
     using System.Linq;
     using System.Web.Http;
     using Models.Note;
-    using Server.Common;
-    using Services.Data;
+    using Server.Common.Constants;
+    using Services.Data.Contracts;
+    using Validation;
 
     [Authorize]
     public class NoteController : BaseController
     {
         private readonly INotesService notesService;
 
-        public NoteController()
+        public NoteController(INotesService service)
         {
-            this.notesService = new NotesServices();
+            this.notesService = service;
         }
 
         [HttpPost]
+        [ValidateModel]
         public IHttpActionResult AddNote(NoteRequestModel note)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(this.ModelState);
-            }
-
             var user = this.User.Identity.Name;
 
             this.notesService.AddNote(user, note.Title, note.Content);
@@ -34,13 +31,9 @@
         }
 
         [HttpPost]
+        [ValidateModel]
         public IHttpActionResult AddNoteWithExpirationDate(NoteRequestModel note)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(this.ModelState);
-            }
-
             var user = this.User.Identity.Name;
 
             this.notesService.AddNote(user, note.Title, note.Content, note.ExpiredOn);

@@ -1,7 +1,7 @@
 ﻿namespace ToDo.Api.Models.Account
 {
     using System.ComponentModel.DataAnnotations;
-    using Server.Common;
+    using Server.Common.Constants;
 
     public class RegisterModel
     {

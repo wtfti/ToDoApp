@@ -2,18 +2,18 @@
 {
     using System;
     using System.Linq;
-    using Server.Common;
-    using ToDo.Data;
-    using ToDo.Data.Common;
+    using Contracts;
+    using Server.Common.Constants;
+    using ToDo.Data.Common.Contracts;
     using ToDo.Data.Models;
 
-    public class NotesServices : INotesService
+    public class NotesService : INotesService
     {
         private readonly IRepository<Note> data;
 
-        public NotesServices()
+        public NotesService(IRepository<Note> noteRepository)
         {
-            this.data = new EfGenericRepository<Note>(new ToDoDbContext());
+            this.data = noteRepository;
         }
 
         public IQueryable<Note> All()

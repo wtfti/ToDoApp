@@ -2,7 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using Server.Common;
+    using Server.Common.Constants;
 
     public class Note
     {

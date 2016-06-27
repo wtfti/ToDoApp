@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq.Expressions;
     using Data.Models;
-    using Server.Common;
+    using Server.Common.Constants;
 
     public class NoteResponseModel
     {

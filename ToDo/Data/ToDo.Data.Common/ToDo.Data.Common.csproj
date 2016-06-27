@@ -49,13 +49,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\IToDoDbContext.cs" />
     <Compile Include="EfGenericRepository.cs" />
-    <Compile Include="IRepository.cs" />
+    <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ToDo.Models\ToDo.Data.Models.csproj">
+      <Project>{d751cfee-8cef-4dbb-8dc6-5492ebb956f3}</Project>
+      <Name>ToDo.Data.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

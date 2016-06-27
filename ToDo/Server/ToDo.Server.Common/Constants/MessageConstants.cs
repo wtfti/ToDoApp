@@ -1,4 +1,4 @@
-﻿namespace ToDo.Server.Common
+﻿namespace ToDo.Server.Common.Constants
 {
     public static class MessageConstants
     {
@@ -13,5 +13,6 @@
         public const string CreateUserMessage = "Successfully created user!";
         public const string LogoutMessage = "Logout successful!";
         public const string UserIsNotAddInDbMessage = "Error while creating user!";
+        public const string EmptyRequest = "Request cannot be empty";
     }
 }

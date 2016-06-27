@@ -1,4 +1,4 @@
-﻿namespace ToDo.Data.Common
+﻿namespace ToDo.Data.Common.Contracts
 {
     using System;
     using System.Linq;

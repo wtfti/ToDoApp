@@ -2,7 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using Server.Common;
+    using Server.Common.Constants;
 
     public class NoteRequestModel
     {
@@ -16,9 +16,6 @@
         [MaxLength(ValidationConstants.ContentMaxLenght)]
         public string Content { get; set; }
 
-        public DateTime CreatedOn { get; set; }
-
-        [DisplayFormat(DataFormatString = ValidationConstants.ExpireDateFormat, ApplyFormatInEditMode = true)]
-        public DateTime ExpiredOn { get; set; }
+        public DateTime? ExpiredOn { get; set; }
     }
 }

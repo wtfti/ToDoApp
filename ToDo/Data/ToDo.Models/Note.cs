@@ -21,7 +21,7 @@
         public string Content { get; set; }
 
         [Required]
-        public DateTime? CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public DateTime? ExpiredOn { get; set; }
 

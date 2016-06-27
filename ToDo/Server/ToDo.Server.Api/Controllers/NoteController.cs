@@ -4,6 +4,9 @@
     using System.Globalization;
     using System.Linq;
     using System.Web.Http;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using Data.Models;
     using Models.Note;
     using Server.Common.Constants;
     using Services.Data.Contracts;
@@ -46,7 +49,7 @@
         {
             var dbNotes = this.notesService
                 .GetNotes(this.User.Identity.Name, page)
-                .Select(NoteResponseModel.FromModel);
+                .ProjectTo<NoteResponseModel>();
 
             return this.Ok(dbNotes);
         }
@@ -56,7 +59,7 @@
         {
             var dbNotes = this.notesService
                 .GetNotesWithExpiredDate(this.User.Identity.Name, page)
-                .Select(NoteResponseModel.FromModel);
+                .ProjectTo<NoteResponseModel>();
 
             return this.Ok(dbNotes);
         }

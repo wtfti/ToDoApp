@@ -2,27 +2,12 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq.Expressions;
     using Data.Models;
+    using Infrastructure.Mapping;
     using Server.Common.Constants;
 
-    public class NoteResponseModel
+    public class NoteResponseModel : IMapFrom<Note>
     {
-        public static Expression<Func<Note, NoteResponseModel>> FromModel
-        {
-            get
-            {
-                return x => new NoteResponseModel()
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    Content = x.Content,
-                    CreatedOn = x.CreatedOn.Value,
-                    ExpiredOn = x.ExpiredOn
-                };
-            }
-        }
-
         public int Id { get; set; }
 
         [Required]
@@ -38,5 +23,7 @@
         public DateTime CreatedOn { get; set; }
 
         public DateTime? ExpiredOn { get; set; }
+
+        public bool IsExpired { get; set; }
     }
 }

@@ -13,11 +13,11 @@
 
         }
 
+        public virtual IDbSet<Note> Notes { get; set; }
+
         public static ToDoDbContext Create()
         {
             return new ToDoDbContext();
         }
-
-        public IDbSet<Note> Notes { get; set; }
     }
 }

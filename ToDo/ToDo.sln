@@ -31,6 +31,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{68
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Services.Data", "Services\ToDo.Services.Data\ToDo.Services.Data.csproj", "{4CE52B47-A922-41E1-8A2B-D694DA886406}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{31C65F91-089F-4C5E-AA62-F7010F0179D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Tests.Api", "Tests\ToDo.Tests.Api\ToDo.Tests.Api.csproj", "{BE0DC342-C417-46C5-BD1E-0C22BF86F7BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +65,10 @@ Global
 		{4CE52B47-A922-41E1-8A2B-D694DA886406}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CE52B47-A922-41E1-8A2B-D694DA886406}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CE52B47-A922-41E1-8A2B-D694DA886406}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE0DC342-C417-46C5-BD1E-0C22BF86F7BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE0DC342-C417-46C5-BD1E-0C22BF86F7BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE0DC342-C417-46C5-BD1E-0C22BF86F7BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE0DC342-C417-46C5-BD1E-0C22BF86F7BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,5 +85,6 @@ Global
 		{5CD17CD2-0E3D-42CE-8CC5-770B95DA19BE} = {4B06B778-D2A2-4B4D-B62E-A88206BAF330}
 		{0F58FB47-55CA-4201-80F8-1DD358A83FC7} = {5CD17CD2-0E3D-42CE-8CC5-770B95DA19BE}
 		{4CE52B47-A922-41E1-8A2B-D694DA886406} = {6851D831-EF31-4EAF-8D33-FFBF0FAA194A}
+		{BE0DC342-C417-46C5-BD1E-0C22BF86F7BA} = {31C65F91-089F-4C5E-AA62-F7010F0179D7}
 	EndGlobalSection
 EndGlobal

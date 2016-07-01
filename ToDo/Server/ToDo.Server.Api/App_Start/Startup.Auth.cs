@@ -34,6 +34,7 @@
                 Provider = new ApplicationOAuthProvider(PublicClientId),
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(10),
+
                 // In production mode set AllowInsecureHttp = false
                 AllowInsecureHttp = true
             };

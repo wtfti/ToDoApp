@@ -1,17 +1,14 @@
 ﻿namespace ToDo.Tests.Api.ControllerTests
 {
-    using System;
     using System.Linq;
-    using System.Net.Http;
     using System.Reflection;
-    using Data.Models;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using MyTested.WebApi;
     using Server.Common.Constants;
     using ToDo.Api;
     using ToDo.Api.Controllers;
-    using ToDo.Api.Models.Note;
     using ToDo.Api.Infrastructure.Validation;
+    using ToDo.Api.Models.Note;
 
     [TestClass]
     public class NoteControllerTests

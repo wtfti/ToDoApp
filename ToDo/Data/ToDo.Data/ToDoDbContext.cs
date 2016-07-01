@@ -10,7 +10,6 @@
         public ToDoDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-
         }
 
         public virtual IDbSet<Note> Notes { get; set; }

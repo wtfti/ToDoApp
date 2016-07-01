@@ -1,8 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace ToDo.Tests.Api.RouteTests
+﻿namespace ToDo.Tests.Api.RouteTests
 {
     using System.Net.Http;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using MyTested.WebApi;
     using ToDo.Api;
     using ToDo.Api.Controllers;

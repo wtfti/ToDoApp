@@ -43,7 +43,6 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IHttpActionResult GetNotes(int page = 1)
         {
             var dbNotes = this.notesService
@@ -116,7 +115,11 @@
 
             DateTime parsedDate;
 
-            if (!DateTime.TryParseExact(date, ValidationConstants.ExpireDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None,
+            if (!DateTime.TryParseExact(
+                date, 
+                ValidationConstants.ExpireDateFormat, 
+                CultureInfo.InvariantCulture, 
+                DateTimeStyles.None,
                 out parsedDate))
             {
                 return this.BadRequest(MessageConstants.InvalidDateMessage);
@@ -138,7 +141,11 @@
 
             DateTime parsedDate;
 
-            if (!DateTime.TryParseExact(date, ValidationConstants.ExpireDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None,
+            if (!DateTime.TryParseExact(
+                date, 
+                ValidationConstants.ExpireDateFormat, 
+                CultureInfo.InvariantCulture, 
+                DateTimeStyles.None,
                 out parsedDate))
             {
                 return this.BadRequest(MessageConstants.InvalidDateMessage);

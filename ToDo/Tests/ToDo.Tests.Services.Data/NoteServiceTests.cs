@@ -10,14 +10,14 @@
     [TestClass]
     public class NoteServiceTests
     {
+        private static int notesCount = 100;
         private INotesService service;
         private InMemoryRepository<Note> noteRepository;
-        private static int NotesCount = 100;
 
         [TestInitialize]
         public void Initialize()
         {
-            this.noteRepository = DepedencyObjectFactory.GetNoteRepository(NotesCount);
+            this.noteRepository = DepedencyObjectFactory.GetNoteRepository(notesCount);
             this.service = new NotesService(this.noteRepository);
         }
 
@@ -26,7 +26,7 @@
         {
             var result = this.service.All();
 
-            Assert.AreEqual(NotesCount, result.Count());
+            Assert.AreEqual(notesCount, result.Count());
             Assert.IsNotNull(result.ToList()[1]);
         }
 
@@ -45,7 +45,7 @@
 
             this.service.RemoveNoteById(note);
 
-            Assert.AreEqual(NotesCount - 1, this.service.All().ToList().Count);
+            Assert.AreEqual(notesCount - 1, this.service.All().ToList().Count);
             Assert.AreEqual(2, this.service.All().ToList()[0].Id);
             Assert.AreEqual(1, this.noteRepository.SaveChanges());
         }
@@ -104,7 +104,7 @@
 
             for (int i = 0; i < 20; i++)
             {
-                this.service.AddNote(user, String.Empty, String.Empty);
+                this.service.AddNote(user, string.Empty, string.Empty);
             }
 
             var firstPageResult = this.service.GetNotes(user, 1);
@@ -140,7 +140,7 @@
 
             for (int i = 0; i < 20; i++)
             {
-                this.service.AddNote(user, String.Empty, String.Empty, date);
+                this.service.AddNote(user, string.Empty, string.Empty, date);
             }
 
             var firstPageResult = this.service.GetNotes(user, 1);
@@ -165,7 +165,7 @@
 
             this.service.AddNote(user, title, content);
 
-            Assert.AreEqual(NotesCount + 1, this.service.All().Count());
+            Assert.AreEqual(notesCount + 1, this.service.All().Count());
             Assert.AreEqual(user, this.noteRepository.All().Last().UserId);
             Assert.AreEqual(1, this.noteRepository.NumberOfSaves);
         }
@@ -173,7 +173,6 @@
         [TestMethod]
         public void AddNoteWithExpireDateShouldReturnCorrectResult()
         {
-
             string user = "username";
             string title = "username title";
             string content = "some test content";
@@ -181,7 +180,7 @@
 
             this.service.AddNote(user, title, content, expire);
 
-            Assert.AreEqual(NotesCount + 1, this.service.All().Count());
+            Assert.AreEqual(notesCount + 1, this.service.All().Count());
             Assert.AreEqual(user, this.noteRepository.All().Last().UserId);
             Assert.AreEqual(1, this.noteRepository.NumberOfSaves);
             Assert.AreEqual(expire, this.service.All().Last().ExpiredOn);

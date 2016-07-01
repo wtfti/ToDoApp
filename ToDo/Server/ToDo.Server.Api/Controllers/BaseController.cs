@@ -10,7 +10,6 @@
 
         protected BaseController()
         {
-            
         }
 
         protected BaseController(ApplicationUserManager applicationUserManager)
@@ -18,18 +17,17 @@
             this.UserManager = applicationUserManager;
         }
 
-
         public ApplicationUserManager UserManager
         {
             get
             {
                 return this.userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
+
             private set
             {
                 this.userManager = value;
             }
         }
-
     }
 }

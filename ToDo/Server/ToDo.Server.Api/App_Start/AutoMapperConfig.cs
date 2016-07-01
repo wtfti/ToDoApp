@@ -44,8 +44,8 @@
 
         // Uncomment if you want automapper to map custom mappings
         // Create interface ICustomMappings and implement it on every model which you need
-        //private static void LoadCustomMappings(IEnumerable<Type> types)
-        //{
+        // private static void LoadCustomMappings(IEnumerable<Type> types)
+        // {
         //    var maps =
         //        types.SelectMany(t => t.GetInterfaces(), (t, i) => new { t, i })
         //            .Where(
@@ -54,10 +54,10 @@
         //                    !type.t.IsInterface)
         //            .Select(type => (IHaveCustomMappings)Activator.CreateInstance(type.t));
 
-        //    foreach (var map in maps)
+        ////    foreach (var map in maps)
         //    {
         //        map.Initialize(a => a.CreateMap(Mapper.Configuration));
         //    }
-        //}
+        // }
     }
 }

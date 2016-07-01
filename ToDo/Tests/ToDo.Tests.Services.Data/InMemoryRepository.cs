@@ -1,5 +1,4 @@
-﻿
-namespace ToDo.Tests.Services.Data
+﻿namespace ToDo.Tests.Services.Data
 {
     using System;
     using System.Collections.Generic;
@@ -86,7 +85,7 @@ namespace ToDo.Tests.Services.Data
 
         public int SaveChanges()
         {
-            return this.NumberOfSaves++; ;
+            return this.NumberOfSaves++;
         }
 
         public void Update(T entity)

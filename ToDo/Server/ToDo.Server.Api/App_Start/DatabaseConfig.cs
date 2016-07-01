@@ -9,7 +9,6 @@
         public static void Initialize()
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ToDoDbContext, Configuration>());
-           // ToDoDbContext.Create().Database.Initialize(true);
         }
     }
 }

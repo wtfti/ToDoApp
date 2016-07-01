@@ -52,7 +52,7 @@
             var notes = this.data.All()
                 .Where(a => a.UserId == currentUser)
                 .OrderBy(w => w.Id)
-                .Skip((page*pageSize) - pageSize)
+                .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);
 
             return notes;

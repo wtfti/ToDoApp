@@ -14,13 +14,11 @@
     {
         public AccountController()
         {
-            
         }
 
         public AccountController(ApplicationUserManager applicationUserManager)
             : base(applicationUserManager)
         {
-            
         }
 
         private IAuthenticationManager Authentication => this.Request.GetOwinContext().Authentication;

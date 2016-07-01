@@ -1,14 +1,15 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ToDo.Tests.Api")]
+[assembly: AssemblyTitle("ToDo.Tests.Services.Data")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ToDo.Tests.Api")]
+[assembly: AssemblyProduct("ToDo.Tests.Services.Data")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("be0dc342-c417-46c5-bd1e-0c22bf86f7ba")]
+[assembly: Guid("9c5e67b2-6509-4200-8759-d494e2631a15")]
 
 // Version information for an assembly consists of the following four values:
 //

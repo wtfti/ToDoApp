@@ -4,13 +4,11 @@
     using System.Globalization;
     using System.Linq;
     using System.Web.Http;
-    using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using Data.Models;
+    using Infrastructure.Validation;
     using Models.Note;
     using Server.Common.Constants;
     using Services.Data.Contracts;
-    using Validation;
 
     [Authorize]
     public class NoteController : BaseController
@@ -45,6 +43,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IHttpActionResult GetNotes(int page = 1)
         {
             var dbNotes = this.notesService

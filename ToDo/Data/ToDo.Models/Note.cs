@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using Server.Common.Constants;
 
-    public class Note
+    public class Note : IEquatable<Note>
     {
         public int Id { get; set; }
 
@@ -26,5 +26,10 @@
         public DateTime? ExpiredOn { get; set; }
 
         public bool IsExpired { get; set; }
+
+        public bool Equals(Note other)
+        {
+            return this.Id == other.Id;
+        }
     }
 }

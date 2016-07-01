@@ -1,4 +1,4 @@
-﻿namespace ToDo.Api.Validation
+﻿namespace ToDo.Api.Infrastructure.Validation
 {
     using System;
     using System.Linq;
@@ -26,9 +26,7 @@
                     .First()
                     .Errors
                     .First()
-                    .Exception
-                    .Message;
-
+                    .ErrorMessage;
 
                 actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, error);
             }

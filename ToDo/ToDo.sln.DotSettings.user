@@ -3,4 +3,5 @@
   &lt;Assembly Path="E:\SoftUni-ToDoApp\ToDo\Server\ToDo.Api\Bin\Owin.dll" /&gt;&#xD;
   &lt;Assembly Path="E:\SoftUni-ToDoApp\ToDo\Server\ToDo.Api\Bin\Microsoft.Owin.dll" /&gt;&#xD;
   &lt;Assembly Path="E:\SoftUni-ToDoApp\ToDo\Server\ToDo.Server.Api\Bin\Ninject.Web.WebApi.dll" /&gt;&#xD;
+  &lt;Assembly Path="E:\SoftUni-ToDoApp\ToDo\packages\Moq.4.5.10\lib\net45\Moq.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

@@ -206,6 +206,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Mapping\IMapFrom.cs" />
+    <Compile Include="Infrastructure\Validation\ValidateModelAttribute.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Note\NoteRequestModel.cs" />
     <Compile Include="Models\Note\NoteResponseModel.cs" />
@@ -217,7 +218,6 @@
     </Compile>
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Validation\ValidateModelAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

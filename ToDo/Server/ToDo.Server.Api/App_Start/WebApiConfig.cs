@@ -14,8 +14,7 @@ namespace ToDo.Api
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{action}/{id}",
-                defaults: new { action = "Default", id = RouteParameter.Optional }
-                //TODO fix action name
+                defaults: new { id = RouteParameter.Optional }
             );
         }
     }

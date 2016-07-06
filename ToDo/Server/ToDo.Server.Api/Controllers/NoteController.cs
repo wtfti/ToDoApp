@@ -28,18 +28,19 @@
 
             this.notesService.AddNote(user, note.Title, note.Content);
 
-            return this.Ok(MessageConstants.CreateNoteMessage);
+            return this.Ok(MessageConstants.CreateNote);
         }
 
         [HttpPost]
         [ValidateModel]
         public IHttpActionResult AddNoteWithExpirationDate(NoteRequestModel note)
         {
+            // TODO DateTime binding bug
             var user = this.User.Identity.Name;
 
             this.notesService.AddNote(user, note.Title, note.Content, note.ExpiredOn);
 
-            return this.Ok(MessageConstants.CreateNoteMessage);
+            return this.Ok(MessageConstants.CreateNote);
         }
 
         [HttpGet]
@@ -68,12 +69,12 @@
             var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
             if (note == null)
             {
-                return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
+                return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
             this.notesService.RemoveNoteById(note);
 
-            return this.Ok(MessageConstants.RemoveNoteMessage);
+            return this.Ok(MessageConstants.RemoveNote);
         }
 
         [HttpPut]
@@ -82,12 +83,12 @@
             var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
             if (note == null)
             {
-                return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
+                return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
             this.notesService.ChangeNoteTitle(note, newValue);
 
-            return this.Ok(MessageConstants.TitleChangeMessage);
+            return this.Ok(MessageConstants.TitleChange);
         }
 
         [HttpPut]
@@ -96,12 +97,12 @@
             var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
             if (note == null)
             {
-                return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
+                return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
             this.notesService.ChangeNoteContent(note, newValue);
 
-            return this.Ok(MessageConstants.ContextChangeMessage);
+            return this.Ok(MessageConstants.ContextChange);
         }
 
         [HttpPut]
@@ -110,7 +111,7 @@
             var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
             if (note == null)
             {
-                return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
+                return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
             DateTime parsedDate;
@@ -122,12 +123,12 @@
                 DateTimeStyles.None,
                 out parsedDate))
             {
-                return this.BadRequest(MessageConstants.InvalidDateMessage);
+                return this.BadRequest(MessageConstants.InvalidDate);
             }
 
             this.notesService.ChangeNoteExpireDate(note, parsedDate);
 
-            return this.Ok(MessageConstants.SetDateMessage);
+            return this.Ok(MessageConstants.SetDate);
         }
 
         [HttpPut]
@@ -136,7 +137,7 @@
             var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
             if (note == null)
             {
-                return this.BadRequest(MessageConstants.NoteDoesNotExistsMessage);
+                return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
             DateTime parsedDate;
@@ -148,12 +149,12 @@
                 DateTimeStyles.None,
                 out parsedDate))
             {
-                return this.BadRequest(MessageConstants.InvalidDateMessage);
+                return this.BadRequest(MessageConstants.InvalidDate);
             }
 
             this.notesService.ChangeNoteExpireDate(note, parsedDate);
 
-            return this.Ok(MessageConstants.ChangeDateMessage);
+            return this.Ok(MessageConstants.ChangeDate);
         }
     }
 }

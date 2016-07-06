@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using System.Web.Http;
     using Data.Models;
+    using Infrastructure.Validation;
     using Microsoft.AspNet.Identity;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.Cookies;
@@ -24,14 +25,10 @@
         private IAuthenticationManager Authentication => this.Request.GetOwinContext().Authentication;
 
         [HttpPost]
+        [ValidateModel]
         [AllowAnonymous]
         public async Task<IHttpActionResult> Register(RegisterModel registerModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(this.ModelState);
-            }
-
             var user = new User()
             {
                 UserName = registerModel.Email,
@@ -42,16 +39,16 @@
 
             if (!result.Succeeded)
             {
-                return this.BadRequest(MessageConstants.UserIsNotAddInDbMessage);
+                return this.BadRequest(MessageConstants.EmailAlreadyTaken);
             }
 
-            return this.Ok(MessageConstants.CreateUserMessage);
+            return this.Ok(MessageConstants.CreateUser);
         }
         
         public IHttpActionResult Logout()
         {
             this.Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-            return this.Ok(MessageConstants.LogoutMessage);
+            return this.Ok(MessageConstants.Logout);
         }
     }
 }

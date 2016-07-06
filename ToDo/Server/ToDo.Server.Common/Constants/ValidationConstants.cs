@@ -11,6 +11,8 @@
         public const int DefaultPageSize = 10;
         public const int UsernameMinLenght = 1;
         public const int UsernameMaxLenght = 30;
+        public const int PasswordMinLenght = 6;
+        public const int PasswordMaxLenght = 40;
         public const string EmailRegexPattern = @"(([^<>()\[\]\\.,;:\s@""]+(\.[^<>()\[\]\\.,;:\s@""]+)*)|("".+""))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$";
     }
 }

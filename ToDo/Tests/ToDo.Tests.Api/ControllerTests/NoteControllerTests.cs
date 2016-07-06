@@ -38,7 +38,7 @@
                 .Calling(a => a.AddNote(new NoteRequestModel()))
                 .ShouldReturn()
                 .Ok()
-                .WithResponseModel(MessageConstants.CreateNoteMessage);
+                .WithResponseModel(MessageConstants.CreateNote);
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@
                 .Calling(a => a.AddNoteWithExpirationDate(new NoteRequestModel()))
                 .ShouldReturn()
                 .Ok()
-                .WithResponseModel(MessageConstants.CreateNoteMessage);
+                .WithResponseModel(MessageConstants.CreateNote);
         }
 
         [TestMethod]
@@ -109,7 +109,7 @@
                 .Calling(q => q.RemoveNoteById(2))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.NoteDoesNotExistsMessage);
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
         }
 
         [TestMethod]
@@ -122,7 +122,7 @@
                 .Calling(q => q.RemoveNoteById(1))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.NoteDoesNotExistsMessage);
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
         }
 
         [TestMethod]
@@ -135,7 +135,7 @@
                 .Calling(q => q.RemoveNoteById(1))
                 .ShouldReturn()
                 .Ok()
-                .WithResponseModel(MessageConstants.RemoveNoteMessage);
+                .WithResponseModel(MessageConstants.RemoveNote);
         }
 
         [TestMethod]
@@ -148,7 +148,7 @@
                 .Calling(q => q.ChangeNoteTitle(2, "str"))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.NoteDoesNotExistsMessage);
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
         }
 
         [TestMethod]
@@ -161,7 +161,7 @@
                 .Calling(q => q.ChangeNoteTitle(1, "str"))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.NoteDoesNotExistsMessage);
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
         }
 
         [TestMethod]
@@ -174,7 +174,7 @@
                 .Calling(q => q.ChangeNoteTitle(1, "str"))
                 .ShouldReturn()
                 .Ok()
-                .WithResponseModel(MessageConstants.TitleChangeMessage);
+                .WithResponseModel(MessageConstants.TitleChange);
         }
 
         [TestMethod]
@@ -187,7 +187,7 @@
                 .Calling(q => q.ChangeNoteContent(2, "str"))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.NoteDoesNotExistsMessage);
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
         }
 
         [TestMethod]
@@ -200,7 +200,7 @@
                 .Calling(q => q.ChangeNoteContent(1, "str"))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.NoteDoesNotExistsMessage);
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
         }
 
         [TestMethod]
@@ -213,7 +213,7 @@
                 .Calling(q => q.ChangeNoteContent(1, "str"))
                 .ShouldReturn()
                 .Ok()
-                .WithResponseModel(MessageConstants.ContextChangeMessage);
+                .WithResponseModel(MessageConstants.ContextChange);
         }
 
         [TestMethod]
@@ -226,7 +226,7 @@
                 .Calling(q => q.SetNoteExpireDate(2, "str"))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.NoteDoesNotExistsMessage);
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
         }
 
         [TestMethod]
@@ -239,7 +239,7 @@
                 .Calling(q => q.SetNoteExpireDate(1, "str"))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.NoteDoesNotExistsMessage);
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
         }
 
         [TestMethod]
@@ -252,7 +252,7 @@
                 .Calling(q => q.SetNoteExpireDate(1, "01.02.2016"))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.InvalidDateMessage);
+                .WithErrorMessage(MessageConstants.InvalidDate);
         }
 
         [TestMethod]
@@ -265,7 +265,7 @@
                 .Calling(q => q.SetNoteExpireDate(1, "01-06-2016"))
                 .ShouldReturn()
                 .Ok()
-                .WithResponseModel(MessageConstants.SetDateMessage);
+                .WithResponseModel(MessageConstants.SetDate);
         }
 
         [TestMethod]
@@ -278,7 +278,7 @@
                 .Calling(q => q.ChangeExpireDate(2, "str"))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.NoteDoesNotExistsMessage);
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
         }
 
         [TestMethod]
@@ -291,7 +291,7 @@
                 .Calling(q => q.ChangeExpireDate(1, "str"))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.NoteDoesNotExistsMessage);
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
         }
 
         [TestMethod]
@@ -304,7 +304,7 @@
                 .Calling(q => q.ChangeExpireDate(1, "01.02.2016"))
                 .ShouldReturn()
                 .BadRequest()
-                .WithErrorMessage(MessageConstants.InvalidDateMessage);
+                .WithErrorMessage(MessageConstants.InvalidDate);
         }
 
         [TestMethod]
@@ -317,7 +317,7 @@
                 .Calling(q => q.ChangeExpireDate(1, "01-06-2016"))
                 .ShouldReturn()
                 .Ok()
-                .WithResponseModel(MessageConstants.ChangeDateMessage);
+                .WithResponseModel(MessageConstants.ChangeDate);
         }
     }
 }

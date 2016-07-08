@@ -1,4 +1,4 @@
-﻿namespace ToDo.Tests.Services.Data
+﻿namespace ToDo.Tests.Services.Data.Services
 {
     using System;
     using System.Linq;
@@ -108,7 +108,7 @@
             }
 
             var firstPageResult = this.service.GetNotes(user, 1);
-            var secondPageResult = this.service.GetNotes(user, 2);
+            var secondPageResult = this.service.GetNotes(user ,2);
 
             Assert.IsNotNull(firstPageResult);
             Assert.IsNotNull(secondPageResult);

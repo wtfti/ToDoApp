@@ -7,9 +7,9 @@
 
     public interface INotesService
     {
-        IQueryable<Note> GetNotes(string currentUser, int page, int pageSize = ValidationConstants.DefaultPageSize);
+        IQueryable<Note> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
-        IQueryable<Note> GetNotesWithExpiredDate(string currentUser, int page, int pageSize = ValidationConstants.DefaultPageSize);
+        IQueryable<Note> GetNotesWithExpiredDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
         void AddNote(string user, string title, string content, DateTime? expireDate = null);
 

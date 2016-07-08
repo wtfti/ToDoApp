@@ -6,6 +6,7 @@
     using System.Web.Http;
     using AutoMapper.QueryableExtensions;
     using Infrastructure.Validation;
+    using Microsoft.AspNet.Identity;
     using Models.Note;
     using Server.Common.Constants;
     using Services.Data.Contracts;
@@ -24,9 +25,7 @@
         [ValidateModel]
         public IHttpActionResult AddNote(NoteRequestModel note)
         {
-            var user = this.User.Identity.Name;
-
-            this.notesService.AddNote(user, note.Title, note.Content);
+            this.notesService.AddNote(this.CurrentUser(), note.Title, note.Content);
 
             return this.Ok(MessageConstants.CreateNote);
         }
@@ -36,9 +35,7 @@
         public IHttpActionResult AddNoteWithExpirationDate(NoteRequestModel note)
         {
             // TODO DateTime binding bug
-            var user = this.User.Identity.Name;
-
-            this.notesService.AddNote(user, note.Title, note.Content, note.ExpiredOn);
+            this.notesService.AddNote(this.CurrentUser(), note.Title, note.Content, note.ExpiredOn);
 
             return this.Ok(MessageConstants.CreateNote);
         }
@@ -47,7 +44,7 @@
         public IHttpActionResult GetNotes(int page = 1)
         {
             var dbNotes = this.notesService
-                .GetNotes(this.User.Identity.Name, page)
+                .GetNotes(this.CurrentUser(), page)
                 .ProjectTo<NoteResponseModel>();
 
             return this.Ok(dbNotes);
@@ -57,7 +54,7 @@
         public IHttpActionResult GetNotesWithExpirateDate(int page = 1)
         {
             var dbNotes = this.notesService
-                .GetNotesWithExpiredDate(this.User.Identity.Name, page)
+                .GetNotesWithExpiredDate(this.CurrentUser(), page)
                 .ProjectTo<NoteResponseModel>();
 
             return this.Ok(dbNotes);
@@ -66,7 +63,7 @@
         [HttpDelete]
         public IHttpActionResult RemoveNoteById(int id)
         {
-            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.CurrentUser());
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
@@ -80,7 +77,7 @@
         [HttpPut]
         public IHttpActionResult ChangeNoteTitle(int id, string newValue)
         {
-            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.CurrentUser());
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
@@ -94,7 +91,7 @@
         [HttpPut]
         public IHttpActionResult ChangeNoteContent(int id, string newValue)
         {
-            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.CurrentUser());
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
@@ -108,7 +105,7 @@
         [HttpPut]
         public IHttpActionResult SetNoteExpireDate(int id, string date)
         {
-            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.CurrentUser());
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
@@ -134,7 +131,7 @@
         [HttpPut]
         public IHttpActionResult ChangeExpireDate(int id, string date)
         {
-            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.User.Identity.Name);
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.CurrentUser());
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
@@ -155,6 +152,13 @@
             this.notesService.ChangeNoteExpireDate(note, parsedDate);
 
             return this.Ok(MessageConstants.ChangeDate);
+        }
+
+        private string CurrentUser()
+        {
+            string result = this.User.Identity.GetUserId();
+
+            return result;
         }
     }
 }

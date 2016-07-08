@@ -105,7 +105,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser()
+                .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.RemoveNoteById(2))
                 .ShouldReturn()
                 .BadRequest()
@@ -118,7 +118,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser()
+                .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.RemoveNoteById(1))
                 .ShouldReturn()
                 .BadRequest()
@@ -131,7 +131,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser(a => a.WithUsername("User"))
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.RemoveNoteById(1))
                 .ShouldReturn()
                 .Ok()
@@ -144,7 +144,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser()
+                .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.ChangeNoteTitle(2, "str"))
                 .ShouldReturn()
                 .BadRequest()
@@ -157,7 +157,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser()
+                .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.ChangeNoteTitle(1, "str"))
                 .ShouldReturn()
                 .BadRequest()
@@ -170,7 +170,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser(a => a.WithUsername("User"))
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.ChangeNoteTitle(1, "str"))
                 .ShouldReturn()
                 .Ok()
@@ -183,7 +183,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser()
+                .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.ChangeNoteContent(2, "str"))
                 .ShouldReturn()
                 .BadRequest()
@@ -196,7 +196,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser()
+                .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.ChangeNoteContent(1, "str"))
                 .ShouldReturn()
                 .BadRequest()
@@ -209,7 +209,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser(a => a.WithUsername("User"))
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.ChangeNoteContent(1, "str"))
                 .ShouldReturn()
                 .Ok()
@@ -222,7 +222,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser()
+                .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.SetNoteExpireDate(2, "str"))
                 .ShouldReturn()
                 .BadRequest()
@@ -235,7 +235,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser()
+                .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.SetNoteExpireDate(1, "str"))
                 .ShouldReturn()
                 .BadRequest()
@@ -248,7 +248,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser(a => a.WithUsername("User"))
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.SetNoteExpireDate(1, "01.02.2016"))
                 .ShouldReturn()
                 .BadRequest()
@@ -261,7 +261,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser(a => a.WithUsername("User"))
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.SetNoteExpireDate(1, "01-06-2016"))
                 .ShouldReturn()
                 .Ok()
@@ -274,7 +274,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser()
+                .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.ChangeExpireDate(2, "str"))
                 .ShouldReturn()
                 .BadRequest()
@@ -287,7 +287,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser()
+                .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.ChangeExpireDate(1, "str"))
                 .ShouldReturn()
                 .BadRequest()
@@ -300,7 +300,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser(a => a.WithUsername("User"))
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.ChangeExpireDate(1, "01.02.2016"))
                 .ShouldReturn()
                 .BadRequest()
@@ -313,7 +313,7 @@
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .WithAuthenticatedUser(a => a.WithUsername("User"))
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.ChangeExpireDate(1, "01-06-2016"))
                 .ShouldReturn()
                 .Ok()

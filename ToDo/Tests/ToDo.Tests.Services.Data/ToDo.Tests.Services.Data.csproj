@@ -52,7 +52,7 @@
   <ItemGroup>
     <Compile Include="DepedencyObjectFactory.cs" />
     <Compile Include="InMemoryRepository.cs" />
-    <Compile Include="NoteServiceTests.cs" />
+    <Compile Include="Services\NoteServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

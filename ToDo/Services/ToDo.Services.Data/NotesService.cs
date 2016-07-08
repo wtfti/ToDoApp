@@ -47,10 +47,10 @@
             this.data.SaveChanges();
         }
 
-        public IQueryable<Note> GetNotes(string currentUser, int page, int pageSize = ValidationConstants.DefaultPageSize)
+        public IQueryable<Note> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
         {
             var notes = this.data.All()
-                .Where(a => a.UserId == currentUser)
+                .Where(a => a.UserId == user)
                 .OrderBy(w => w.Id)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);
@@ -58,10 +58,10 @@
             return notes;
         }
 
-        public IQueryable<Note> GetNotesWithExpiredDate(string currentUser, int page, int pageSize = ValidationConstants.DefaultPageSize)
+        public IQueryable<Note> GetNotesWithExpiredDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
         {
             var notes = this.data.All()
-                .Where(a => a.UserId == currentUser && a.ExpiredOn != null)
+                .Where(a => a.ExpiredOn != null && a.UserId == user)
                 .OrderBy(w => w.Id)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);

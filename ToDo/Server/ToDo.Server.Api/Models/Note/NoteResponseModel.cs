@@ -20,10 +20,15 @@
         [MaxLength(ValidationConstants.ContentMaxLenght)]
         public string Content { get; set; }
 
+        [Required]
         public DateTime CreatedOn { get; set; }
 
         public DateTime? ExpiredOn { get; set; }
 
+        [Required]
         public bool IsExpired { get; set; }
+
+        [Required]
+        public bool IsComplete { get; set; }
     }
 }

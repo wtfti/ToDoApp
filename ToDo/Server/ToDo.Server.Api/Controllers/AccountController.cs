@@ -31,6 +31,7 @@
         {
             var user = new User()
             {
+                FullName = registerModel.FullName,
                 UserName = registerModel.Email,
                 Email = registerModel.Email
             };

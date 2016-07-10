@@ -3,6 +3,7 @@
     using System.Reflection;
     using System.Web;
     using System.Web.Http;
+    using Data;
     using Server.Common.Constants;
 
     public class WebApiApplication : HttpApplication

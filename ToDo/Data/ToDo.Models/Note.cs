@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using Server.Common.Constants;
 
-    public class Note : IEquatable<Note>
+    public class Note
     {
         [Key]
         public int Id { get; set; }
@@ -30,11 +30,10 @@
 
         public DateTime? ExpiredOn { get; set; }
 
+        [Required]
         public bool IsExpired { get; set; }
 
-        public bool Equals(Note other)
-        {
-            return this.Id == other.Id;
-        }
+        [Required]
+        public bool IsComplete { get; set; }
     }
 }

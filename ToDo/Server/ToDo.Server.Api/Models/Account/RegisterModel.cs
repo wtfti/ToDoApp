@@ -6,6 +6,11 @@
     public class RegisterModel
     {
         [Required]
+        [MinLength(ValidationConstants.FullNameMinLenght)]
+        [MaxLength(ValidationConstants.FullNameMaxLenght)]
+        public string FullName { get; set; }
+
+        [Required]
         [RegularExpression(ValidationConstants.EmailRegexPattern, ErrorMessage = MessageConstants.InvalidEmail)]
         public string Email { get; set; }
 

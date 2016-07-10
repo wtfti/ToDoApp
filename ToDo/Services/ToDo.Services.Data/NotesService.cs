@@ -18,7 +18,7 @@
 
         public IQueryable<Note> All()
         {
-            var notes = this.data.All();
+            var notes = this.data.All().Where(a => !a.IsComplete && !a.IsExpired);
 
             return notes;
         }
@@ -35,6 +35,12 @@
             this.data.SaveChanges();
         }
 
+        public void SetComplete(Note note)
+        {
+            note.IsComplete = true;
+            this.data.SaveChanges();
+        }
+
         public void ChangeNoteContent(Note note, string newValue)
         {
             note.Content = newValue;
@@ -47,11 +53,22 @@
             this.data.SaveChanges();
         }
 
+        public void SetExpired(Note note)
+        {
+            note.IsExpired = true;
+            this.data.SaveChanges();
+        }
+
+        public Note GetNoteById(int id)
+        {
+            return this.data.GetById(id);
+        }
+
         public IQueryable<Note> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
         {
             var notes = this.data.All()
-                .Where(a => a.UserId == user)
-                .OrderBy(w => w.Id)
+                .Where(a => a.UserId == user && !a.IsComplete && !a.IsExpired)
+                .OrderBy(q => q.Content)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);
 

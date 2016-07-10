@@ -1,8 +1,6 @@
 ﻿namespace ToDo.Data.Models
 {
-    using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Security.Claims;
@@ -27,6 +25,9 @@
 
         [Key]
         public override string Id { get; set; }
+
+        [Required]
+        public string FullName { get; set; }
 
         [Index(IsUnique = true)]
         public override string Email { get; set; }

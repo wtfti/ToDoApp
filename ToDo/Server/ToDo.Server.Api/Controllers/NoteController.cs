@@ -1,10 +1,12 @@
 ﻿namespace ToDo.Api.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Web.Http;
     using AutoMapper.QueryableExtensions;
+    using Data.Models;
     using Infrastructure.Validation;
     using Microsoft.AspNet.Identity;
     using Models.Note;
@@ -34,7 +36,6 @@
         [ValidateModel]
         public IHttpActionResult AddNoteWithExpirationDate(NoteRequestModel note)
         {
-            // TODO DateTime binding bug
             this.notesService.AddNote(this.CurrentUser(), note.Title, note.Content, note.ExpiredOn);
 
             return this.Ok(MessageConstants.CreateNote);
@@ -44,10 +45,19 @@
         public IHttpActionResult GetNotes(int page = 1)
         {
             var dbNotes = this.notesService
-                .GetNotes(this.CurrentUser(), page)
-                .ProjectTo<NoteResponseModel>();
+                .GetNotes(this.CurrentUser(), page);
 
-            return this.Ok(dbNotes);
+            bool hasChange = this.CheckIfNotesAreExpired(dbNotes.ToList());
+
+            if (hasChange)
+            {
+                dbNotes = this.notesService
+                    .GetNotes(this.CurrentUser(), page);
+            }
+
+            var result = dbNotes.ProjectTo<NoteResponseModel>();
+
+            return this.Ok(result);
         }
 
         [HttpGet]
@@ -72,6 +82,21 @@
             this.notesService.RemoveNoteById(note);
 
             return this.Ok(MessageConstants.RemoveNote);
+        }
+
+        [HttpPut]
+        public IHttpActionResult SetComplete(int id)
+        {
+            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.CurrentUser());
+
+            if (note == null)
+            {
+                return this.BadRequest(MessageConstants.NoteDoesNotExist);
+            }
+
+            this.notesService.SetComplete(note);
+
+            return this.Ok();
         }
 
         [HttpPut]
@@ -154,11 +179,31 @@
             return this.Ok(MessageConstants.ChangeDate);
         }
 
+        [NonAction]
         private string CurrentUser()
         {
             string result = this.User.Identity.GetUserId();
 
             return result;
+        }
+
+        [NonAction]
+        private bool CheckIfNotesAreExpired(List<Note> dbNotes)
+        {
+            bool hasChange = false;
+            DateTime dateNow = DateTime.Now;
+
+            foreach (var note in dbNotes)
+            {
+                if (note.ExpiredOn != null && note.ExpiredOn <= dateNow && !note.IsComplete)
+                {
+                    var dbNote = this.notesService.GetNoteById(note.Id);
+                    this.notesService.SetExpired(dbNote);
+                    hasChange = true;
+                }
+            }
+
+            return hasChange;
         }
     }
 }

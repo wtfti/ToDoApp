@@ -5,10 +5,12 @@
     using System.Globalization;
     using System.Linq;
     using System.Web.Http;
+    using System.Web.Http.ModelBinding;
     using AutoMapper.QueryableExtensions;
     using Data.Models;
     using Infrastructure.Validation;
     using Microsoft.AspNet.Identity;
+    using ModelBinders;
     using Models.Note;
     using Server.Common.Constants;
     using Services.Data.Contracts;
@@ -25,7 +27,7 @@
 
         [HttpPost]
         [ValidateModel]
-        public IHttpActionResult AddNote(NoteRequestModel note)
+        public IHttpActionResult AddNote([ModelBinder(typeof(NoteRequestModelBinder))]NoteRequestModel note)
         {
             this.notesService.AddNote(this.CurrentUser(), note.Title, note.Content);
 
@@ -46,6 +48,25 @@
         {
             var dbNotes = this.notesService
                 .GetNotes(this.CurrentUser(), page);
+
+            bool hasChange = this.CheckIfNotesAreExpired(dbNotes.ToList());
+
+            if (hasChange)
+            {
+                dbNotes = this.notesService
+                    .GetNotes(this.CurrentUser(), page);
+            }
+
+            var result = dbNotes.ProjectTo<NoteResponseModel>();
+
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetCompletedNotes(int page = 1)
+        {
+            var dbNotes = this.notesService
+                .GetCompletedNotes(this.CurrentUser(), page);
 
             bool hasChange = this.CheckIfNotesAreExpired(dbNotes.ToList());
 
@@ -87,9 +108,9 @@
         [HttpPut]
         public IHttpActionResult SetComplete(int id)
         {
-            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.CurrentUser());
+            var note = this.notesService.GetNoteById(id);
 
-            if (note == null)
+            if (note == null || note.UserId != this.CurrentUser())
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }

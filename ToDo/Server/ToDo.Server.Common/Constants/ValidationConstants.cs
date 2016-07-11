@@ -2,7 +2,7 @@
 {
     public static class ValidationConstants
     {
-        public const string ExpireDateFormat = "dd-MM-yyyy";
+        public const string ExpireDateFormat = "dd/MM/yyyy HH:mm";
         public const string PasswordProperty = "Password";
         public const int TitleMinLenght = 3;
         public const int TitleMaxLenght = 30;

@@ -75,6 +75,18 @@
             return notes;
         }
 
+        public IQueryable<Note> GetCompletedNotes(string user, int page,
+            int pageSize = ValidationConstants.DefaultPageSize)
+        {
+            var notes = this.data.All()
+                .Where(a => a.UserId == user && a.IsComplete)
+                .OrderBy(q => q.Content)
+                .Skip((page * pageSize) - pageSize)
+                .Take(pageSize);
+
+            return notes;
+        }
+
         public IQueryable<Note> GetNotesWithExpiredDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
         {
             var notes = this.data.All()

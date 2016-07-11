@@ -15,5 +15,6 @@
         public const string EmailAlreadyTaken = "Email is already taken!";
         public const string EmptyRequest = "Request cannot be empty";
         public const string InvalidEmail = "Invalid Email!";
+        public const string InvalidJsonFormat = "Wrong JSON format";
     }
 }

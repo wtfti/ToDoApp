@@ -108,7 +108,7 @@
             }
 
             var firstPageResult = this.service.GetNotes(user, 1);
-            var secondPageResult = this.service.GetNotes(user ,2);
+            var secondPageResult = this.service.GetNotes(user, 2);
 
             Assert.IsNotNull(firstPageResult);
             Assert.IsNotNull(secondPageResult);
@@ -184,6 +184,65 @@
             Assert.AreEqual(user, this.noteRepository.All().Last().UserId);
             Assert.AreEqual(1, this.noteRepository.NumberOfSaves);
             Assert.AreEqual(expire, this.service.All().Last().ExpiredOn);
+        }
+
+        [TestMethod]
+        public void SetExpiredShouldReturnCorrectResult()
+        {
+            var note = new Note()
+            {
+                IsExpired = false
+            };
+            this.service.SetExpired(note);
+
+            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+            Assert.IsTrue(note.IsExpired);
+        }
+
+        [TestMethod]
+        public void SetCompleteShouldReturnCorrectResult()
+        {
+            var note = new Note()
+            {
+                IsComplete = false
+            };
+            this.service.SetComplete(note);
+
+            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+            Assert.IsTrue(note.IsComplete);
+        }
+
+        [TestMethod]
+        public void GetNotesWithExpiredDateShouldReturnEmptyCollection()
+        {
+            var result = this.service.GetNotesWithExpiredDate("101", 1);
+
+            Assert.AreEqual(0, result.Count());
+        }
+
+        [TestMethod]
+        public void GetNotesWithExpiredDateShouldPass()
+        {
+            var result = this.service.GetNotesWithExpiredDate("10", 1);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual("10", result.First().UserId);
+        }
+
+        [TestMethod]
+        public void GetCompletedNotesShouldReturnEmptyCollection()
+        {
+            var result = this.service.GetCompletedNotes("1", 1);
+
+            Assert.AreEqual(0, result.Count());
+        }
+
+        [TestMethod]
+        public void GetCompleteNotesShouldPass()
+        {
+            var result = this.service.GetCompletedNotes("complete", 1, notesCount);
+
+            Assert.AreEqual(notesCount, result.Count());
         }
     }
 }

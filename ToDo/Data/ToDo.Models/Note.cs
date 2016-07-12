@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using Server.Common.Constants;
 
-    public class Note
+    public class Note : IEquatable<Note>
     {
         [Key]
         public int Id { get; set; }
@@ -35,5 +35,10 @@
 
         [Required]
         public bool IsComplete { get; set; }
+
+        public bool Equals(Note other)
+        {
+            return this.Id == other.Id;
+        }
     }
 }

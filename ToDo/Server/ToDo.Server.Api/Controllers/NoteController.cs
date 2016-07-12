@@ -29,15 +29,11 @@
         [ValidateModel]
         public IHttpActionResult AddNote([ModelBinder(typeof(NoteRequestModelBinder))]NoteRequestModel note)
         {
-            this.notesService.AddNote(this.CurrentUser(), note.Title, note.Content);
+            if (note.ExpiredOn != null && note.ExpiredOn <= DateTime.Now)
+            {
+                return this.BadRequest(MessageConstants.InvalidDate);
+            }
 
-            return this.Ok(MessageConstants.CreateNote);
-        }
-
-        [HttpPost]
-        [ValidateModel]
-        public IHttpActionResult AddNoteWithExpirationDate(NoteRequestModel note)
-        {
             this.notesService.AddNote(this.CurrentUser(), note.Title, note.Content, note.ExpiredOn);
 
             return this.Ok(MessageConstants.CreateNote);
@@ -85,10 +81,19 @@
         public IHttpActionResult GetNotesWithExpirateDate(int page = 1)
         {
             var dbNotes = this.notesService
-                .GetNotesWithExpiredDate(this.CurrentUser(), page)
-                .ProjectTo<NoteResponseModel>();
+                .GetNotesWithExpiredDate(this.CurrentUser(), page);
 
-            return this.Ok(dbNotes);
+            bool hasChange = this.CheckIfNotesAreExpired(dbNotes.ToList());
+
+            if (hasChange)
+            {
+                dbNotes = this.notesService
+                    .GetNotesWithExpiredDate(this.CurrentUser(), page);
+            }
+
+            var result = dbNotes.ProjectTo<NoteResponseModel>();
+
+            return this.Ok(result);
         }
 
         [HttpDelete]

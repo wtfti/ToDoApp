@@ -20,27 +20,13 @@
         [TestMethod]
         public void AddNoteRoute()
         {
+            // TODO test modelbinder and fix this method
             MyWebApi
                 .Routes()
                 .ShouldMap("api/Note/Addnote")
                 .WithHttpMethod(HttpMethod.Post)
                 .WithJsonContent(@"{""Title"": ""expire"", ""Content"": ""create content""}")
                 .To<NoteController>(a => a.AddNote(new NoteRequestModel()
-                {
-                    Title = "expire",
-                    Content = "create content"
-                }));
-        }
-
-        [TestMethod]
-        public void AddNoteWithExpirationDateRoute()
-        {
-            MyWebApi
-                .Routes()
-                .ShouldMap("api/Note/AddNoteWithExpirationDate")
-                .WithHttpMethod(HttpMethod.Post)
-                .WithJsonContent(@"{""Title"": ""expire"", ""Content"": ""create content"", ""Date"": ""01.01.2016""}")
-                .To<NoteController>(a => a.AddNoteWithExpirationDate(new NoteRequestModel()
                 {
                     Title = "expire",
                     Content = "create content"

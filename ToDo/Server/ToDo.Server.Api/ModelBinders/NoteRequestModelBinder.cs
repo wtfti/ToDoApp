@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
     using System.Web.Http.Controllers;
     using System.Web.Http.ModelBinding;
-    using System.Web.Http.ValueProviders;
     using Models.Note;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -32,7 +31,6 @@
             schemaJson.Title = myType.Name;
 
             this.schema = JsonSchema.Parse(schemaJson.ToString());
-
         }
 
         public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
@@ -41,6 +39,7 @@
             {
                 return false;
             }
+
             Task<string> content = actionContext.Request.Content.ReadAsStringAsync();
             string body = content.Result;
 

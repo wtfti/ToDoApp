@@ -24,6 +24,8 @@
                 .Returns(GenerateNotes);
             notesService.Setup(a => a.GetNotesWithExpiredDate(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateNotes);
+            notesService.Setup(a => a.GetCompletedNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(GenerateCompleteNotes);
             notesService.Setup(a => a.RemoveNoteById(It.IsAny<Note>()));
 
             return notesService.Object;
@@ -42,6 +44,26 @@
                     CreatedOn = DateTime.Now,
                     ExpiredOn = DateTime.Now.AddDays(i),
                     UserId = "User"
+                });
+            }
+
+            return result.AsQueryable();
+        }
+
+        private static IQueryable<Note> GenerateCompleteNotes()
+        {
+            var result = new List<Note>();
+            for (int i = 1; i <= Count; i++)
+            {
+                result.Add(new Note()
+                {
+                    Id = i,
+                    Title = "TestTitle",
+                    Content = "TestContent",
+                    CreatedOn = DateTime.Now,
+                    ExpiredOn = DateTime.Now.AddDays(i),
+                    UserId = "User",
+                    IsComplete = true
                 });
             }
 

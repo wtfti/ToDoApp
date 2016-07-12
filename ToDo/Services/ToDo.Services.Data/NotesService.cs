@@ -75,7 +75,9 @@
             return notes;
         }
 
-        public IQueryable<Note> GetCompletedNotes(string user, int page,
+        public IQueryable<Note> GetCompletedNotes(
+            string user, 
+            int page,
             int pageSize = ValidationConstants.DefaultPageSize)
         {
             var notes = this.data.All()

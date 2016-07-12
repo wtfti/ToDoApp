@@ -1,10 +1,15 @@
 ﻿namespace ToDo.Tests.Api.ControllerTests
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Data.Models;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Moq;
     using MyTested.WebApi;
     using Server.Common.Constants;
+    using Services.Data.Contracts;
     using ToDo.Api;
     using ToDo.Api.Controllers;
     using ToDo.Api.Infrastructure.Validation;
@@ -48,29 +53,6 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
                 .Calling(a => a.AddNote(new NoteRequestModel()))
-                .ShouldHave()
-                .ActionAttributes(a => a.ContainingAttributeOfType<ValidateModelAttribute>());
-        }
-
-        [TestMethod]
-        public void AddNoteWithExpirationDateShouldReturnProperResponse()
-        {
-            MyWebApi
-                .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .Calling(a => a.AddNoteWithExpirationDate(new NoteRequestModel()))
-                .ShouldReturn()
-                .Ok()
-                .WithResponseModel(MessageConstants.CreateNote);
-        }
-
-        [TestMethod]
-        public void AddNoteWithExpirationDateShouldHaveValidateModel()
-        {
-            MyWebApi
-                .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
-                .Calling(a => a.AddNoteWithExpirationDate(new NoteRequestModel()))
                 .ShouldHave()
                 .ActionAttributes(a => a.ContainingAttributeOfType<ValidateModelAttribute>());
         }
@@ -262,7 +244,7 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
-                .Calling(q => q.SetNoteExpireDate(1, "01-06-2016"))
+                .Calling(q => q.SetNoteExpireDate(1, "01/06/2016 14:12"))
                 .ShouldReturn()
                 .Ok()
                 .WithResponseModel(MessageConstants.SetDate);
@@ -314,10 +296,78 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
-                .Calling(q => q.ChangeExpireDate(1, "01-06-2016"))
+                .Calling(q => q.ChangeExpireDate(1, "01/06/2016 16:26"))
                 .ShouldReturn()
                 .Ok()
                 .WithResponseModel(MessageConstants.ChangeDate);
+        }
+
+        [TestMethod]
+        public void SetCompleteShouldReturnNotFound()
+        {
+            MyWebApi
+                .Controller<NoteController>()
+                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
+                .Calling(q => q.SetComplete(101))
+                .ShouldReturn()
+                .BadRequest()
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
+        }
+
+        [TestMethod]
+        public void SetCompleteWithInvalidUserShouldReturnNotFound()
+        {
+            MyWebApi
+                .Controller<NoteController>()
+                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithAuthenticatedUser(a => a.WithIdentifier("User1"))
+                .Calling(q => q.SetComplete(1))
+                .ShouldReturn()
+                .BadRequest()
+                .WithErrorMessage(MessageConstants.NoteDoesNotExist);
+        }
+
+        [TestMethod]
+        public void SetCompleteShouldReturnOk()
+        {
+            var notesService = new Mock<INotesService>();
+            notesService.Setup(a => a.GetNoteById(It.IsAny<int>()))
+                .Returns(new Note()
+                {
+                    Id = 1,
+                    Title = "TestTitle",
+                    Content = "TestContent",
+                    CreatedOn = DateTime.Now,
+                    ExpiredOn = DateTime.Now.AddDays(1),
+                    UserId = "User"
+                });
+
+            notesService.Setup(a => a.SetComplete(It.IsAny<Note>()));
+            MyWebApi
+                .Controller<NoteController>()
+                .WithResolvedDependencyFor(notesService.Object)
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
+                .Calling(q => q.SetComplete(1))
+                .ShouldReturn()
+                .Ok();
+        }
+
+        [TestMethod]
+        public void GetCompleteNotesShouldPass()
+        {
+            MyWebApi
+                .Controller<NoteController>()
+                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
+                .Calling(q => q.GetCompletedNotes(1))
+                .ShouldReturn()
+                .Ok()
+                .WithResponseModelOfType<IQueryable<NoteResponseModel>>()
+                .Passing(a =>
+                {
+                    Assert.AreEqual(50, a.Count());
+                });
         }
     }
 }

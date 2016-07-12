@@ -27,6 +27,17 @@
                     UserId = i.ToString()
                 });
             }
+
+            // Add complete notes to test methods which
+            // require completed notes in repository
+            for (int i = 1; i <= count; i++)
+            {
+                noteRepository.Add(new Note()
+                {
+                    IsComplete = true,
+                    UserId = "complete"
+                });
+            }
         }
     }
 }

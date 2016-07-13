@@ -369,5 +369,79 @@
                     Assert.AreEqual(50, a.Count());
                 });
         }
+
+        [TestMethod]
+        public void GetNotesFromTodayShouldPass()
+        {
+            var notes = new List<Note>();
+            for (int i = 0; i < 100; i++)
+            {
+                notes.Add(new Note()
+                {
+                    UserId = "User",
+                    CreatedOn = DateTime.Now
+                });
+            }
+            var notesService = new Mock<INotesService>();
+            notesService.Setup(a => a.GetNotesFromToday(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(notes.AsQueryable());
+
+            MyWebApi
+                .Controller<NoteController>()
+                .WithResolvedDependencyFor(notesService.Object)
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
+                .Calling(q => q.GetNotesFromToday(1))
+                .ShouldReturn()
+                .Ok()
+                .WithResponseModelOfType<IQueryable<NoteResponseModel>>()
+                .Passing(a =>
+                {
+                    Assert.AreEqual(100, a.Count());
+                    Assert.IsFalse(a.Any(x => x.IsComplete));
+                    Assert.IsFalse(a.Any(x => x.IsExpired));
+                    Assert.IsTrue(a.Any(x => x.CreatedOn.Date == DateTime.Now.Date));
+                });
+        }
+
+        [TestMethod]
+        public void GetNotesFromTodayShouldPassOption2()
+        {
+            var notes = new List<Note>()
+            {
+                new Note()
+                {
+                    Id = 1000,
+                    UserId = "User",
+                    CreatedOn = DateTime.Now
+                },
+                new Note()
+                {
+                    UserId = "User",
+                    CreatedOn = DateTime.Now
+                },
+                new Note()
+                {
+                    UserId = "User",
+                    CreatedOn = DateTime.Now
+                }
+            };
+            var notesService = new Mock<INotesService>();
+            notesService.Setup(a => a.GetNotesFromToday(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(notes.AsQueryable());
+
+            MyWebApi
+                .Controller<NoteController>()
+                .WithResolvedDependencyFor(notesService.Object)
+                .WithAuthenticatedUser(a => a.WithIdentifier("User"))
+                .Calling(q => q.GetNotesFromToday(1))
+                .ShouldReturn()
+                .Ok()
+                .WithResponseModelOfType<IQueryable<NoteResponseModel>>()
+                .Passing(a =>
+                {
+                    Assert.AreEqual(notes.Count, a.Count());
+                    Assert.AreEqual(1000, a.First().Id);
+                });
+        }
     }
 }

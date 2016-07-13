@@ -1,6 +1,9 @@
 ﻿namespace ToDo.Api.ModelBinders
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
     using System.Web.Http.Controllers;
     using System.Web.Http.ModelBinding;
@@ -43,9 +46,9 @@
             Task<string> content = actionContext.Request.Content.ReadAsStringAsync();
             string body = content.Result;
 
-            JObject person = JObject.Parse(body);
+            JObject note = JObject.Parse(body);
 
-            bool valid = person.IsValid(this.schema);
+            bool valid = note.IsValid(this.schema);
             if (!valid)
             {
                 bindingContext.ModelState.AddModelError(
@@ -57,6 +60,11 @@
             {
                 NoteRequestModel jsonObj = JsonConvert.DeserializeObject<NoteRequestModel>(body, this.dateTimeConverter);
 
+                if (!this.ValidateProperties(bindingContext, jsonObj))
+                {
+                    return false;
+                }
+
                 bindingContext.Model = jsonObj;
                 return true;
             }
@@ -66,6 +74,63 @@
                     bindingContext.ModelName, MessageConstants.InvalidDate);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Validate requested model using reflection</summary>
+        /// <remarks>
+        /// If there is any attribute which is not recognised
+        /// by reflection, it will make ModelState invalid
+        /// and throw a BadRequest</remarks>
+        private bool ValidateProperties(ModelBindingContext bindingContext, NoteRequestModel jsonObj)
+        {
+            PropertyInfo[] props = jsonObj.GetType().GetProperties();
+
+            foreach (var property in props)
+            {
+                var attributes = property.GetCustomAttributes(true);
+
+                foreach (var attribute in attributes)
+                {
+                    var reqiredAttribute = attribute as RequiredAttribute;
+                    var minAttribute = attribute as MinLengthAttribute;
+                    var maxAttribute = attribute as MaxLengthAttribute;
+                    bool isValid = true;
+                    string errorMessage = "";
+                    if (minAttribute != null)
+                    {
+                        isValid = minAttribute.IsValid(jsonObj.GetType().GetProperty(property.Name).GetValue(jsonObj, null));
+                        if (!isValid)
+                        {
+                            errorMessage = minAttribute.FormatErrorMessage(property.Name);
+                        }
+                    }
+                    else if (maxAttribute != null)
+                    {
+                        isValid = maxAttribute.IsValid(jsonObj.GetType().GetProperty(property.Name).GetValue(jsonObj, null));
+                        if (!isValid)
+                        {
+                            errorMessage = maxAttribute.FormatErrorMessage(property.Name);
+                        }
+                    }
+                    else if (reqiredAttribute == null)
+                    {
+                        bindingContext.ModelState.AddModelError(
+                            bindingContext.ModelName,
+                            MessageConstants.UnknownAttribute);
+                        return false;
+                    }
+
+                    if (!isValid)
+                    {
+                        bindingContext.ModelState.AddModelError(
+                            bindingContext.ModelName,
+                            errorMessage);
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

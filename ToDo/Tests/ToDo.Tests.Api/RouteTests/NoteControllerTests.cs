@@ -102,5 +102,35 @@
                 .WithHttpMethod(HttpMethod.Put)
                 .To<NoteController>(a => a.ChangeExpireDate(5, "01 02 2016"));
         }
+
+        [TestMethod]
+        public void GetCompletedNotesRoute()
+        {
+            MyWebApi
+                .Routes()
+                .ShouldMap("api/Note/GetCompletedNotes?page=1")
+                .WithHttpMethod(HttpMethod.Get)
+                .To<NoteController>(a => a.GetCompletedNotes(1));
+        }
+
+        [TestMethod]
+        public void SetCompleteRoute()
+        {
+            MyWebApi
+                .Routes()
+                .ShouldMap("api/Note/SetComplete?id=5")
+                .WithHttpMethod(HttpMethod.Put)
+                .To<NoteController>(a => a.SetComplete(5));
+        }
+
+        [TestMethod]
+        public void GetNotesFromToday()
+        {
+            MyWebApi
+                .Routes()
+                .ShouldMap("api/Note/GetNotesFromToday?page=1")
+                .WithHttpMethod(HttpMethod.Get)
+                .To<NoteController>(a => a.GetNotesFromToday(1));
+        }
     }
 }

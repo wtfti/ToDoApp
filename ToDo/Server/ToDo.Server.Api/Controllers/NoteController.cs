@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using System.Web.Http;
@@ -59,6 +60,25 @@
         }
 
         [HttpGet]
+        public IHttpActionResult GetNotesFromToday(int page = 1)
+        {
+            var dbNotes = this.notesService
+                .GetNotesFromToday(this.CurrentUser(), page);
+
+            bool hasChange = this.CheckIfNotesAreExpired(dbNotes.ToList());
+
+            if (hasChange)
+            {
+                dbNotes = this.notesService
+                    .GetNotesFromToday(this.CurrentUser(), page);
+            }
+
+            var result = dbNotes.ProjectTo<NoteResponseModel>();
+
+            return this.Ok(result);
+        }
+
+        [HttpGet]
         public IHttpActionResult GetCompletedNotes(int page = 1)
         {
             var dbNotes = this.notesService
@@ -99,7 +119,12 @@
         [HttpDelete]
         public IHttpActionResult RemoveNoteById(int id)
         {
-            var note = this.notesService.All().FirstOrDefault(a => a.Id == id && a.UserId == this.CurrentUser());
+            string user = this.CurrentUser();
+
+            var note = this.notesService
+                .All()
+                .Where(a => a.Id == id && a.UserId == user)
+                .FirstOrDefault();
             if (note == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);

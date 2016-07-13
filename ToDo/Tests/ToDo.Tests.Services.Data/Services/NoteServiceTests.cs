@@ -171,22 +171,6 @@
         }
 
         [TestMethod]
-        public void AddNoteWithExpireDateShouldReturnCorrectResult()
-        {
-            string user = "username";
-            string title = "username title";
-            string content = "some test content";
-            DateTime expire = new DateTime(2014, 3, 3);
-
-            this.service.AddNote(user, title, content, expire);
-
-            Assert.AreEqual(notesCount + 1, this.service.All().Count());
-            Assert.AreEqual(user, this.noteRepository.All().Last().UserId);
-            Assert.AreEqual(1, this.noteRepository.NumberOfSaves);
-            Assert.AreEqual(expire, this.service.All().Last().ExpiredOn);
-        }
-
-        [TestMethod]
         public void SetExpiredShouldReturnCorrectResult()
         {
             var note = new Note()
@@ -232,6 +216,14 @@
         [TestMethod]
         public void GetCompletedNotesShouldReturnEmptyCollection()
         {
+            for (int i = 1; i <= 10; i++)
+            {
+                this.noteRepository.Add(new Note()
+                {
+                    IsComplete = true,
+                    UserId = "complete"
+                });
+            }
             var result = this.service.GetCompletedNotes("1", 1);
 
             Assert.AreEqual(0, result.Count());
@@ -240,9 +232,101 @@
         [TestMethod]
         public void GetCompleteNotesShouldPass()
         {
-            var result = this.service.GetCompletedNotes("complete", 1, notesCount);
+            for (int i = 1; i <= 10; i++)
+            {
+                this.noteRepository.Add(new Note()
+                {
+                    IsComplete = true,
+                    UserId = "complete"
+                });
+            }
+            var result = this.service.GetCompletedNotes("complete", 1);
 
-            Assert.AreEqual(notesCount, result.Count());
+            Assert.AreEqual(10, result.Count());
+            Assert.IsTrue(result.Any(a => a.IsComplete));
+        }
+
+        [TestMethod]
+        public void GetNotesFromTodayShouldReturnEmptyCollection()
+        {
+            var result = this.service.GetNotesFromToday("1", 1);
+
+            Assert.AreEqual(0, result.Count());
+        }
+
+        [TestMethod]
+        public void GetNotesFromTodayShouldPass()
+        {
+            this.noteRepository.Add(new Note()
+            {
+                UserId = "today",
+                CreatedOn = DateTime.Now
+            });
+            this.noteRepository.Add(new Note()
+            {
+                UserId = "today",
+                CreatedOn = DateTime.Now,
+                IsExpired = true
+
+            });
+            this.noteRepository.Add(new Note()
+            {
+                UserId = "today",
+                CreatedOn = DateTime.Now,
+                IsComplete = true
+            });
+            this.noteRepository.Add(new Note()
+            {
+                UserId = "today",
+                CreatedOn = DateTime.Now,
+                IsComplete = true,
+                IsExpired = true
+            });
+
+            var result = this.service.GetNotesFromToday("today", 1);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.IsFalse(result.First().IsComplete);
+            Assert.IsFalse(result.First().IsExpired);
+            Assert.AreEqual("today", result.First().UserId);
+        }
+
+        [TestMethod]
+        public void GetNotesFromTodayShouldPassOption2()
+        {
+            var result = this.service.GetNotesFromToday("today", 2, notesCount);
+
+            Assert.AreEqual(0, result.Count());
+        }
+
+        [TestMethod]
+        public void GetNotesFromTodayShouldPassOption3()
+        {
+            this.noteRepository.Add(new Note()
+            {
+                UserId = "today",
+                CreatedOn = DateTime.Now
+            });
+            this.noteRepository.Add(new Note()
+            {
+                UserId = "today",
+                CreatedOn = DateTime.Now.AddDays(1),
+                IsExpired = true
+
+            });
+            this.noteRepository.Add(new Note()
+            {
+                UserId = "today",
+                CreatedOn = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - 1),
+                IsComplete = true
+            });
+
+            var result = this.service.GetNotesFromToday("today", 1);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.IsFalse(result.First().IsComplete);
+            Assert.IsFalse(result.First().IsExpired);
+            Assert.AreEqual("today", result.First().UserId);
         }
     }
 }

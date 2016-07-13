@@ -75,8 +75,30 @@
             return notes;
         }
 
+        public IQueryable<Note> GetNotesFromToday(string user, int page,
+            int pageSize = ValidationConstants.DefaultPageSize)
+        {
+            var today = DateTime.Now;
+
+            var notes = this.data.All()
+                .Where(a =>
+                    a.UserId == user &&
+                    !a.IsComplete &&
+                    !a.IsExpired &&
+                    a.CreatedOn != null);
+
+            var todayNotes = notes.ToList()
+                .Where(a => a.CreatedOn.Date == today.Date)
+                .OrderBy(q => q.Content)
+                .Skip((page * pageSize) - pageSize)
+                .Take(pageSize)
+                .AsQueryable();
+
+            return todayNotes;
+        }
+
         public IQueryable<Note> GetCompletedNotes(
-            string user, 
+            string user,
             int page,
             int pageSize = ValidationConstants.DefaultPageSize)
         {

@@ -11,6 +11,8 @@
 
         IQueryable<Note> GetCompletedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
+        IQueryable<Note> GetNotesFromToday(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+
         IQueryable<Note> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
         IQueryable<Note> GetNotesWithExpiredDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);

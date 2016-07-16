@@ -48,9 +48,9 @@
         {
             MyWebApi
                 .Routes()
-                .ShouldMap("api/Note/GetNotesWithExpirateDate?page=5")
+                .ShouldMap("api/Note/GetNotesWithExpirationDate?page=5")
                 .WithHttpMethod(HttpMethod.Get)
-                .To<NoteController>(a => a.GetNotesWithExpirateDate(5));
+                .To<NoteController>(a => a.GetNotesWithExpirationDate(5));
         }
 
         [TestMethod]
@@ -91,6 +91,16 @@
                 .ShouldMap("api/Note/GetNotesFromToday?page=1")
                 .WithHttpMethod(HttpMethod.Get)
                 .To<NoteController>(a => a.GetNotesFromToday(1));
+        }
+
+        [TestMethod]
+        public void ChangeNote()
+        {
+            MyWebApi
+                .Routes()
+                .ShouldMap("api/Note/ChangeNote")
+                .WithHttpMethod(HttpMethod.Put)
+                .To<NoteController>(a => a.ChangeNote(new NoteRequestModel()));
         }
     }
 }

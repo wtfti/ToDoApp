@@ -15,7 +15,7 @@
 
         IQueryable<Note> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
-        IQueryable<Note> GetNotesWithExpiredDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+        IQueryable<Note> GetNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
         void AddNote(string user, string title, string content, DateTime? expireDate = null);
 

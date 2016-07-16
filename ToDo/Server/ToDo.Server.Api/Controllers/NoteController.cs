@@ -49,9 +49,9 @@
 
             int? id = note.Id;
 
-            if (id == null)
+            if (id == null || id.Value <= 0)
             {
-                return this.BadRequest(MessageConstants.InvalidDate);
+                return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
             var dbNote = this.notesService.GetNoteById(id.Value);
@@ -69,6 +69,11 @@
         [HttpGet]
         public IHttpActionResult GetNotes(int page = 1)
         {
+            if (page <= 0)
+            {
+                return this.BadRequest(MessageConstants.InvalidPage);
+            }
+
             var dbNotes = this.notesService
                 .GetNotes(this.CurrentUser(), page);
 
@@ -90,6 +95,11 @@
         [HttpGet]
         public IHttpActionResult GetNotesFromToday(int page = 1)
         {
+            if (page <= 0)
+            {
+                return this.BadRequest(MessageConstants.InvalidPage);
+            }
+
             var dbNotes = this.notesService
                 .GetNotesFromToday(this.CurrentUser(), page);
 
@@ -111,6 +121,11 @@
         [HttpGet]
         public IHttpActionResult GetCompletedNotes(int page = 1)
         {
+            if (page <= 0)
+            {
+                return this.BadRequest(MessageConstants.InvalidPage);
+            }
+
             var dbNotes = this.notesService
                 .GetCompletedNotes(this.CurrentUser(), page);
 
@@ -130,10 +145,15 @@
         }
 
         [HttpGet]
-        public IHttpActionResult GetNotesWithExpirateDate(int page = 1)
+        public IHttpActionResult GetNotesWithExpirationDate(int page = 1)
         {
+            if (page <= 0)
+            {
+                return this.BadRequest(MessageConstants.InvalidPage);
+            }
+
             var dbNotes = this.notesService
-                .GetNotesWithExpiredDate(this.CurrentUser(), page);
+                .GetNotesWithExpirationDate(this.CurrentUser(), page);
 
             var dbNotesList = dbNotes.ToList();
 
@@ -142,7 +162,7 @@
             if (hasChange)
             {
                 dbNotes = this.notesService
-                    .GetNotesWithExpiredDate(this.CurrentUser(), page);
+                    .GetNotesWithExpirationDate(this.CurrentUser(), page);
             }
 
             var result = dbNotes.ProjectTo<NoteResponseModel>();
@@ -153,6 +173,11 @@
         [HttpDelete]
         public IHttpActionResult RemoveNoteById(int id)
         {
+            if (id <= 0)
+            {
+                return this.BadRequest(MessageConstants.NoteDoesNotExist);
+            }
+
             var note = this.notesService
                 .GetNoteById(id);
             if (note == null || note.UserId != this.CurrentUser())
@@ -168,6 +193,11 @@
         [HttpPut]
         public IHttpActionResult SetComplete(int id)
         {
+            if (id <= 0)
+            {
+                return this.BadRequest(MessageConstants.NoteDoesNotExist);
+            }
+
             var note = this.notesService.GetNoteById(id);
 
             if (note == null || note.UserId != this.CurrentUser())

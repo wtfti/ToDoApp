@@ -21,7 +21,7 @@
                 .Returns(GenerateNotes);
             notesService.Setup(a => a.GetNotesFromToday(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateTodayNotes);
-            notesService.Setup(a => a.GetNotesWithExpiredDate(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+            notesService.Setup(a => a.GetNotesWithExpirationDate(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateNotes);
             notesService.Setup(a => a.GetCompletedNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateCompleteNotes);

@@ -169,7 +169,7 @@
         [TestMethod]
         public void GetNotesWithExpiredDateShouldReturnEmptyCollection()
         {
-            var result = this.service.GetNotesWithExpiredDate("101", 1);
+            var result = this.service.GetNotesWithExpirationDate("101", 1);
 
             Assert.AreEqual(0, result.Count());
         }
@@ -179,7 +179,7 @@
         {
             var note = this.service.GetNoteById(10);
             note.IsExpired = true;
-            var result = this.service.GetNotesWithExpiredDate("expired", 1);
+            var result = this.service.GetNotesWithExpirationDate("expired", 1);
 
             Assert.AreEqual(10, result.Count());
             Assert.IsTrue(result.Any(a => a.UserId == "expired"));

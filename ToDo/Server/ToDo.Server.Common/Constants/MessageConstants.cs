@@ -17,5 +17,6 @@
         public const string InvalidEmail = "Invalid Email!";
         public const string InvalidJsonFormat = "Wrong JSON format";
         public const string UnknownAttribute = "Unknown attribute";
+        public const string InvalidPage = "Invalid Page";
     }
 }

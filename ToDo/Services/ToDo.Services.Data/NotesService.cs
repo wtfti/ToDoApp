@@ -127,7 +127,7 @@
             return notes;
         }
 
-        public IQueryable<Note> GetNotesWithExpiredDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
+        public IQueryable<Note> GetNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
         {
             var notes = this.data.All()
                 .Where(a => a.IsExpired && a.UserId == user)

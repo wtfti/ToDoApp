@@ -2,7 +2,6 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
     using System.Web.Http.Controllers;
@@ -18,7 +17,6 @@
     {
         private readonly JsonSchemaGenerator jsonSchemaGenerator;
         private readonly IsoDateTimeConverter dateTimeConverter;
-        private readonly JsonSchema jsonSchema;
         private readonly JsonSchema schema;
 
         public NoteRequestModelBinder()
@@ -28,10 +26,9 @@
             {
                 DateTimeFormat = ValidationConstants.ExpireDateFormat
             };
-            var myType = typeof(NoteRequestModel);
-            this.jsonSchema = this.jsonSchemaGenerator.Generate(myType);
-            var schemaJson = this.jsonSchema;
-            schemaJson.Title = myType.Name;
+            var type = typeof(NoteRequestModel);
+            var schemaJson = this.jsonSchemaGenerator.Generate(type);
+            schemaJson.Title = type.Name;
 
             this.schema = JsonSchema.Parse(schemaJson.ToString());
         }
@@ -52,7 +49,8 @@
             if (!valid)
             {
                 bindingContext.ModelState.AddModelError(
-                    bindingContext.ModelName, MessageConstants.InvalidJsonFormat);
+                    bindingContext.ModelName, 
+                    MessageConstants.InvalidJsonFormat);
                 return false;
             }
 
@@ -92,11 +90,11 @@
 
                 foreach (var attribute in attributes)
                 {
-                    var reqiredAttribute = attribute as RequiredAttribute;
+                    var jsonPropertyAttribute = attribute as JsonPropertyAttribute;
                     var minAttribute = attribute as MinLengthAttribute;
                     var maxAttribute = attribute as MaxLengthAttribute;
                     bool isValid = true;
-                    string errorMessage = "";
+                    string errorMessage = string.Empty;
                     if (minAttribute != null)
                     {
                         isValid = minAttribute.IsValid(jsonObj.GetType().GetProperty(property.Name).GetValue(jsonObj, null));
@@ -113,7 +111,7 @@
                             errorMessage = maxAttribute.FormatErrorMessage(property.Name);
                         }
                     }
-                    else if (reqiredAttribute == null)
+                    else if (jsonPropertyAttribute == null)
                     {
                         bindingContext.ModelState.AddModelError(
                             bindingContext.ModelName,
@@ -130,6 +128,7 @@
                     }
                 }
             }
+
             return true;
         }
     }

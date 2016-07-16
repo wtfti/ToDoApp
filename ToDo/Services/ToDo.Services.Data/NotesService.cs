@@ -16,9 +16,41 @@
             this.data = noteRepository;
         }
 
+        public void EditNote(
+            Note dbNote,
+            string newTitle, 
+            string newContent, 
+            DateTime? newExpiredOn)
+        {
+            bool hasChange = false;
+
+            if (dbNote.Title != newTitle)
+            {
+                dbNote.Title = newTitle;
+                hasChange = true;
+            }
+
+            if (dbNote.Content != newContent)
+            {
+                dbNote.Content = newContent;
+                hasChange = true;
+            }
+
+            if (dbNote.ExpiredOn != newExpiredOn)
+            {
+                dbNote.ExpiredOn = newExpiredOn;
+                hasChange = true;
+            }
+
+            if (hasChange)
+            {
+                this.data.SaveChanges();
+            }
+        }
+
         public IQueryable<Note> All()
         {
-            var notes = this.data.All().Where(a => !a.IsComplete && !a.IsExpired);
+            var notes = this.data.All();
 
             return notes;
         }
@@ -29,27 +61,9 @@
             this.data.SaveChanges();
         }
 
-        public void ChangeNoteTitle(Note note, string newValue)
-        {
-            note.Title = newValue;
-            this.data.SaveChanges();
-        }
-
         public void SetComplete(Note note)
         {
             note.IsComplete = true;
-            this.data.SaveChanges();
-        }
-
-        public void ChangeNoteContent(Note note, string newValue)
-        {
-            note.Content = newValue;
-            this.data.SaveChanges();
-        }
-
-        public void ChangeNoteExpireDate(Note note, DateTime date)
-        {
-            note.ExpiredOn = date;
             this.data.SaveChanges();
         }
 
@@ -75,7 +89,9 @@
             return notes;
         }
 
-        public IQueryable<Note> GetNotesFromToday(string user, int page,
+        public IQueryable<Note> GetNotesFromToday(
+            string user, 
+            int page,
             int pageSize = ValidationConstants.DefaultPageSize)
         {
             var today = DateTime.Now;
@@ -114,7 +130,7 @@
         public IQueryable<Note> GetNotesWithExpiredDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
         {
             var notes = this.data.All()
-                .Where(a => a.ExpiredOn != null && a.UserId == user)
+                .Where(a => a.IsExpired && a.UserId == user)
                 .OrderBy(w => w.Id)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);

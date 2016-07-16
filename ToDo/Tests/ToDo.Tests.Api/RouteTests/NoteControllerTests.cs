@@ -64,46 +64,6 @@
         }
 
         [TestMethod]
-        public void ChangeNoteTitleRoute()
-        {
-            MyWebApi
-                .Routes()
-                .ShouldMap("api/Note/ChangeNoteTitle?id=5&&newValue=test")
-                .WithHttpMethod(HttpMethod.Put)
-                .To<NoteController>(a => a.ChangeNoteTitle(5, "test"));
-        }
-
-        [TestMethod]
-        public void ChangeNoteContentRoute()
-        {
-            MyWebApi
-                .Routes()
-                .ShouldMap("api/Note/ChangeNoteContent?id=5&&newValue=test")
-                .WithHttpMethod(HttpMethod.Put)
-                .To<NoteController>(a => a.ChangeNoteContent(5, "test"));
-        }
-
-        [TestMethod]
-        public void SetNoteExpireDateRoute()
-        {
-            MyWebApi
-                .Routes()
-                .ShouldMap("api/Note/SetNoteExpireDate?id=5&&date=01 02 2016")
-                .WithHttpMethod(HttpMethod.Put)
-                .To<NoteController>(a => a.SetNoteExpireDate(5, "01 02 2016"));
-        }
-
-        [TestMethod]
-        public void ChangeExpireDateRoute()
-        {
-            MyWebApi
-                .Routes()
-                .ShouldMap("api/Note/ChangeExpireDate?id=5&&date=01 02 2016")
-                .WithHttpMethod(HttpMethod.Put)
-                .To<NoteController>(a => a.ChangeExpireDate(5, "01 02 2016"));
-        }
-
-        [TestMethod]
         public void GetCompletedNotesRoute()
         {
             MyWebApi

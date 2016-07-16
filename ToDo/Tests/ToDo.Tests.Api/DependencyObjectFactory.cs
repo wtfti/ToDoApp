@@ -17,9 +17,6 @@
 
             notesService.Setup(a => a.AddNote(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>()));
             notesService.Setup(a => a.All()).Returns(GenerateNotes);
-            notesService.Setup(a => a.ChangeNoteContent(It.IsAny<Note>(), It.IsAny<string>()));
-            notesService.Setup(a => a.ChangeNoteExpireDate(It.IsAny<Note>(), It.IsAny<DateTime>()));
-            notesService.Setup(a => a.ChangeNoteTitle(It.IsAny<Note>(), It.IsAny<string>()));
             notesService.Setup(a => a.GetNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateNotes);
             notesService.Setup(a => a.GetNotesFromToday(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
@@ -29,6 +26,8 @@
             notesService.Setup(a => a.GetCompletedNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateCompleteNotes);
             notesService.Setup(a => a.RemoveNoteById(It.IsAny<Note>()));
+            notesService.Setup(a => a.GetNoteById(1))
+                .Returns(GenerateNotes().First());
 
             return notesService.Object;
         }

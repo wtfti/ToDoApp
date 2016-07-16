@@ -15,17 +15,31 @@
 
         private static void GenerateNotes(InMemoryRepository<Note> noteRepository, int count)
         {
-            for (int i = 1; i <= count; i++)
+            for (int i = 1; i <= count * 2; i++)
             {
-                noteRepository.Add(new Note()
+                if (i <= count)
                 {
-                    Id = i,
-                    Title = "Title " + i,
-                    Content = "Content " + i,
-                    CreatedOn = DateTime.Now.AddDays(i),
-                    ExpiredOn = DateTime.Now.AddDays(i + i),
-                    UserId = i.ToString()
-                });
+                    noteRepository.Add(new Note()
+                    {
+                        Id = i,
+                        Title = "Title " + i,
+                        Content = "Content " + i,
+                        CreatedOn = DateTime.Now.AddDays(i),
+                        ExpiredOn = DateTime.Now.AddDays(i + i),
+                        UserId = i.ToString()
+                    });
+                }
+                else if (i > count)
+                {
+                    noteRepository.Add(new Note()
+                    {
+                        Id = i,
+                        Title = "Expired Title " + i,
+                        Content = "Expired Content " + i,
+                        IsExpired = true,
+                        UserId = "expired"
+                    });
+                }
             }
         }
     }

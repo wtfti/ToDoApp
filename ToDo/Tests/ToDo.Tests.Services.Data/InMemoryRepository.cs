@@ -80,7 +80,7 @@
                 throw new InvalidOperationException("No objects in database");
             }
 
-            return this.data[0];
+            return this.data[(int)id];
         }
 
         public int SaveChanges()

@@ -16,7 +16,7 @@
             this.data = noteRepository;
         }
 
-        public void EditNote(
+        public void ChangeNote(
             Note dbNote,
             string newTitle, 
             string newContent, 

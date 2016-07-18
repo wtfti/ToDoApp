@@ -305,5 +305,112 @@
             Assert.IsFalse(result.First().IsExpired);
             Assert.AreEqual("today", result.First().UserId);
         }
+
+        [TestMethod]
+        public void ChangeNoteShouldPass()
+        {
+            var dbNote = new Note()
+            {
+                Title = "test",
+                Content = "content",
+                ExpiredOn = new DateTime(2016, 1, 1)
+            };
+
+            string newTitle = "test";
+            string newContent = "content";
+            DateTime? newExpirationDate = new DateTime(2016, 1, 1);
+
+            this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
+
+            Assert.AreEqual(0, this.noteRepository.SaveChanges());
+        }
+
+        [TestMethod]
+        public void ChangeNoteShouldPassOption2()
+        {
+            var dbNote = new Note()
+            {
+                Title = "test",
+                Content = "content",
+                ExpiredOn = new DateTime(2016, 1, 1)
+            };
+
+            string newTitle = "test------";
+            string newContent = "content";
+            DateTime? newExpirationDate = new DateTime(2016, 1, 1);
+
+            this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
+
+            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+        }
+
+        [TestMethod]
+        public void ChangeNoteShouldPassOption3()
+        {
+            var dbNote = new Note()
+            {
+                Title = "test",
+                Content = "content",
+                ExpiredOn = new DateTime(2016, 1, 1)
+            };
+
+            string newTitle = "test";
+            string newContent = "content------";
+            DateTime? newExpirationDate = new DateTime(2016, 1, 1);
+
+            this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
+
+            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+        }
+
+        [TestMethod]
+        public void ChangeNoteShouldPassOption4()
+        {
+            var dbNote = new Note()
+            {
+                Title = "test",
+                Content = "content",
+                ExpiredOn = new DateTime(2016, 1, 1)
+            };
+
+            string newTitle = "test";
+            string newContent = "content";
+            DateTime? newExpirationDate = new DateTime(2016, 1, 2);
+
+            this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
+
+            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+        }
+
+        [TestMethod]
+        public void GetNoteByIdShouldPass()
+        {
+            var result = this.service.GetNoteById(4);
+
+            var dbNote = new Note()
+            {
+                Id = 5,
+                Title = "Title " + 5,
+                Content = "Content " + 5,
+                CreatedOn = DateTime.Now.AddDays(5),
+                ExpiredOn = DateTime.Now.AddDays(5 + 5),
+                UserId = 5.ToString()
+            };
+
+            Assert.AreEqual(result.Id, dbNote.Id);
+            Assert.AreEqual(result.Title, dbNote.Title);
+            Assert.AreEqual(result.Content, dbNote.Content);
+            Assert.AreEqual(result.CreatedOn.Date, dbNote.CreatedOn.Date);
+            Assert.AreEqual(result.ExpiredOn.Value.Date, dbNote.ExpiredOn.Value.Date);
+            Assert.AreEqual(result.UserId, dbNote.UserId);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GetNoteByIdShouldReturnNull()
+        {
+            this.service.GetNoteById(int.MaxValue);
+            this.service.GetNoteById(356);
+        }
     }
 }

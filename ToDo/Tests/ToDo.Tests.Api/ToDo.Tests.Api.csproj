@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="ControllerTests\NoteControllerTests.cs" />
     <Compile Include="DependencyObjectFactory.cs" />
+    <Compile Include="ModelBindersTests\NoteRequestModelBinderTests.cs" />
     <Compile Include="RouteTests\NoteControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -124,6 +125,7 @@
       <Name>ToDo.Services.Data</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

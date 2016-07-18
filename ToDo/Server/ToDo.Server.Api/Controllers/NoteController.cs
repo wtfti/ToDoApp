@@ -61,7 +61,7 @@
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
-            this.notesService.EditNote(dbNote, note.Title, note.Content, note.ExpiredOn);
+            this.notesService.ChangeNote(dbNote, note.Title, note.Content, note.ExpiredOn);
 
             return this.Ok();
         }

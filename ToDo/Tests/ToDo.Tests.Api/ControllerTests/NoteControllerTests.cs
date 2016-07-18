@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Reflection;
     using System.Web.Http;
     using Data.Models;
@@ -67,7 +66,7 @@
             var note = new NoteRequestModel();
             note.Title = "test";
             note.Content = "test";
-            note.ExpiredOn = new DateTime(2016, 1 , 1);
+            note.ExpiredOn = new DateTime(2016, 1, 1);
 
             MyWebApi
                 .Controller<NoteController>()
@@ -331,7 +330,6 @@
         [TestMethod]
         public void GetCompletedNotesShouldReturnEmptyCollection()
         {
-            bool expired = false;
             var notes = new List<Note>();
 
             var notesService = new Mock<INotesService>();

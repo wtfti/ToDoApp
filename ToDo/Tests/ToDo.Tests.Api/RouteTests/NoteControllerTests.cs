@@ -5,7 +5,6 @@
     using MyTested.WebApi;
     using ToDo.Api;
     using ToDo.Api.Controllers;
-    using ToDo.Api.Models.Note;
 
     [TestClass]
     public class UnitTest1
@@ -20,17 +19,12 @@
         [TestMethod]
         public void AddNoteRoute()
         {
-            // TODO test modelbinder and fix this method
             MyWebApi
                 .Routes()
                 .ShouldMap("api/Note/Addnote")
                 .WithHttpMethod(HttpMethod.Post)
                 .WithJsonContent(@"{""Title"": ""expire"", ""Content"": ""create content""}")
-                .To<NoteController>(a => a.AddNote(new NoteRequestModel()
-                {
-                    Title = "expire",
-                    Content = "create content"
-                }));
+                .To<NoteController>(a => a.AddNote(null));
         }
 
         [TestMethod]
@@ -100,7 +94,8 @@
                 .Routes()
                 .ShouldMap("api/Note/ChangeNote")
                 .WithHttpMethod(HttpMethod.Put)
-                .To<NoteController>(a => a.ChangeNote(new NoteRequestModel()));
+                .WithJsonContent(@"{""Title"": ""expire"", ""Content"": ""create content""}")
+                .To<NoteController>(a => a.ChangeNote(null));
         }
     }
 }

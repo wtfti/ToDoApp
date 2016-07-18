@@ -19,7 +19,7 @@
 
         void AddNote(string user, string title, string content, DateTime? expireDate = null);
 
-        void EditNote(Note dbNote, string newTitle, string newContent, DateTime? newExpiredOn);
+        void ChangeNote(Note dbNote, string newTitle, string newContent, DateTime? newExpiredOn);
 
         IQueryable<Note> All();
 

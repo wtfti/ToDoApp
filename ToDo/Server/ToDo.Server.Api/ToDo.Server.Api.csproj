@@ -208,6 +208,8 @@
     <Compile Include="Infrastructure\Mapping\IMapFrom.cs" />
     <Compile Include="Infrastructure\Validation\ValidateModelAttribute.cs" />
     <Compile Include="ModelBinders\NoteRequestModelBinder.cs" />
+    <Compile Include="Models\Account\UserProfileRequestModel.cs" />
+    <Compile Include="Models\Account\UserProfileResponseModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Note\NoteRequestModel.cs" />
     <Compile Include="Models\Note\NoteResponseModel.cs" />

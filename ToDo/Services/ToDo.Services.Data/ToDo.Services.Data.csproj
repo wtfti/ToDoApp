@@ -57,6 +57,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountService.cs" />
+    <Compile Include="Contracts\IAccountService.cs" />
     <Compile Include="Contracts\INotesService.cs" />
     <Compile Include="NotesService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

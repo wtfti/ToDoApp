@@ -18,5 +18,11 @@
         {
             return new ToDoDbContext();
         }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProfileDetails>().HasRequired(x => x.User);
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

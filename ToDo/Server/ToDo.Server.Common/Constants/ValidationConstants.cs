@@ -15,6 +15,8 @@
         public const int PasswordMaxLenght = 40;
         public const int FullNameMinLenght = 6;
         public const int FullNameMaxLenght = 30;
+        public const int MinAge = 4;
+        public const int MaxAge = 117;
         public const string EmailRegexPattern = @"(([^<>()\[\]\\.,;:\s@""]+(\.[^<>()\[\]\\.,;:\s@""]+)*)|("".+""))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$";
     }
 }

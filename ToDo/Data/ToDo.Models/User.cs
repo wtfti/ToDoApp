@@ -17,20 +17,19 @@
             this.notes = new HashSet<Note>();
         }
 
+        [Key]
+        public override string Id { get; set; }
+
+        [Index(IsUnique = true)]
+        public override string Email { get; set; }
+
+        public virtual ProfileDetails ProfileDetails { get; set; }
+
         public virtual ICollection<Note> Notes
         {
             get { return this.notes; }
             set { this.notes = value; }
         }
-
-        [Key]
-        public override string Id { get; set; }
-
-        [Required]
-        public string FullName { get; set; }
-
-        [Index(IsUnique = true)]
-        public override string Email { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager, string authenticationType)
         {

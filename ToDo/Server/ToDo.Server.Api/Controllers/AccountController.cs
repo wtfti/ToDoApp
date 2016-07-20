@@ -10,11 +10,15 @@
     using Microsoft.Owin.Security.Cookies;
     using Models.Account;
     using Server.Common.Constants;
+    using Services.Data.Contracts;
 
     public class AccountController : BaseController
     {
-        public AccountController()
+        private readonly IAccountService accountService;
+
+        public AccountController(IAccountService service)
         {
+            this.accountService = service;
         }
 
         public AccountController(ApplicationUserManager applicationUserManager)
@@ -31,9 +35,12 @@
         {
             var user = new User()
             {
-                FullName = registerModel.FullName,
                 UserName = registerModel.Email,
-                Email = registerModel.Email
+                Email = registerModel.Email,
+                ProfileDetails = new ProfileDetails()
+                {
+                    FullName = registerModel.FullName
+                }
             };
 
             IdentityResult result = await this.UserManager.CreateAsync(user, registerModel.Password);
@@ -50,6 +57,38 @@
         {
             this.Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return this.Ok(MessageConstants.Logout);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IHttpActionResult Details()
+        {
+            var userId = this.User.Identity.GetUserId();
+
+            var userDetails = this.accountService
+                .ProfileDetails(userId);
+
+            var result = new UserProfileResponseModel()
+            {
+                FullName = userDetails.FullName,
+                Age = userDetails.Age,
+                Gender = userDetails.Gender.ToString(),
+                Email = this.User.Identity.Name
+            };
+
+            return this.Ok(result);
+        }
+
+        [HttpPut]
+        [ValidateModel]
+        [Authorize]
+        public IHttpActionResult Edit(UserProfileRequestModel user)
+        {
+            var userId = this.User.Identity.GetUserId();
+
+            this.accountService.Edit(userId, user.FullName, user.Age, user.Gender);
+
+            return this.Ok();
         }
     }
 }

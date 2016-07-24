@@ -1,9 +1,12 @@
 ﻿namespace ToDo.Api.Controllers
 {
+    using System;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using System.Web.Hosting;
     using System.Web.Http;
     using Data.Models;
+    using Data.Models.Account;
     using Infrastructure.Validation;
     using Microsoft.AspNet.Identity;
     using Microsoft.Owin.Security;
@@ -12,6 +15,7 @@
     using Server.Common.Constants;
     using Services.Data.Contracts;
 
+    [Authorize]
     public class AccountController : BaseController
     {
         private readonly IAccountService accountService;
@@ -39,7 +43,11 @@
                 Email = registerModel.Email,
                 ProfileDetails = new ProfileDetails()
                 {
-                    FullName = registerModel.FullName
+                    FullName = registerModel.FullName,
+                    Background = new Background()
+                    {
+                        Value = HostingEnvironment.MapPath(ValidationConstants.DefaultBackground)
+                    }
                 }
             };
 
@@ -60,7 +68,6 @@
         }
 
         [HttpGet]
-        [Authorize]
         public IHttpActionResult Details()
         {
             var userId = this.User.Identity.GetUserId();
@@ -81,14 +88,29 @@
 
         [HttpPut]
         [ValidateModel]
-        [Authorize]
         public IHttpActionResult Edit(UserProfileRequestModel user)
         {
             var userId = this.User.Identity.GetUserId();
 
-            this.accountService.Edit(userId, user.FullName, user.Age, user.Gender);
+            this.accountService.Edit(
+                userId,
+                user.FullName,
+                user.Age,
+                user.Gender,
+                user.Image,
+                HostingEnvironment.MapPath(string.Format(ValidationConstants.CustomBackgroundFileName, userId)));
 
             return this.Ok();
+        }
+
+        [HttpGet]
+        public IHttpActionResult Background()
+        {
+            var userId = this.User.Identity.GetUserId();
+
+            string background = this.accountService.GetBackground(userId);
+
+            return this.Ok(background);
         }
     }
 }

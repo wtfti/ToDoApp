@@ -4,6 +4,7 @@
     using Common.Contracts;
     using Microsoft.AspNet.Identity.EntityFramework;
     using Models;
+    using Models.Account;
 
     public class ToDoDbContext : IdentityDbContext<User>, IToDoDbContext
     {
@@ -22,6 +23,7 @@
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProfileDetails>().HasRequired(x => x.User);
+            modelBuilder.Entity<Background>().HasRequired(x => x.ProfileDetails);
             base.OnModelCreating(modelBuilder);
         }
     }

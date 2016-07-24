@@ -4,6 +4,8 @@
     {
         public const string ExpireDateFormat = "dd/MM/yyyy HH:mm";
         public const string PasswordProperty = "Password";
+        public const string DefaultBackground = "~/Images/DefaultBackground.b";
+        public const string CustomBackgroundFileName = "~/Images/{0}background.b";
         public const int TitleMinLenght = 3;
         public const int TitleMaxLenght = 30;
         public const int ContentMinLenght = 1;

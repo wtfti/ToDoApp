@@ -62,9 +62,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GenderType.cs" />
+    <Compile Include="Account\Background.cs" />
+    <Compile Include="Account\GenderType.cs" />
     <Compile Include="Note.cs" />
-    <Compile Include="ProfileDetails.cs" />
+    <Compile Include="Account\ProfileDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace ToDo.Data.Models
+﻿namespace ToDo.Data.Models.Account
 {
     public enum GenderType
     {

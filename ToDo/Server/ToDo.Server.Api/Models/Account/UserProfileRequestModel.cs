@@ -1,7 +1,7 @@
 ﻿namespace ToDo.Api.Models.Account
 {
     using System.ComponentModel.DataAnnotations;
-    using Data.Models;
+    using Data.Models.Account;
 
     public class UserProfileRequestModel
     {
@@ -13,5 +13,7 @@
 
         [Required]
         public GenderType Gender { get; set; }
+
+        public string Image { get; set; }
     }
 }

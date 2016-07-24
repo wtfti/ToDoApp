@@ -1,4 +1,4 @@
-﻿namespace ToDo.Data.Models
+﻿namespace ToDo.Data.Models.Account
 {
     using System.ComponentModel.DataAnnotations;
     using Server.Common.Constants;
@@ -16,5 +16,7 @@
         public int? Age { get; set; }
 
         public GenderType Gender { get; set; }
+
+        public virtual Background Background { get; set; }
     }
 }

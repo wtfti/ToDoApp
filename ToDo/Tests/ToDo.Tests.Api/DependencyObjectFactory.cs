@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Data.Models;
+    using Data.Models.Account;
     using Moq;
     using Services.Data.Contracts;
 
@@ -11,7 +12,7 @@
     {
         private const int Count = 50;
 
-        public static INotesService GetNotesService()
+        public static INotesService MockNotesService()
         {
             var notesService = new Mock<INotesService>();
 
@@ -30,6 +31,25 @@
                 .Returns(GenerateNotes().First());
 
             return notesService.Object;
+        }
+
+        public static IAccountService MockAccountService()
+        {
+            var accountService = new Mock<IAccountService>();
+
+            accountService.Setup(a => a.GetBackground(It.IsAny<string>())).Returns("image");
+            accountService
+                .Setup(a => a.ProfileDetails(It.IsAny<string>()))
+                .Returns(new ProfileDetails());
+            accountService.Setup(a => a.Edit(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<int?>(),
+                It.IsAny<GenderType>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()));
+
+            return accountService.Object;
         }
 
         private static IQueryable<Note> GenerateNotes()

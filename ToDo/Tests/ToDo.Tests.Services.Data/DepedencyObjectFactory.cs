@@ -2,13 +2,21 @@
 {
     using System;
     using ToDo.Data.Models;
+    using ToDo.Data.Models.Account;
 
     public static class DepedencyObjectFactory
     {
-        public static InMemoryRepository<Note> GetNoteRepository(int notesInRepository)
+        public static InMemoryRepository<Note> GetNoteRepository(int notesCount)
         {
             var repository = new InMemoryRepository<Note>();
-            GenerateNotes(repository, notesInRepository);
+            GenerateNotes(repository, notesCount);
+
+            return repository;
+        }
+
+        public static InMemoryRepository<ProfileDetails> GetProfileDetailsRepository()
+        {
+            var repository = new InMemoryRepository<ProfileDetails>();
 
             return repository;
         }

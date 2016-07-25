@@ -30,7 +30,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .ShouldHave()
                 .Attributes(attr => attr.RestrictingForAuthorizedRequests());
         }
@@ -40,7 +40,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .Calling(a => a.AddNote(new NoteRequestModel()))
                 .ShouldReturn()
                 .Ok()
@@ -52,7 +52,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .Calling(a => a.AddNote(new NoteRequestModel()))
                 .ShouldHave()
                 .ActionAttributes(a => a.ContainingAttributeOfType<ValidateModelAttribute>());
@@ -99,7 +99,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .Calling(a => a.AddNote(new NoteRequestModel()))
                 .ShouldHave()
                 .ActionAttributes(a => a.ContainingAttributeOfType<HttpPostAttribute>());
@@ -110,7 +110,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .Calling(a => a.GetNotes(1))
                 .ShouldReturn()
                 .Ok()
@@ -122,7 +122,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .Calling(a => a.GetNotes(2))
                 .ShouldHave()
                 .ActionAttributes(a => a.ContainingAttributeOfType<HttpGetAttribute>());
@@ -133,14 +133,14 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .Calling(a => a.GetNotes(-1))
                 .ShouldReturn()
                 .BadRequest();
 
             MyWebApi
                .Controller<NoteController>()
-               .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+               .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                .Calling(a => a.GetNotes(0))
                .ShouldReturn()
                .BadRequest();
@@ -151,7 +151,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .Calling(a => a.GetNotesWithExpirationDate(1))
                 .ShouldReturn()
                 .Ok()
@@ -163,14 +163,14 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .Calling(a => a.GetNotesWithExpirationDate(-1))
                 .ShouldReturn()
                 .BadRequest();
 
             MyWebApi
                .Controller<NoteController>()
-               .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+               .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                .Calling(a => a.GetNotesWithExpirationDate(0))
                .ShouldReturn()
                .BadRequest();
@@ -181,7 +181,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.RemoveNoteById(2))
                 .ShouldReturn()
@@ -194,7 +194,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.RemoveNoteById(1))
                 .ShouldReturn()
@@ -207,7 +207,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
                 .Calling(q => q.RemoveNoteById(0))
                 .ShouldReturn()
@@ -220,7 +220,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.RemoveNoteById(1))
                 .ShouldReturn()
@@ -233,7 +233,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.SetComplete(101))
                 .ShouldReturn()
@@ -246,7 +246,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User1"))
                 .Calling(q => q.SetComplete(1))
                 .ShouldReturn()
@@ -259,7 +259,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User1"))
                 .Calling(q => q.SetComplete(-1))
                 .ShouldReturn()
@@ -297,7 +297,7 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.GetCompletedNotes(1))
                 .ShouldReturn()
@@ -314,14 +314,14 @@
         {
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .Calling(a => a.GetCompletedNotes(-1))
                 .ShouldReturn()
                 .BadRequest();
 
             MyWebApi
                .Controller<NoteController>()
-               .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+               .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                .Calling(a => a.GetCompletedNotes(0))
                .ShouldReturn()
                .BadRequest();
@@ -484,7 +484,7 @@
 
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.ChangeNote(note))
                 .ShouldReturn()
@@ -503,7 +503,7 @@
 
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.ChangeNote(note))
                 .ShouldReturn()
@@ -522,7 +522,7 @@
 
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.GetNotesService())
+                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.ChangeNote(note))
                 .ShouldReturn()

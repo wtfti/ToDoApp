@@ -32,8 +32,9 @@
             dbUser.Gender = gender;
             if (image != null && dbUser.Background.Value != image)
             {
-                using (var fs = new FileStream(path, FileMode.Truncate))
+                using (var fs = new FileStream(path, FileMode.OpenOrCreate))
                 {
+                    fs.SetLength(0);
                     using (var sw = new StreamWriter(fs))
                     {
                         sw.Write(image);

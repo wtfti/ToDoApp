@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="DepedencyObjectFactory.cs" />
     <Compile Include="InMemoryRepository.cs" />
+    <Compile Include="Services\AccountServiceTests.cs" />
     <Compile Include="Services\NoteServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

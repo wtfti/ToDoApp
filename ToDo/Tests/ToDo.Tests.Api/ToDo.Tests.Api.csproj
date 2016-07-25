@@ -97,9 +97,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ControllerTests\AccountControllerTests.cs" />
     <Compile Include="ControllerTests\NoteControllerTests.cs" />
     <Compile Include="DependencyObjectFactory.cs" />
     <Compile Include="ModelBindersTests\NoteRequestModelBinderTests.cs" />
+    <Compile Include="RouteTests\AccountControllerTests.cs" />
     <Compile Include="RouteTests\NoteControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

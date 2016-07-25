@@ -18,5 +18,6 @@
         public const string InvalidJsonFormat = "Wrong JSON format";
         public const string UnknownAttribute = "Unknown attribute";
         public const string InvalidPage = "Invalid Page";
+        public const string NewPasswordIsNotSameAsConfirmPassword = "New password is not same as confirm password";
     }
 }

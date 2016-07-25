@@ -9,34 +9,34 @@
 
     public class AccountService : IAccountService
     {
-        private readonly IRepository<ProfileDetails> data;
+        private readonly IRepository<ProfileDetails> profileDetailsData;
 
-        public AccountService(IRepository<ProfileDetails> userRepository)
+        public AccountService(IRepository<ProfileDetails> userProfileRepository)
         {
-            this.data = userRepository;
+            this.profileDetailsData = userProfileRepository;
         }
 
         public ProfileDetails ProfileDetails(string userId)
         {
-            var user = this.data.All().Where(a => a.Id == userId).Single();
+            var user = this.profileDetailsData.All().Where(a => a.Id == userId).Single();
 
             return user;
         }
 
-        public async void Edit(string userId, string fullName, int? age, GenderType gender, string image, string path)
+        public void Edit(string userId, string fullName, int? age, GenderType gender, string image, string path)
         {
-            var dbUser = this.data.All().Where(a => a.Id == userId).Single();
+            var dbUser = this.profileDetailsData.All().Where(a => a.Id == userId).Single();
 
             dbUser.FullName = fullName;
             dbUser.Age = age;
             dbUser.Gender = gender;
-            if (dbUser.Background.Value != image)
+            if (image != null && dbUser.Background.Value != image)
             {
                 using (var fs = new FileStream(path, FileMode.Truncate))
                 {
                     using (var sw = new StreamWriter(fs))
                     {
-                        await sw.WriteAsync(image);
+                        sw.Write(image);
                     }
                 }
 
@@ -44,12 +44,12 @@
             }
             
 
-            this.data.SaveChanges();
+            this.profileDetailsData.SaveChanges();
         }
 
         public string GetBackground(string userId)
         {
-            var dbUser = this.data.All().Where(a => a.Id == userId).Single();
+            var dbUser = this.profileDetailsData.All().Where(a => a.Id == userId).Single();
             string background = dbUser.Background.Value;
             var result = new StringBuilder();
 

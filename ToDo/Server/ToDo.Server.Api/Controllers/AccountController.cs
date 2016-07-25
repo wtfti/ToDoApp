@@ -1,6 +1,5 @@
 ﻿namespace ToDo.Api.Controllers
 {
-    using System;
     using System.Net.Http;
     using System.Threading.Tasks;
     using System.Web.Hosting;
@@ -60,7 +59,29 @@
 
             return this.Ok(MessageConstants.CreateUser);
         }
-        
+
+        [HttpPut]
+        public async Task<IHttpActionResult> ChangePassword(string currentPassword, string newPassword, string confirmNewPassword)
+        {
+            if (newPassword != confirmNewPassword)
+            {
+                return this.BadRequest(MessageConstants.NewPasswordIsNotSameAsConfirmPassword);
+            }
+
+            IdentityResult result = await this.UserManager.ChangePasswordAsync(
+                this.User.Identity.GetUserId(),
+                currentPassword,
+                newPassword);
+
+            if (!result.Succeeded)
+            {
+                return this.BadRequest();
+            }
+
+            return this.Ok();
+        }
+
+        [HttpPost]
         public IHttpActionResult Logout()
         {
             this.Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);

@@ -13,7 +13,9 @@
         {
         }
 
-        public virtual IDbSet<Note> Notes { get; set; }
+        public virtual IDbSet<PrivateNote> PrivateNotes { get; set; }
+
+        public virtual IDbSet<SharedNote> SharedNotes { get; set; }
 
         public static ToDoDbContext Create()
         {

@@ -6,9 +6,9 @@
 
     public static class DepedencyObjectFactory
     {
-        public static InMemoryRepository<Note> GetNoteRepository(int notesCount)
+        public static InMemoryRepository<PrivateNote> GetNoteRepository(int notesCount)
         {
-            var repository = new InMemoryRepository<Note>();
+            var repository = new InMemoryRepository<PrivateNote>();
             GenerateNotes(repository, notesCount);
 
             return repository;
@@ -21,13 +21,13 @@
             return repository;
         }
 
-        private static void GenerateNotes(InMemoryRepository<Note> noteRepository, int count)
+        private static void GenerateNotes(InMemoryRepository<PrivateNote> noteRepository, int count)
         {
             for (int i = 1; i <= count * 2; i++)
             {
                 if (i <= count)
                 {
-                    noteRepository.Add(new Note()
+                    noteRepository.Add(new PrivateNote()
                     {
                         Id = i,
                         Title = "Title " + i,
@@ -39,7 +39,7 @@
                 }
                 else if (i > count)
                 {
-                    noteRepository.Add(new Note()
+                    noteRepository.Add(new PrivateNote()
                     {
                         Id = i,
                         Title = "Expired Title " + i,

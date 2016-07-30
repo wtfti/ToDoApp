@@ -26,7 +26,7 @@
                 .Returns(GenerateNotes);
             notesService.Setup(a => a.GetCompletedNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateCompleteNotes);
-            notesService.Setup(a => a.RemoveNoteById(It.IsAny<Note>()));
+            notesService.Setup(a => a.RemoveNoteById(It.IsAny<PrivateNote>()));
             notesService.Setup(a => a.GetNoteById(1))
                 .Returns(GenerateNotes().First());
 
@@ -52,12 +52,12 @@
             return accountService.Object;
         }
 
-        private static IQueryable<Note> GenerateNotes()
+        private static IQueryable<PrivateNote> GenerateNotes()
         {
-            var result = new List<Note>();
+            var result = new List<PrivateNote>();
             for (int i = 1; i <= Count; i++)
             {
-                result.Add(new Note()
+                result.Add(new PrivateNote()
                 {
                     Id = i,
                     Title = "TestTitle",
@@ -71,12 +71,12 @@
             return result.AsQueryable();
         }
 
-        private static IQueryable<Note> GenerateCompleteNotes()
+        private static IQueryable<PrivateNote> GenerateCompleteNotes()
         {
-            var result = new List<Note>();
+            var result = new List<PrivateNote>();
             for (int i = 1; i <= Count; i++)
             {
-                result.Add(new Note()
+                result.Add(new PrivateNote()
                 {
                     Id = i,
                     Title = "TestTitle",
@@ -91,12 +91,12 @@
             return result.AsQueryable();
         }
 
-        private static IQueryable<Note> GenerateTodayNotes()
+        private static IQueryable<PrivateNote> GenerateTodayNotes()
         {
-            var result = new List<Note>();
+            var result = new List<PrivateNote>();
             for (int i = 1; i <= Count; i++)
             {
-                result.Add(new Note()
+                result.Add(new PrivateNote()
                 {
                     Id = i,
                     CreatedOn = DateTime.Now,

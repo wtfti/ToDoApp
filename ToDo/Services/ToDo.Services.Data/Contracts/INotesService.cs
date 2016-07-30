@@ -7,26 +7,28 @@
 
     public interface INotesService
     {
-        Note GetNoteById(int id);
+        PrivateNote GetNoteById(int id);
 
-        IQueryable<Note> GetCompletedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+        IQueryable<PrivateNote> GetCompletedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
-        IQueryable<Note> GetNotesFromToday(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+        IQueryable<PrivateNote> GetNotesFromToday(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
-        IQueryable<Note> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+        IQueryable<PrivateNote> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
-        IQueryable<Note> GetNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+        IQueryable<SharedNote> GetSharedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+
+        IQueryable<PrivateNote> GetNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
         void AddNote(string user, string title, string content, DateTime? expireDate = null);
 
-        void ChangeNote(Note dbNote, string newTitle, string newContent, DateTime? newExpiredOn);
+        void ChangeNote(PrivateNote dbNote, string newTitle, string newContent, DateTime? newExpiredOn);
 
-        IQueryable<Note> All();
+        IQueryable<PrivateNote> All();
 
-        void RemoveNoteById(Note note);
+        void RemoveNoteById(PrivateNote note);
 
-        void SetExpired(Note note);
+        void SetExpired(PrivateNote note);
 
-        void SetComplete(Note note);
+        void SetComplete(PrivateNote note);
     }
 }

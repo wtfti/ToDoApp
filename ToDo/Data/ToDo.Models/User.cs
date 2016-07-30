@@ -11,12 +11,14 @@
 
     public class User : IdentityUser
     {
-        private ICollection<Note> notes;
+        private ICollection<PrivateNote> privateNotes;
+        private ICollection<SharedNote> sharedNotes;
         private ICollection<User> friends;
 
         public User()
         {
-            this.notes = new HashSet<Note>();
+            this.privateNotes = new HashSet<PrivateNote>();
+            this.sharedNotes = new HashSet<SharedNote>();
             this.friends = new HashSet<User>();
         }
 
@@ -28,10 +30,16 @@
 
         public virtual ProfileDetails ProfileDetails { get; set; }
 
-        public virtual ICollection<Note> Notes
+        public virtual ICollection<PrivateNote> PrivateNotes
         {
-            get { return this.notes; }
-            set { this.notes = value; }
+            get { return this.privateNotes; }
+            set { this.privateNotes = value; }
+        }
+
+        public virtual ICollection<SharedNote> SharedNotes
+        {
+            get { return this.sharedNotes; }
+            set { this.sharedNotes = value; }
         }
 
         public virtual ICollection<User> Friends

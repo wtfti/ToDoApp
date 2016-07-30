@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using ToDo.Data.Models;
     using ToDo.Data.Models.Account;
     using ToDo.Services.Data;
     using ToDo.Services.Data.Contracts;
@@ -11,13 +12,15 @@
     public class AccountServiceTests
     {
         private InMemoryRepository<ProfileDetails> profileDetailsRepository;
+        private InMemoryRepository<User> userRepository;
         private IAccountService service;
          
         [TestInitialize]
         public void Initialize()
         {
             this.profileDetailsRepository = DepedencyObjectFactory.GetProfileDetailsRepository();
-            this.service = new AccountService(this.profileDetailsRepository);
+            this.userRepository = new InMemoryRepository<User>();
+            this.service = new AccountService(this.profileDetailsRepository, this.userRepository);
         }
 
         [TestMethod]

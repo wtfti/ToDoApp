@@ -34,7 +34,7 @@
         [HttpPost]
         [ValidateModel]
         [AllowAnonymous]
-        public async Task<IHttpActionResult> Register(RegisterModel registerModel)
+        public async Task<IHttpActionResult> Register(RegisterRequestModel registerModel)
         {
             var user = new User()
             {

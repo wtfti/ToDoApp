@@ -5,15 +5,20 @@
     using System.Text;
     using Contracts;
     using ToDo.Data.Common.Contracts;
+    using ToDo.Data.Models;
     using ToDo.Data.Models.Account;
 
     public class AccountService : IAccountService
     {
         private readonly IRepository<ProfileDetails> profileDetailsData;
+        private readonly IRepository<User> users;
 
-        public AccountService(IRepository<ProfileDetails> userProfileRepository)
+        public AccountService(
+            IRepository<ProfileDetails> userProfileRepository,
+            IRepository<User> userRepository)
         {
             this.profileDetailsData = userProfileRepository;
+            this.users = userRepository;
         }
 
         public ProfileDetails ProfileDetails(string userId)
@@ -46,6 +51,17 @@
             
 
             this.profileDetailsData.SaveChanges();
+        }
+
+        public void AddFriend(string firstUsername, string secondUsername)
+        {
+            var firstUser = this.users.All().Single(a => a.UserName == firstUsername);
+            var secondUser = this.users.All().Single(a => a.UserName == secondUsername);
+
+            firstUser.Friends.Add(secondUser);
+            secondUser.Friends.Add(firstUser);
+
+            this.users.SaveChanges();
         }
 
         public string GetBackground(string userId)

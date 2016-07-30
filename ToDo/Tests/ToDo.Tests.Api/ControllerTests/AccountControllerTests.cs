@@ -3,11 +3,9 @@
     using Data.Models.Account;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using MyTested.WebApi;
-    using Server.Common.Constants;
     using ToDo.Api.Controllers;
     using ToDo.Api.Infrastructure.Validation;
     using ToDo.Api.Models.Account;
-    using ToDo.Api.Models.Note;
 
     [TestClass]
     public class AccountControllerTests

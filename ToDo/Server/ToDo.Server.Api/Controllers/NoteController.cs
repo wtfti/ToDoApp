@@ -219,7 +219,7 @@
         }
 
         [NonAction]
-        private bool CheckIfNotesAreExpired(List<Note> dbNotes)
+        private bool CheckIfNotesAreExpired(List<PrivateNote> dbNotes)
         {
             bool hasChange = false;
             DateTime dateNow = DateTime.Now;

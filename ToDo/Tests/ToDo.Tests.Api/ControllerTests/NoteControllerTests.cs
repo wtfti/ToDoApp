@@ -272,7 +272,7 @@
         {
             var notesService = new Mock<INotesService>();
             notesService.Setup(a => a.GetNoteById(It.IsAny<int>()))
-                .Returns(new Note()
+                .Returns(new PrivateNote()
                 {
                     Id = 1,
                     Title = "TestTitle",
@@ -282,7 +282,7 @@
                     UserId = "User"
                 });
 
-            notesService.Setup(a => a.SetComplete(It.IsAny<Note>()));
+            notesService.Setup(a => a.SetComplete(It.IsAny<PrivateNote>()));
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(notesService.Object)
@@ -330,7 +330,7 @@
         [TestMethod]
         public void GetCompletedNotesShouldReturnEmptyCollection()
         {
-            var notes = new List<Note>();
+            var notes = new List<PrivateNote>();
 
             var notesService = new Mock<INotesService>();
             notesService.Setup(a => a.GetCompletedNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
@@ -353,10 +353,10 @@
         [TestMethod]
         public void GetNotesFromTodayShouldPass()
         {
-            var notes = new List<Note>();
+            var notes = new List<PrivateNote>();
             for (int i = 0; i < 100; i++)
             {
-                notes.Add(new Note()
+                notes.Add(new PrivateNote()
                 {
                     UserId = "User",
                     CreatedOn = DateTime.Now
@@ -387,7 +387,7 @@
         [TestMethod]
         public void GetNotesFromTodayShouldReturnEmptyColletion()
         {
-            var notes = new List<Note>();
+            var notes = new List<PrivateNote>();
 
             var notesService = new Mock<INotesService>();
             notesService.Setup(a => a.GetNotesFromToday(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
@@ -410,20 +410,20 @@
         [TestMethod]
         public void GetNotesFromTodayShouldPassOption2()
         {
-            var notes = new List<Note>()
+            var notes = new List<PrivateNote>()
             {
-                new Note()
+                new PrivateNote()
                 {
                     Id = 1000,
                     UserId = "User",
                     CreatedOn = DateTime.Now
                 },
-                new Note()
+                new PrivateNote()
                 {
                     UserId = "User",
                     CreatedOn = DateTime.Now
                 },
-                new Note()
+                new PrivateNote()
                 {
                     UserId = "User",
                     CreatedOn = DateTime.Now
@@ -451,7 +451,7 @@
         [TestMethod]
         public void ChangeNoteShouldPass()
         {
-            var dbNote = new Note()
+            var dbNote = new PrivateNote()
             {
                 UserId = "User"
             };

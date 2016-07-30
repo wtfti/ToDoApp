@@ -34,6 +34,7 @@
                 RequireUppercase = false,
             };
             var dataProtectionProvider = options.DataProtectionProvider;
+
             if (dataProtectionProvider != null)
             {
                 manager.UserTokenProvider = new DataProtectorTokenProvider<User>(dataProtectionProvider.Create("ASP.NET Identity"));

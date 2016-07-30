@@ -2,18 +2,12 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
     using Server.Common.Constants;
 
-    public class Note : IEquatable<Note>
+    public abstract class Note
     {
         [Key]
         public int Id { get; set; }
-
-        [ForeignKey("User")]
-        public string UserId { get; set; }
-        
-        public virtual User User { get; set; }
 
         [Required]
         [MinLength(ValidationConstants.TitleMinLenght)]
@@ -35,10 +29,5 @@
 
         [Required]
         public bool IsComplete { get; set; }
-
-        public bool Equals(Note other)
-        {
-            return this.Id == other.Id;
-        }
     }
 }

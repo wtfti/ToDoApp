@@ -1,32 +1,51 @@
 ﻿namespace ToDo.Api.Hubs
 {
+    using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.SignalR;
+    using Models.Hubs;
 
     public class Friend : Hub
     {
-        private static ConcurrentDictionary<string, string> users = 
+        private static ConcurrentDictionary<string, string> UsernameToConnectionId = 
             new ConcurrentDictionary<string, string>();
+        private static IDictionary<string, FriendRequest> FriendRequests = 
+            new Dictionary<string, FriendRequest>();
 
-        public void FriendRequest(string recieverFullName)
+        public void FriendRequest(string recieverUsername, string senderFullName)
         {
             string recieverId;
 
-            if (users.TryGetValue(recieverFullName, out recieverId))
+            if (UsernameToConnectionId.TryGetValue(recieverUsername, out recieverId))
             {
-                this.Clients.Client(recieverId).newFriendRequest(recieverFullName);
+                string key = Guid.NewGuid().ToString();
+                var friendRequest = new FriendRequest()
+                {
+                    From = this.Context.User.Identity.GetUserName(),
+                    To = recieverUsername
+                };
+
+                if (!FriendRequests.ContainsKey(key))
+                {
+                    FriendRequests.Add(key, friendRequest);
+                    this.Clients.Client(recieverId).newFriendRequest(key, senderFullName);
+                }
             }
         }
 
-        public void AcceptRequest(string senderFullName)
+        public void AcceptRequest(string id)
         {
-            string recieverId;
+            string currentUser = Context.User.Identity.GetUserName();
+            FriendRequest request;
 
-            if (users.TryGetValue(senderFullName, out recieverId))
+            if (FriendRequests.TryGetValue(id, out request) && request.To == currentUser)
             {
-                this.Clients.Client(recieverId).acceptedRequest();
+                var senderId = UsernameToConnectionId[request.From];
+                // TODO Make friendship between these users lol
+                this.Clients.Client(senderId).acceptedRequest();
             }
         }
 
@@ -36,7 +55,7 @@
 
             if (name != null)
             {
-                users.TryAdd(name, this.Context.ConnectionId);
+                UsernameToConnectionId.TryAdd(name, this.Context.ConnectionId);
             }
 
             return base.OnConnected();
@@ -47,21 +66,9 @@
             string name = Context.User.Identity.GetUserName();
             string connectionId;
 
-            users.TryRemove(name, out connectionId);
+            UsernameToConnectionId.TryRemove(name, out connectionId);
 
             return base.OnDisconnected(stopCalled);
-        }
-
-        public override Task OnReconnected()
-        {
-            string name = this.Context.User.Identity.Name;
-
-            if (!users[name].Contains(this.Context.ConnectionId))
-            {
-                users.TryAdd(name, this.Context.ConnectionId);
-            }
-
-            return base.OnReconnected();
         }
     }
 }

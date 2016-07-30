@@ -6,7 +6,7 @@
     using Infrastructure.Mapping;
     using Server.Common.Constants;
 
-    public class NoteResponseModel : IMapFrom<Note>
+    public class NoteResponseModel : IMapFrom<PrivateNote>
     {
         public int Id { get; set; }
 

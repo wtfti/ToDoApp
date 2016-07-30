@@ -3,7 +3,7 @@
     using System.ComponentModel.DataAnnotations;
     using Server.Common.Constants;
 
-    public class RegisterModel
+    public class RegisterRequestModel
     {
         [Required]
         [MinLength(ValidationConstants.FullNameMinLenght)]

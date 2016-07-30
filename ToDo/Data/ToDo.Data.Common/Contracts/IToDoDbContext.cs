@@ -6,7 +6,7 @@
 
     public interface IToDoDbContext
     {
-        IDbSet<Note> Notes { get; set; }
+        IDbSet<PrivateNote> PrivateNotes { get; set; }
 
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
 

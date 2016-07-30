@@ -9,15 +9,19 @@
 
     public class NotesService : INotesService
     {
-        private readonly IRepository<Note> data;
+        private readonly IRepository<PrivateNote> privateNotesData;
+        private readonly IRepository<SharedNote> sharedNotesData;
 
-        public NotesService(IRepository<Note> noteRepository)
+        public NotesService(
+            IRepository<PrivateNote> privateNotesRepository,
+            IRepository<SharedNote> sharedNotesRepository )
         {
-            this.data = noteRepository;
+            this.privateNotesData = privateNotesRepository;
+            this.sharedNotesData = sharedNotesRepository;
         }
 
         public void ChangeNote(
-            Note dbNote,
+            PrivateNote dbNote,
             string newTitle, 
             string newContent, 
             DateTime? newExpiredOn)
@@ -44,43 +48,44 @@
 
             if (hasChange)
             {
-                this.data.SaveChanges();
+                this.privateNotesData.SaveChanges();
             }
         }
 
-        public IQueryable<Note> All()
+        public IQueryable<PrivateNote> All()
         {
-            var notes = this.data.All();
+            var notes = this.privateNotesData.All();
 
             return notes;
         }
 
-        public void RemoveNoteById(Note note)
+        public void RemoveNoteById(PrivateNote note)
         {
-            this.data.Delete(note);
-            this.data.SaveChanges();
+            this.privateNotesData.Delete(note);
+            this.privateNotesData.SaveChanges();
         }
 
-        public void SetComplete(Note note)
+        public void SetComplete(PrivateNote note)
         {
             note.IsComplete = true;
-            this.data.SaveChanges();
+            this.privateNotesData.SaveChanges();
         }
 
-        public void SetExpired(Note note)
+        public void SetExpired(PrivateNote note)
         {
             note.IsExpired = true;
-            this.data.SaveChanges();
+            this.privateNotesData.SaveChanges();
         }
 
-        public Note GetNoteById(int id)
+        public PrivateNote GetNoteById(int id)
         {
-            return this.data.GetById(id);
+            return this.privateNotesData.GetById(id);
         }
 
-        public IQueryable<Note> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
+        public IQueryable<PrivateNote> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
         {
-            var notes = this.data.All()
+            var notes = this.privateNotesData
+                .All()
                 .Where(a => a.UserId == user && !a.IsComplete && !a.IsExpired)
                 .OrderBy(q => q.Content)
                 .Skip((page * pageSize) - pageSize)
@@ -89,14 +94,23 @@
             return notes;
         }
 
-        public IQueryable<Note> GetNotesFromToday(
+        public IQueryable<SharedNote> GetSharedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
+        {
+            var notes = this.sharedNotesData
+                .All()
+                .Where(a => a.Users.Any(x => x.Id == user));
+
+            return notes;
+        }
+
+        public IQueryable<PrivateNote> GetNotesFromToday(
             string user, 
             int page,
             int pageSize = ValidationConstants.DefaultPageSize)
         {
             var today = DateTime.Now;
 
-            var notes = this.data.All()
+            var notes = this.privateNotesData.All()
                 .Where(a =>
                     a.UserId == user &&
                     !a.IsComplete &&
@@ -113,12 +127,12 @@
             return todayNotes;
         }
 
-        public IQueryable<Note> GetCompletedNotes(
+        public IQueryable<PrivateNote> GetCompletedNotes(
             string user,
             int page,
             int pageSize = ValidationConstants.DefaultPageSize)
         {
-            var notes = this.data.All()
+            var notes = this.privateNotesData.All()
                 .Where(a => a.UserId == user && a.IsComplete)
                 .OrderBy(q => q.Content)
                 .Skip((page * pageSize) - pageSize)
@@ -127,9 +141,9 @@
             return notes;
         }
 
-        public IQueryable<Note> GetNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
+        public IQueryable<PrivateNote> GetNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
         {
-            var notes = this.data.All()
+            var notes = this.privateNotesData.All()
                 .Where(a => a.IsExpired && a.UserId == user)
                 .OrderBy(w => w.Id)
                 .Skip((page * pageSize) - pageSize)
@@ -140,7 +154,7 @@
 
         public void AddNote(string user, string title, string content, DateTime? expireDate = null)
         {
-            var noteDb = new Note()
+            var noteDb = new PrivateNote()
             {
                 UserId = user,
                 Title = title,
@@ -149,8 +163,8 @@
                 ExpiredOn = expireDate
             };
 
-            this.data.Add(noteDb);
-            this.data.SaveChanges();
+            this.privateNotesData.Add(noteDb);
+            this.privateNotesData.SaveChanges();
         }
     }
 }

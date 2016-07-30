@@ -12,13 +12,15 @@
     {
         private static int notesCount = 100;
         private INotesService service;
-        private InMemoryRepository<Note> noteRepository;
+        private InMemoryRepository<PrivateNote> privateNotesRepository;
+        private InMemoryRepository<SharedNote> sharedNotesRepository;
 
         [TestInitialize]
         public void Initialize()
         {
-            this.noteRepository = DepedencyObjectFactory.GetNoteRepository(notesCount);
-            this.service = new NotesService(this.noteRepository);
+            this.privateNotesRepository = DepedencyObjectFactory.GetNoteRepository(notesCount);
+            this.sharedNotesRepository = new InMemoryRepository<SharedNote>();
+            this.service = new NotesService(this.privateNotesRepository, this.sharedNotesRepository);
         }
 
         [TestMethod]
@@ -33,7 +35,7 @@
         [TestMethod]
         public void RemoveByIdShouldReturnCorrectResult()
         {
-            var note = new Note()
+            var note = new PrivateNote()
             {
                 Id = 1,
                 Title = "Title " + 1,
@@ -49,7 +51,7 @@
 
             Assert.AreEqual(count - 1, this.service.All().ToList().Count);
             Assert.AreEqual(2, this.service.All().ToList()[0].Id);
-            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+            Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
         }
 
         [TestMethod]
@@ -135,34 +137,34 @@
             this.service.AddNote(user, title, content);
 
             Assert.AreEqual(count + 1, this.service.All().Count());
-            Assert.AreEqual(user, this.noteRepository.All().Last().UserId);
-            Assert.AreEqual(content, this.noteRepository.All().Last().Content);
-            Assert.AreEqual(1, this.noteRepository.NumberOfSaves);
+            Assert.AreEqual(user, this.privateNotesRepository.All().Last().UserId);
+            Assert.AreEqual(content, this.privateNotesRepository.All().Last().Content);
+            Assert.AreEqual(1, this.privateNotesRepository.NumberOfSaves);
         }
 
         [TestMethod]
         public void SetExpiredShouldReturnCorrectResult()
         {
-            var note = new Note()
+            var note = new PrivateNote()
             {
                 IsExpired = false
             };
             this.service.SetExpired(note);
 
-            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+            Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
             Assert.IsTrue(note.IsExpired);
         }
 
         [TestMethod]
         public void SetCompleteShouldReturnCorrectResult()
         {
-            var note = new Note()
+            var note = new PrivateNote()
             {
                 IsComplete = false
             };
             this.service.SetComplete(note);
 
-            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+            Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
             Assert.IsTrue(note.IsComplete);
         }
 
@@ -190,7 +192,7 @@
         {
             for (int i = 1; i <= 10; i++)
             {
-                this.noteRepository.Add(new Note()
+                this.privateNotesRepository.Add(new PrivateNote()
                 {
                     IsComplete = true,
                     UserId = "complete"
@@ -207,7 +209,7 @@
         {
             for (int i = 1; i <= 10; i++)
             {
-                this.noteRepository.Add(new Note()
+                this.privateNotesRepository.Add(new PrivateNote()
                 {
                     IsComplete = true,
                     UserId = "complete"
@@ -231,27 +233,27 @@
         [TestMethod]
         public void GetNotesFromTodayShouldPass()
         {
-            this.noteRepository.Add(new Note()
+            this.privateNotesRepository.Add(new PrivateNote()
             {
                 UserId = "today",
                 CreatedOn = DateTime.Now
             });
 
-            this.noteRepository.Add(new Note()
+            this.privateNotesRepository.Add(new PrivateNote()
             {
                 UserId = "today",
                 CreatedOn = DateTime.Now,
                 IsExpired = true
             });
 
-            this.noteRepository.Add(new Note()
+            this.privateNotesRepository.Add(new PrivateNote()
             {
                 UserId = "today",
                 CreatedOn = DateTime.Now,
                 IsComplete = true
             });
 
-            this.noteRepository.Add(new Note()
+            this.privateNotesRepository.Add(new PrivateNote()
             {
                 UserId = "today",
                 CreatedOn = DateTime.Now,
@@ -278,20 +280,20 @@
         [TestMethod]
         public void GetNotesFromTodayShouldPassOption3()
         {
-            this.noteRepository.Add(new Note()
+            this.privateNotesRepository.Add(new PrivateNote()
             {
                 UserId = "today",
                 CreatedOn = DateTime.Now
             });
 
-            this.noteRepository.Add(new Note()
+            this.privateNotesRepository.Add(new PrivateNote()
             {
                 UserId = "today",
                 CreatedOn = DateTime.Now.AddDays(1),
                 IsExpired = true
             });
 
-            this.noteRepository.Add(new Note()
+            this.privateNotesRepository.Add(new PrivateNote()
             {
                 UserId = "today",
                 CreatedOn = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - 1),
@@ -309,7 +311,7 @@
         [TestMethod]
         public void ChangeNoteShouldPass()
         {
-            var dbNote = new Note()
+            var dbNote = new PrivateNote()
             {
                 Title = "test",
                 Content = "content",
@@ -322,13 +324,13 @@
 
             this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
 
-            Assert.AreEqual(0, this.noteRepository.SaveChanges());
+            Assert.AreEqual(0, this.privateNotesRepository.SaveChanges());
         }
 
         [TestMethod]
         public void ChangeNoteShouldPassOption2()
         {
-            var dbNote = new Note()
+            var dbNote = new PrivateNote()
             {
                 Title = "test",
                 Content = "content",
@@ -341,13 +343,13 @@
 
             this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
 
-            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+            Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
         }
 
         [TestMethod]
         public void ChangeNoteShouldPassOption3()
         {
-            var dbNote = new Note()
+            var dbNote = new PrivateNote()
             {
                 Title = "test",
                 Content = "content",
@@ -360,13 +362,13 @@
 
             this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
 
-            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+            Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
         }
 
         [TestMethod]
         public void ChangeNoteShouldPassOption4()
         {
-            var dbNote = new Note()
+            var dbNote = new PrivateNote()
             {
                 Title = "test",
                 Content = "content",
@@ -379,7 +381,7 @@
 
             this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
 
-            Assert.AreEqual(1, this.noteRepository.SaveChanges());
+            Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
         }
 
         [TestMethod]
@@ -387,7 +389,7 @@
         {
             var result = this.service.GetNoteById(4);
 
-            var dbNote = new Note()
+            var dbNote = new PrivateNote()
             {
                 Id = 5,
                 Title = "Title " + 5,

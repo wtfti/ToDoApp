@@ -223,7 +223,8 @@
     <Compile Include="ModelBinders\NoteRequestModelBinder.cs" />
     <Compile Include="Models\Account\UserProfileRequestModel.cs" />
     <Compile Include="Models\Account\UserProfileResponseModel.cs" />
-    <Compile Include="Models\Account\RegisterModel.cs" />
+    <Compile Include="Models\Account\RegisterRequestModel.cs" />
+    <Compile Include="Models\Hubs\FriendRequest.cs" />
     <Compile Include="Models\Note\NoteRequestModel.cs" />
     <Compile Include="Models\Note\NoteResponseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

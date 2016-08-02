@@ -1,5 +1,6 @@
 ﻿namespace ToDo.Services.Data
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -62,6 +63,25 @@
             secondUser.Friends.Add(firstUser);
 
             this.users.SaveChanges();
+        }
+
+        public ICollection<User> GetUsersByUsername(IEnumerable<string> users)
+        {
+            ICollection<User> result = new List<User>();
+            List<User> usersDb = this.users.All().ToList();
+
+            foreach (var user in users)
+            {
+                var currentUserDb = usersDb.FirstOrDefault(a => a.UserName == user);
+                result.Add(currentUserDb);
+            }
+
+            return result;
+        }
+
+        public User GetUserByUsername(string userId)
+        {
+            return this.users.All().Single(a => a.Id == userId);
         }
 
         public string GetBackground(string userId)

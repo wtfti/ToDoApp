@@ -62,7 +62,7 @@
         public void AddNoteShouldReturnBadRequestInvalidDate()
         {
             var notesService = new Mock<INotesService>();
-            notesService.Setup(a => a.AddNote(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>()));
+            notesService.Setup(a => a.AddPrivateNote(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>()));
             var note = new NoteRequestModel();
             note.Title = "test";
             note.Content = "test";
@@ -80,7 +80,7 @@
         public void AddNoteShouldReturnBadRequestInvalidDateOption2()
         {
             var notesService = new Mock<INotesService>();
-            notesService.Setup(a => a.AddNote(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>()));
+            notesService.Setup(a => a.AddPrivateNote(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>()));
             var note = new NoteRequestModel();
             note.Title = "test";
             note.Content = "test";

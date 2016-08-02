@@ -16,7 +16,7 @@
         {
             var notesService = new Mock<INotesService>();
 
-            notesService.Setup(a => a.AddNote(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>()));
+            notesService.Setup(a => a.AddPrivateNote(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>()));
             notesService.Setup(a => a.All()).Returns(GenerateNotes);
             notesService.Setup(a => a.GetNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateNotes);

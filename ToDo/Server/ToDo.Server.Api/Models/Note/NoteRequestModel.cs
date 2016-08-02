@@ -22,5 +22,7 @@
 
         [JsonProperty(Required = Required.Default)]
         public DateTime? ExpiredOn { get; set; }
+
+        public string[] SharedWith { get; set; }
     }
 }

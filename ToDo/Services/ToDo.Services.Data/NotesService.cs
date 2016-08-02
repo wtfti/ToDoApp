@@ -1,6 +1,7 @@
 ﻿namespace ToDo.Services.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Contracts;
     using Server.Common.Constants;
@@ -11,19 +12,22 @@
     {
         private readonly IRepository<PrivateNote> privateNotesData;
         private readonly IRepository<SharedNote> sharedNotesData;
+        private readonly IAccountService accountService;
 
         public NotesService(
             IRepository<PrivateNote> privateNotesRepository,
-            IRepository<SharedNote> sharedNotesRepository )
+            IRepository<SharedNote> sharedNotesRepository,
+            IAccountService accountService)
         {
             this.privateNotesData = privateNotesRepository;
             this.sharedNotesData = sharedNotesRepository;
+            this.accountService = accountService;
         }
 
         public void ChangeNote(
             PrivateNote dbNote,
-            string newTitle, 
-            string newContent, 
+            string newTitle,
+            string newContent,
             DateTime? newExpiredOn)
         {
             bool hasChange = false;
@@ -82,11 +86,29 @@
             return this.privateNotesData.GetById(id);
         }
 
-        public IQueryable<PrivateNote> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
+        public IQueryable<PrivateNote> GetNotes(
+            string user, 
+            int page, 
+            int pageSize = ValidationConstants.DefaultPageSize)
         {
-            var notes = this.privateNotesData
+            var privateNotes = this.privateNotesData
                 .All()
                 .Where(a => a.UserId == user && !a.IsComplete && !a.IsExpired)
+                .OrderBy(q => q.Content)
+                .Skip((page*pageSize) - pageSize)
+                .Take(pageSize);
+
+            return privateNotes;
+        }
+
+        public IQueryable<SharedNote> GetSharedNotes(
+            string user, 
+            int page, 
+            int pageSize = ValidationConstants.DefaultPageSize)
+        {
+            var notes = this.sharedNotesData
+                .All()
+                .Where(note => note.Users.Any(u => u.Id == user))
                 .OrderBy(q => q.Content)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);
@@ -94,17 +116,8 @@
             return notes;
         }
 
-        public IQueryable<SharedNote> GetSharedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
-        {
-            var notes = this.sharedNotesData
-                .All()
-                .Where(a => a.Users.Any(x => x.Id == user));
-
-            return notes;
-        }
-
         public IQueryable<PrivateNote> GetNotesFromToday(
-            string user, 
+            string user,
             int page,
             int pageSize = ValidationConstants.DefaultPageSize)
         {
@@ -141,7 +154,10 @@
             return notes;
         }
 
-        public IQueryable<PrivateNote> GetNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize)
+        public IQueryable<PrivateNote> GetNotesWithExpirationDate(
+            string user, 
+            int page, 
+            int pageSize = ValidationConstants.DefaultPageSize)
         {
             var notes = this.privateNotesData.All()
                 .Where(a => a.IsExpired && a.UserId == user)
@@ -152,9 +168,13 @@
             return notes;
         }
 
-        public void AddNote(string user, string title, string content, DateTime? expireDate = null)
+        public void AddPrivateNote(
+            string user, 
+            string title, 
+            string content, 
+            DateTime? expireDate = null)
         {
-            var noteDb = new PrivateNote()
+            var privateNoteDb = new PrivateNote()
             {
                 UserId = user,
                 Title = title,
@@ -163,8 +183,32 @@
                 ExpiredOn = expireDate
             };
 
-            this.privateNotesData.Add(noteDb);
+            this.privateNotesData.Add(privateNoteDb);
             this.privateNotesData.SaveChanges();
+        }
+
+        public void AddSharedNote(
+            string[] users, 
+            string currentUser, 
+            string title, 
+            string content,
+            DateTime? expireDate = null)
+        {
+            var usersDb = this.accountService.GetUsersByUsername(users);
+            var currentUserDb = this.accountService.GetUserByUsername(currentUser);
+            usersDb.Add(currentUserDb);
+
+            var sharedNoteDb = new SharedNote()
+            {
+                Title = title,
+                Content = content,
+                CreatedOn = DateTime.Now,
+                ExpiredOn = expireDate,
+                Users = usersDb
+            };
+
+            this.sharedNotesData.Add(sharedNoteDb);
+            this.sharedNotesData.SaveChanges();
         }
     }
 }

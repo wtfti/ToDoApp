@@ -57,7 +57,7 @@
             try
             {
                 NoteRequestModel jsonObj = JsonConvert.DeserializeObject<NoteRequestModel>(body, this.dateTimeConverter);
-
+                
                 if (!this.ValidateProperties(bindingContext, jsonObj))
                 {
                     return false;

@@ -33,7 +33,14 @@
                 return this.BadRequest(MessageConstants.InvalidDate);
             }
 
-            this.notesService.AddNote(this.CurrentUser(), note.Title, note.Content, note.ExpiredOn);
+            if (note.SharedWith.Length > 0)
+            {
+                this.notesService.AddSharedNote(note.SharedWith, this.CurrentUser(), note.Title, note.Content, note.ExpiredOn);
+            }
+            else
+            {
+                this.notesService.AddPrivateNote(this.CurrentUser(), note.Title, note.Content, note.ExpiredOn);
+            }
 
             return this.Ok(MessageConstants.CreateNote);
         }
@@ -89,6 +96,20 @@
 
             var result = dbNotes.ProjectTo<NoteResponseModel>();
 
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetSharedNotes(int page = 1)
+        {
+            if (page <= 0)
+            {
+                return this.BadRequest(MessageConstants.InvalidPage);
+            }
+
+            var dbNotes = this.notesService.GetSharedNotes(this.CurrentUser(), page);
+
+            var result = dbNotes.ProjectTo<NoteResponseModel>();
             return this.Ok(result);
         }
 

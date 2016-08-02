@@ -1,6 +1,7 @@
 ﻿namespace ToDo.Services.Data.Contracts
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Server.Common.Constants;
     using ToDo.Data.Models;
@@ -19,7 +20,9 @@
 
         IQueryable<PrivateNote> GetNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
-        void AddNote(string user, string title, string content, DateTime? expireDate = null);
+        void AddPrivateNote(string user, string title, string content, DateTime? expireDate = null);
+
+        void AddSharedNote(string[] users, string currentUser, string title, string content, DateTime? expireDate = null);
 
         void ChangeNote(PrivateNote dbNote, string newTitle, string newContent, DateTime? newExpiredOn);
 

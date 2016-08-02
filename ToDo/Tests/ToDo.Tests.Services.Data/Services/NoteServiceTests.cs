@@ -4,6 +4,7 @@
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using ToDo.Data.Models;
+    using ToDo.Data.Models.Account;
     using ToDo.Services.Data;
     using ToDo.Services.Data.Contracts;
 
@@ -14,13 +15,19 @@
         private INotesService service;
         private InMemoryRepository<PrivateNote> privateNotesRepository;
         private InMemoryRepository<SharedNote> sharedNotesRepository;
+        private InMemoryRepository<ProfileDetails> profileDetailsRepository;
+        private InMemoryRepository<User> usersRepository;
+        private IAccountService accountService;
 
         [TestInitialize]
         public void Initialize()
         {
             this.privateNotesRepository = DepedencyObjectFactory.GetNoteRepository(notesCount);
             this.sharedNotesRepository = new InMemoryRepository<SharedNote>();
-            this.service = new NotesService(this.privateNotesRepository, this.sharedNotesRepository);
+            this.profileDetailsRepository = new InMemoryRepository<ProfileDetails>();
+            this.usersRepository = new InMemoryRepository<User>();
+            this.accountService = new AccountService(this.profileDetailsRepository, this.usersRepository);
+            this.service = new NotesService(this.privateNotesRepository, this.sharedNotesRepository, this.accountService);
         }
 
         [TestMethod]
@@ -74,7 +81,7 @@
 
             for (int i = 0; i < 20; i++)
             {
-                this.service.AddNote(user, string.Empty, string.Empty);
+                this.service.AddPrivateNote(user, string.Empty, string.Empty);
             }
 
             var firstPageResult = this.service.GetNotes(user, 1);
@@ -110,7 +117,7 @@
 
             for (int i = 0; i < 20; i++)
             {
-                this.service.AddNote(user, string.Empty, string.Empty, date);
+                this.service.AddPrivateNote(user, string.Empty, string.Empty, date);
             }
 
             var firstPageResult = this.service.GetNotes(user, 1);
@@ -134,7 +141,7 @@
             string content = "some test content";
             int count = this.service.All().Count();
 
-            this.service.AddNote(user, title, content);
+            this.service.AddPrivateNote(user, title, content);
 
             Assert.AreEqual(count + 1, this.service.All().Count());
             Assert.AreEqual(user, this.privateNotesRepository.All().Last().UserId);

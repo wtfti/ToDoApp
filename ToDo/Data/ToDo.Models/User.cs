@@ -13,13 +13,13 @@
     {
         private ICollection<PrivateNote> privateNotes;
         private ICollection<SharedNote> sharedNotes;
-        private ICollection<User> friends;
+        private ICollection<Friend> friends;
 
         public User()
         {
             this.privateNotes = new HashSet<PrivateNote>();
             this.sharedNotes = new HashSet<SharedNote>();
-            this.friends = new HashSet<User>();
+            this.friends = new HashSet<Friend>();
         }
 
         [Key]
@@ -42,7 +42,7 @@
             set { this.sharedNotes = value; }
         }
 
-        public virtual ICollection<User> Friends
+        public virtual ICollection<Friend> Friends
         {
             get { return this.friends; }
             set { this.friends = value; }

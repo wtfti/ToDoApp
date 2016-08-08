@@ -5,7 +5,9 @@
     using System.Linq;
     using System.Reflection;
     using AutoMapper;
+    using Data.Models;
     using Infrastructure.Mapping;
+    using Models.Account;
 
     public static class AutoMapperConfig
     {
@@ -39,25 +41,10 @@
                     a.CreateMap(source, dest);
                     a.CreateMap(dest, source);
                 }
+
+                a.CreateMap<User, UserResponseModel>()
+                .ForMember(x => x.FullName, z => z.MapFrom(user => user.ProfileDetails.FullName));
             });
         }
-
-        // Uncomment if you want automapper to map custom mappings
-        // Create interface ICustomMappings and implement it on every model which you need
-        // private static void LoadCustomMappings(IEnumerable<Type> types)
-        // {
-        //    var maps =
-        //        types.SelectMany(t => t.GetInterfaces(), (t, i) => new { t, i })
-        //            .Where(
-        //                type =>
-        //                    typeof(IHaveCustomMappings).IsAssignableFrom(type.t) && !type.t.IsAbstract &&
-        //                    !type.t.IsInterface)
-        //            .Select(type => (IHaveCustomMappings)Activator.CreateInstance(type.t));
-
-        ////    foreach (var map in maps)
-        //    {
-        //        map.Initialize(a => a.CreateMap(Mapper.Configuration));
-        //    }
-        // }
     }
 }

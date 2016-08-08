@@ -12,6 +12,8 @@
             this.users = new HashSet<User>();
         }
 
+        public string CreatedFrom { get; set; }
+
         public virtual ICollection<User> Users
         {
             get { return this.users; }

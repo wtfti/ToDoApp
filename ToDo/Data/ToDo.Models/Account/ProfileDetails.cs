@@ -10,6 +10,8 @@
         public virtual User User { get; set; }
 
         [Required]
+        [MinLength(ValidationConstants.FullNameMinLenght)]
+        [MaxLength(ValidationConstants.FullNameMaxLenght)]
         public string FullName { get; set; }
 
         [Range(ValidationConstants.MinAge, ValidationConstants.MaxAge)]

@@ -7,22 +7,28 @@
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.SignalR;
     using Models.Hubs;
+    using Services.Data.Contracts;
 
     public class Friend : Hub
     {
-        private static readonly ConcurrentDictionary<string, string> UsernameToConnectionId = 
+        private static readonly ConcurrentDictionary<string, string> UsernameToConnectionId =
             new ConcurrentDictionary<string, string>();
-        private static readonly IDictionary<string, FriendRequest> FriendRequests = 
+
+        private static readonly IDictionary<string, FriendRequest> FriendRequests =
             new Dictionary<string, FriendRequest>();
-        private static readonly IDictionary<string, string> Friendships =
-            new Dictionary<string, string>();
+
+        private readonly IAccountService accountService;
+        
+        public Friend(IAccountService accountService)
+        {
+            this.accountService = accountService;
+        }
 
         public void FriendRequest(string recieverUsername, string senderFullName)
         {
-            string recieverId;
+            string recieverConnectionId;
 
-            if (UsernameToConnectionId.TryGetValue(recieverUsername, out recieverId) &&
-                !Friendships.ContainsKey(this.Context.User.Identity.GetUserName()))
+            if (UsernameToConnectionId.TryGetValue(recieverUsername, out recieverConnectionId))
             {
                 string key = Guid.NewGuid().ToString();
                 var friendRequest = new FriendRequest()
@@ -32,12 +38,12 @@
                     To = recieverUsername
                 };
 
-                
-                if (!FriendRequests.ContainsKey(friendRequest.From) && !Friendships.ContainsKey(friendRequest.From))
+                var friendshipExist = this.accountService.GetFriendship(recieverUsername);
+                if (!FriendRequests.ContainsKey(friendRequest.From) && friendshipExist == null)
                 {
                     FriendRequests.Add(friendRequest.From, friendRequest);
                     FriendRequests.Add(friendRequest.To, friendRequest);
-                    this.Clients.Client(recieverId).newFriendRequest(friendRequest.From, senderFullName);
+                    this.Clients.Client(recieverConnectionId).newFriendRequest(friendRequest.Id, friendRequest.From, senderFullName);
                 }
             }
         }
@@ -47,16 +53,17 @@
             string currentUser = this.Context.User.Identity.GetUserName();
             FriendRequest request;
 
-            if (FriendRequests.TryGetValue(currentUser, out request) && request.To == currentUser)
+            if (FriendRequests.TryGetValue(currentUser, out request) && request.Id == id)
             {
-                string senderUsername = UsernameToConnectionId[request.From];
-                string recieverUsername = UsernameToConnectionId[request.To];
-                Friendships.Add(request.To, request.From);
-                Friendships.Add(request.From, request.To);
+                string senderConnectionId = UsernameToConnectionId[request.From];
+                string recieverConnectionId = UsernameToConnectionId[request.To];
+
+                this.accountService.AddFriendship(request.From, request.To);
                 FriendRequests.Remove(request.From);
                 FriendRequests.Remove(request.To);
-                this.Clients.Client(senderUsername).acceptedRequest(request.To);
-                this.Clients.Client(recieverUsername).acceptedRequest(request.From);
+
+                this.Clients.Client(senderConnectionId).acceptedRequest(request.To);
+                this.Clients.Client(recieverConnectionId).acceptedRequest(request.From);
             }
         }
 

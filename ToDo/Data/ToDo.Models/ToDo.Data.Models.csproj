@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Account\Background.cs" />
     <Compile Include="Account\GenderType.cs" />
+    <Compile Include="Account\Friend.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="PrivateNote.cs" />
     <Compile Include="Account\ProfileDetails.cs" />

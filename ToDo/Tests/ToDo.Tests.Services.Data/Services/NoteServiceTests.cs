@@ -17,6 +17,7 @@
         private InMemoryRepository<SharedNote> sharedNotesRepository;
         private InMemoryRepository<ProfileDetails> profileDetailsRepository;
         private InMemoryRepository<User> usersRepository;
+        private InMemoryRepository<Friend> friendRepository;
         private IAccountService accountService;
 
         [TestInitialize]
@@ -26,7 +27,8 @@
             this.sharedNotesRepository = new InMemoryRepository<SharedNote>();
             this.profileDetailsRepository = new InMemoryRepository<ProfileDetails>();
             this.usersRepository = new InMemoryRepository<User>();
-            this.accountService = new AccountService(this.profileDetailsRepository, this.usersRepository);
+            this.friendRepository = new InMemoryRepository<Friend>();
+            this.accountService = new AccountService(this.profileDetailsRepository, this.usersRepository, this.friendRepository);
             this.service = new NotesService(this.privateNotesRepository, this.sharedNotesRepository, this.accountService);
         }
 

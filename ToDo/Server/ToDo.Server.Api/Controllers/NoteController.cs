@@ -109,7 +109,7 @@
 
             var dbNotes = this.notesService.GetSharedNotes(this.CurrentUser(), page);
 
-            var result = dbNotes.ProjectTo<NoteResponseModel>();
+            var result = dbNotes.ProjectTo<SharedNoteResponseModel>();
             return this.Ok(result);
         }
 
@@ -232,15 +232,7 @@
         }
 
         [NonAction]
-        private string CurrentUser()
-        {
-            string result = this.User.Identity.GetUserId();
-
-            return result;
-        }
-
-        [NonAction]
-        private bool CheckIfNotesAreExpired(List<PrivateNote> dbNotes)
+        private bool CheckIfNotesAreExpired(IList<PrivateNote> dbNotes)
         {
             bool hasChange = false;
             DateTime dateNow = DateTime.Now;

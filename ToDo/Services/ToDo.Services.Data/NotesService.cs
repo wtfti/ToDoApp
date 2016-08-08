@@ -1,7 +1,6 @@
 ﻿namespace ToDo.Services.Data
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using Contracts;
     using Server.Common.Constants;
@@ -95,7 +94,7 @@
                 .All()
                 .Where(a => a.UserId == user && !a.IsComplete && !a.IsExpired)
                 .OrderBy(q => q.Content)
-                .Skip((page*pageSize) - pageSize)
+                .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);
 
             return privateNotes;
@@ -202,6 +201,7 @@
             {
                 Title = title,
                 Content = content,
+                CreatedFrom = currentUserDb.ProfileDetails.FullName,
                 CreatedOn = DateTime.Now,
                 ExpiredOn = expireDate,
                 Users = usersDb

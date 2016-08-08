@@ -13,6 +13,7 @@
     {
         private InMemoryRepository<ProfileDetails> profileDetailsRepository;
         private InMemoryRepository<User> userRepository;
+        private InMemoryRepository<Friend> friendRepository;
         private IAccountService service;
          
         [TestInitialize]
@@ -20,7 +21,8 @@
         {
             this.profileDetailsRepository = DepedencyObjectFactory.GetProfileDetailsRepository();
             this.userRepository = new InMemoryRepository<User>();
-            this.service = new AccountService(this.profileDetailsRepository, this.userRepository);
+            this.friendRepository = new InMemoryRepository<Friend>();
+            this.service = new AccountService(this.profileDetailsRepository, this.userRepository, this.friendRepository);
         }
 
         [TestMethod]
@@ -105,7 +107,7 @@
 
             Assert.AreEqual(1, this.profileDetailsRepository.SaveChanges());
 
-            string result = "";
+            string result = string.Empty;
             using (StreamReader sr = new StreamReader("E:\\test.txt"))
             {
                 result = sr.ReadToEnd();

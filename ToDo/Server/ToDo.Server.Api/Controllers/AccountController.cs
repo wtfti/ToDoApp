@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using System.Web.Hosting;
     using System.Web.Http;
+    using AutoMapper.QueryableExtensions;
     using Data.Models;
     using Data.Models.Account;
     using Infrastructure.Validation;
@@ -132,6 +133,16 @@
             string background = this.accountService.GetBackground(userId);
 
             return this.Ok(background);
+        }
+
+        [HttpGet]
+        public IHttpActionResult Users()
+        {
+            var usersDb = this.accountService
+                .GetRegistratedUsers()
+                .ProjectTo<UserResponseModel>();
+
+            return this.Ok(usersDb);
         }
     }
 }

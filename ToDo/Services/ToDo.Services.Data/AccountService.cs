@@ -12,14 +12,17 @@
     public class AccountService : IAccountService
     {
         private readonly IRepository<ProfileDetails> profileDetailsData;
-        private readonly IRepository<User> users;
+        private readonly IRepository<User> usersData;
+        private readonly IRepository<Friend> friendsData;
 
         public AccountService(
             IRepository<ProfileDetails> userProfileRepository,
-            IRepository<User> userRepository)
+            IRepository<User> userDataRepository,
+            IRepository<Friend> friendRepository)
         {
             this.profileDetailsData = userProfileRepository;
-            this.users = userRepository;
+            this.usersData = userDataRepository;
+            this.friendsData = friendRepository;
         }
 
         public ProfileDetails ProfileDetails(string userId)
@@ -50,25 +53,13 @@
                 dbUser.Background.Value = path;
             }
             
-
             this.profileDetailsData.SaveChanges();
-        }
-
-        public void AddFriend(string firstUsername, string secondUsername)
-        {
-            var firstUser = this.users.All().Single(a => a.UserName == firstUsername);
-            var secondUser = this.users.All().Single(a => a.UserName == secondUsername);
-
-            firstUser.Friends.Add(secondUser);
-            secondUser.Friends.Add(firstUser);
-
-            this.users.SaveChanges();
         }
 
         public ICollection<User> GetUsersByUsername(IEnumerable<string> users)
         {
             ICollection<User> result = new List<User>();
-            List<User> usersDb = this.users.All().ToList();
+            List<User> usersDb = this.usersData.All().ToList();
 
             foreach (var user in users)
             {
@@ -81,7 +72,44 @@
 
         public User GetUserByUsername(string userId)
         {
-            return this.users.All().Single(a => a.Id == userId);
+            return this.usersData.All().Single(a => a.Id == userId);
+        }
+
+        public IQueryable<User> GetRegistratedUsers()
+        {
+            var users = this.usersData.All();
+
+            return users;
+        }
+
+        public void AddFriendship(string firstUsername, string secondUsername)
+        {
+            var firstUser = this.GetUserByUsername(firstUsername);
+            var secondUser = this.GetUserByUsername(secondUsername);
+
+            Friend firstUserToSecondUserFriendship = new Friend()
+            {
+                FirstUserId = firstUser.Id,
+                SecondUserId = secondUser.Id
+            };
+            
+            Friend secondUserToFirstUserFriendship = new Friend()
+            {
+                FirstUserId = secondUser.Id,
+                SecondUserId = firstUser.Id
+            };
+
+            this.friendsData.Add(firstUserToSecondUserFriendship);
+            this.friendsData.Add(secondUserToFirstUserFriendship);
+            this.friendsData.SaveChanges();
+        }
+
+        public Friend GetFriendship(string username)
+        {
+            var user = this.GetUserByUsername(username);
+            var friend = this.friendsData.All().SingleOrDefault(a => a.FirstUserId == user.Id);
+
+            return friend;
         }
 
         public string GetBackground(string userId)

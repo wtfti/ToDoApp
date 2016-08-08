@@ -2,6 +2,7 @@
 {
     using System.Net.Http;
     using System.Web.Http;
+    using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.Owin;
 
     public abstract class BaseController : ApiController
@@ -28,6 +29,14 @@
             {
                 this.userManager = value;
             }
+        }
+
+        [NonAction]
+        protected string CurrentUser()
+        {
+            string result = this.User.Identity.GetUserId();
+
+            return result;
         }
     }
 }

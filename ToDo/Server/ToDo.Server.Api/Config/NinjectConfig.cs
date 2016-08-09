@@ -6,10 +6,13 @@ using ToDo.Api;
 namespace ToDo.Api
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Web;
     using Data;
     using Data.Common;
     using Data.Common.Contracts;
+    using Microsoft.AspNet.SignalR;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using Ninject;
     using Ninject.Extensions.Conventions;
@@ -49,6 +52,7 @@ namespace ToDo.Api
             {
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
                 kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
+                GlobalHost.DependencyResolver = new SignalRNinjectDependencyResolver(kernel);
 
                 RegisterServices(kernel);
                 return kernel;
@@ -80,5 +84,25 @@ namespace ToDo.Api
                     .SelectAllClasses()
                     .BindDefaultInterface());
         }        
+    }
+
+    public class SignalRNinjectDependencyResolver : DefaultDependencyResolver
+    {
+        private readonly IKernel _kernel;
+
+        public SignalRNinjectDependencyResolver(IKernel kernel)
+        {
+            _kernel = kernel;
+        }
+
+        public override object GetService(Type serviceType)
+        {
+            return _kernel.TryGet(serviceType) ?? base.GetService(serviceType);
+        }
+
+        public override IEnumerable<object> GetServices(Type serviceType)
+        {
+            return _kernel.GetAll(serviceType).Concat(base.GetServices(serviceType));
+        }
     }
 }

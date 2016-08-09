@@ -8,7 +8,6 @@
     using AutoMapper.QueryableExtensions;
     using Data.Models;
     using Infrastructure.Validation;
-    using Microsoft.AspNet.Identity;
     using ModelBinders;
     using Models.Note;
     using Server.Common.Constants;

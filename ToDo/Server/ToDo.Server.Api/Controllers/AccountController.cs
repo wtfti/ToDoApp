@@ -114,7 +114,7 @@
         {
             var userId = this.User.Identity.GetUserId();
 
-            this.accountService.Edit(
+            this.accountService.EditAccountSettings(
                 userId,
                 user.FullName,
                 user.Age,
@@ -139,7 +139,7 @@
         public IHttpActionResult Users()
         {
             var usersDb = this.accountService
-                .GetRegistratedUsers()
+                .GetRegistratedUsers(this.CurrentUser())
                 .ProjectTo<UserResponseModel>();
 
             return this.Ok(usersDb);

@@ -41,7 +41,7 @@
             accountService
                 .Setup(a => a.ProfileDetails(It.IsAny<string>()))
                 .Returns(new ProfileDetails());
-            accountService.Setup(a => a.Edit(
+            accountService.Setup(a => a.EditAccountSettings(
                 It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<int?>(),

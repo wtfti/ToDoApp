@@ -79,7 +79,7 @@
             };
             this.profileDetailsRepository.Add(details);
 
-            this.service.Edit("test", "changed user", 21, GenderType.None, null, "C:\\");
+            this.service.EditAccountSettings("test", "changed user", 21, GenderType.None, null, "C:\\");
 
             Assert.AreEqual(1, this.profileDetailsRepository.SaveChanges());
         }
@@ -103,7 +103,7 @@
             };
             this.profileDetailsRepository.Add(details);
 
-            this.service.Edit("test", "changed user", 21, GenderType.None, "background", "E:\\test.txt");
+            this.service.EditAccountSettings("test", "changed user", 21, GenderType.None, "background", "E:\\test.txt");
 
             Assert.AreEqual(1, this.profileDetailsRepository.SaveChanges());
 

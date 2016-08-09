@@ -32,7 +32,7 @@
             return user;
         }
 
-        public void Edit(string userId, string fullName, int? age, GenderType gender, string image, string path)
+        public void EditAccountSettings(string userId, string fullName, int? age, GenderType gender, string image, string path)
         {
             var dbUser = this.profileDetailsData.All().Where(a => a.Id == userId).Single();
 
@@ -52,7 +52,7 @@
 
                 dbUser.Background.Value = path;
             }
-            
+
             this.profileDetailsData.SaveChanges();
         }
 
@@ -70,46 +70,73 @@
             return result;
         }
 
-        public User GetUserByUsername(string userId)
+        public User GetUserByUsername(string username)
         {
-            return this.usersData.All().Single(a => a.Id == userId);
+            return this.usersData.All().Single(a => a.UserName == username);
         }
 
-        public IQueryable<User> GetRegistratedUsers()
+        public IQueryable<User> GetRegistratedUsers(string currentUserId)
         {
-            var users = this.usersData.All();
+            var friends = this.friendsData.All().Where(a => a.FirstUserId == currentUserId || a.SecondUserId == currentUserId);
+            var allUsers = this.usersData.All();
+            var exceptUserCollection =
+                from friend in friends.AsEnumerable()
+                join user in allUsers.AsEnumerable()
+                on friend.FirstUserId equals user.Id
+                select user;
+
+            var exceptUserCollection2 =
+                from friend in friends.AsEnumerable()
+                join user in allUsers.AsEnumerable()
+                on friend.SecondUserId equals user.Id
+                select user;
+
+            var users = this.usersData.All().Where(a => a.Id != currentUserId).Except(exceptUserCollection).Except(exceptUserCollection2);
 
             return users;
         }
 
-        public void AddFriendship(string firstUsername, string secondUsername)
+        public void AcceptRequest(Friend request)
         {
-            var firstUser = this.GetUserByUsername(firstUsername);
-            var secondUser = this.GetUserByUsername(secondUsername);
+            request.Status = Status.Accepted;
 
-            Friend firstUserToSecondUserFriendship = new Friend()
-            {
-                FirstUserId = firstUser.Id,
-                SecondUserId = secondUser.Id
-            };
-            
-            Friend secondUserToFirstUserFriendship = new Friend()
-            {
-                FirstUserId = secondUser.Id,
-                SecondUserId = firstUser.Id
-            };
-
-            this.friendsData.Add(firstUserToSecondUserFriendship);
-            this.friendsData.Add(secondUserToFirstUserFriendship);
             this.friendsData.SaveChanges();
         }
 
-        public Friend GetFriendship(string username)
+        public void DeclineRequest(Friend request)
         {
-            var user = this.GetUserByUsername(username);
-            var friend = this.friendsData.All().SingleOrDefault(a => a.FirstUserId == user.Id);
+            request.Status = Status.Declined;
+
+            this.friendsData.SaveChanges();
+        }
+
+        public Friend GetFriendship(string firstUsername, string secondUsername)
+        {
+            var firstUser = this.GetUserByUsername(firstUsername);
+            var secondUser = this.GetUserByUsername(secondUsername);
+            var friend =
+                this.friendsData.All()
+                    .SingleOrDefault(a => a.FirstUserId == firstUser.Id && a.SecondUserId == secondUser.Id) ??
+                this.friendsData.All()
+                    .SingleOrDefault(a => a.FirstUserId == secondUser.Id && a.SecondUserId == firstUser.Id);
 
             return friend;
+        }
+
+        public void AddFriendRequest(string firstUsername, string secondUsername)
+        {
+            var firstUserDb = this.GetUserByUsername(firstUsername);
+            var secondUserDb = this.GetUserByUsername(secondUsername);
+
+            Friend friend = new Friend()
+            {
+                FirstUserId = firstUserDb.Id,
+                SecondUserId = secondUserDb.Id,
+                Status = Status.Pending
+            };
+
+            this.friendsData.Add(friend);
+            this.friendsData.SaveChanges();
         }
 
         public string GetBackground(string userId)

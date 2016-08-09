@@ -12,5 +12,7 @@
 
         [Required]
         public string SecondUserId { get; set; }
+
+        public Status Status { get; set; }
     }
 }

@@ -1,79 +1,94 @@
 ﻿namespace ToDo.Api.Hubs
 {
-    using System;
     using System.Collections.Concurrent;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.SignalR;
-    using Models.Hubs;
     using Services.Data.Contracts;
 
     public class Friend : Hub
     {
-        private static readonly ConcurrentDictionary<string, string> UsernameToConnectionId =
+        private static readonly ConcurrentDictionary<string, string> FullNameToConnectionId =
+            new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> FullNameToUsername =
+            new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> UsernameToFullName =
             new ConcurrentDictionary<string, string>();
 
-        private static readonly IDictionary<string, FriendRequest> FriendRequests =
-            new Dictionary<string, FriendRequest>();
-
         private readonly IAccountService accountService;
-        
+
         public Friend(IAccountService accountService)
         {
             this.accountService = accountService;
         }
 
-        public void FriendRequest(string recieverUsername, string senderFullName)
+        public void FriendRequest(string recieverFullName)
         {
             string recieverConnectionId;
 
-            if (UsernameToConnectionId.TryGetValue(recieverUsername, out recieverConnectionId))
+            if (FullNameToConnectionId.TryGetValue(recieverFullName, out recieverConnectionId))
             {
-                string key = Guid.NewGuid().ToString();
-                var friendRequest = new FriendRequest()
+                var friendshipExist = this.accountService.GetFriendship(this.Context.User.Identity.GetUserName(), FullNameToUsername[recieverFullName]);
+                if (friendshipExist == null)
                 {
-                    Id = key,
-                    From = this.Context.User.Identity.GetUserName(),
-                    To = recieverUsername
-                };
+                    string sender = this.Context.User.Identity.GetUserName();
+                    string reciever = FullNameToUsername[recieverFullName];
 
-                var friendshipExist = this.accountService.GetFriendship(recieverUsername);
-                if (!FriendRequests.ContainsKey(friendRequest.From) && friendshipExist == null)
-                {
-                    FriendRequests.Add(friendRequest.From, friendRequest);
-                    FriendRequests.Add(friendRequest.To, friendRequest);
-                    this.Clients.Client(recieverConnectionId).newFriendRequest(friendRequest.Id, friendRequest.From, senderFullName);
+                    this.accountService.AddFriendRequest(sender, reciever);
+                    this.Clients.Client(recieverConnectionId).newFriendRequest(UsernameToFullName[sender]);
                 }
             }
         }
 
-        public void AcceptRequest(string id)
+        public void AcceptRequest(string senderFullName)
         {
             string currentUser = this.Context.User.Identity.GetUserName();
-            FriendRequest request;
+            string secondUser = FullNameToUsername[senderFullName];
 
-            if (FriendRequests.TryGetValue(currentUser, out request) && request.Id == id)
+            if (currentUser != null && secondUser != null)
             {
-                string senderConnectionId = UsernameToConnectionId[request.From];
-                string recieverConnectionId = UsernameToConnectionId[request.To];
+                var request = this.accountService.GetFriendship(currentUser, secondUser);
 
-                this.accountService.AddFriendship(request.From, request.To);
-                FriendRequests.Remove(request.From);
-                FriendRequests.Remove(request.To);
+                if (request != null)
+                {
+                    this.accountService.AcceptRequest(request);
 
-                this.Clients.Client(senderConnectionId).acceptedRequest(request.To);
-                this.Clients.Client(recieverConnectionId).acceptedRequest(request.From);
+                    string connectionId;
+
+                    if (FullNameToConnectionId.TryGetValue(senderFullName, out connectionId))
+                    {
+                        this.Clients.Client(connectionId).acceptedRequest(UsernameToFullName[currentUser]);
+                    }
+                }
+            }
+        }
+
+        public void DeclineRequest(string senderFullName)
+        {
+            string firstUser = this.Context.User.Identity.GetUserName();
+            string secondUser = FullNameToUsername[senderFullName];
+
+            if (firstUser != null && secondUser != null)
+            {
+                var request = this.accountService.GetFriendship(firstUser, secondUser);
+
+                if (request != null)
+                {
+                    this.accountService.DeclineRequest(request);
+                }
             }
         }
 
         public override Task OnConnected()
         {
-            string name = this.Context.User.Identity.GetUserName();
+            string username = this.Context.User.Identity.GetUserName();
 
-            if (name != null)
+            if (username != null)
             {
-                UsernameToConnectionId.TryAdd(name, this.Context.ConnectionId);
+                string fullname = this.accountService.GetUserByUsername(username).ProfileDetails.FullName;
+                FullNameToConnectionId.TryAdd(fullname, this.Context.ConnectionId);
+                FullNameToUsername.TryAdd(fullname, username);
+                UsernameToFullName.TryAdd(username, fullname);
             }
 
             return base.OnConnected();
@@ -84,7 +99,7 @@
             string name = this.Context.User.Identity.GetUserName();
             string connectionId;
 
-            UsernameToConnectionId.TryRemove(name, out connectionId);
+            FullNameToConnectionId.TryRemove(name, out connectionId);
 
             return base.OnDisconnected(stopCalled);
         }

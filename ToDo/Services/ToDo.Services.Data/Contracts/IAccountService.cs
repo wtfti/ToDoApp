@@ -9,17 +9,21 @@
     {
         ProfileDetails ProfileDetails(string userId);
 
-        void Edit(string userId, string fullName, int? age, GenderType gender, string image, string path);
+        void EditAccountSettings(string userId, string fullName, int? age, GenderType gender, string image, string path);
 
         ICollection<User> GetUsersByUsername(IEnumerable<string> users);
 
         User GetUserByUsername(string userId);
 
-        IQueryable<User> GetRegistratedUsers();
+        IQueryable<User> GetRegistratedUsers(string currentUser);
 
-        void AddFriendship(string firstUsername, string secondUsername);
+        void AcceptRequest(Friend request);
 
-        Friend GetFriendship(string username);
+        void DeclineRequest(Friend request);
+
+        Friend GetFriendship(string firstUsername, string secondUsername);
+
+        void AddFriendRequest(string firstUser, string secondUser);
 
         string GetBackground(string userId);
     }

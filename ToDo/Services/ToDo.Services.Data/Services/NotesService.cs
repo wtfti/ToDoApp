@@ -1,6 +1,7 @@
 ﻿namespace ToDo.Services.Data.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Contracts;
     using Server.Common.Constants;
@@ -107,10 +108,12 @@
         {
             var notes = this.sharedNotesData
                 .All()
+                .ToList()
                 .Where(note => note.Users.Any(u => u.Id == user))
                 .OrderBy(q => q.Content)
                 .Skip((page * pageSize) - pageSize)
-                .Take(pageSize);
+                .Take(pageSize)
+                .AsQueryable();
 
             return notes;
         }
@@ -173,9 +176,11 @@
             string content, 
             DateTime? expireDate = null)
         {
+            User currentUserDb = this.accountService.GetUserByUsername(user);
+
             var privateNoteDb = new PrivateNote()
             {
-                UserId = user,
+                UserId = currentUserDb.Id,
                 Title = title,
                 Content = content,
                 CreatedOn = DateTime.Now,
@@ -193,9 +198,21 @@
             string content,
             DateTime? expireDate = null)
         {
-            var usersDb = this.accountService.GetUsersByUsername(users);
-            var currentUserDb = this.accountService.GetUserByUsername(currentUser);
-            usersDb.Add(currentUserDb);
+            User currentUserDb = this.accountService.GetUserByUsername(currentUser);
+            var usersDb = this.accountService.GetUsersByFullName(users);
+            List<User> sharedWith = new List<User>(usersDb.Count + 1);
+            sharedWith.Add(currentUserDb);
+
+            foreach (var user in usersDb)
+            {
+                foreach (var friend in user.Friends)
+                {
+                    if (friend.UserId == currentUserDb.Id || friend.ContactUserId == currentUserDb.Id)
+                    {
+                        sharedWith.Add(user);
+                    }
+                }
+            }
 
             var sharedNoteDb = new SharedNote()
             {
@@ -204,7 +221,7 @@
                 CreatedFrom = currentUserDb.ProfileDetails.FullName,
                 CreatedOn = DateTime.Now,
                 ExpiredOn = expireDate,
-                Users = usersDb
+                Users = sharedWith
             };
 
             this.sharedNotesData.Add(sharedNoteDb);

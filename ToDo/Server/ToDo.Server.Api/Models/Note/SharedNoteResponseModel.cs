@@ -30,7 +30,7 @@
         public string CreatedFrom { get; set; }
 
         [Required]
-        public ICollection<User> Users { get; set; }
+        public ICollection<string> Users { get; set; }
 
         [Required]
         public bool IsExpired { get; set; }

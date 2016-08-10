@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
     using System.Web.Hosting;
     using System.Web.Http;
-    using AutoMapper.QueryableExtensions;
     using Data.Models;
     using Data.Models.Account;
     using Infrastructure.Validation;
@@ -139,7 +138,7 @@
         public IHttpActionResult Users()
         {
             var usersDb = this.accountService
-                .GetRegistratedUsers(this.CurrentUser());
+                .GetRegistratedUsers(this.CurrentUserId());
 
             return this.Ok(usersDb);
         }

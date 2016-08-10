@@ -61,15 +61,18 @@
             this.profileDetailsData.SaveChanges();
         }
 
-        public ICollection<User> GetUsersByUsername(IEnumerable<string> users)
+        public ICollection<User> GetUsersByFullName(IEnumerable<string> users)
         {
             ICollection<User> result = new List<User>();
             List<User> usersDb = this.usersData.All().ToList();
 
             foreach (var user in users)
             {
-                var currentUserDb = usersDb.FirstOrDefault(a => a.UserName == user);
-                result.Add(currentUserDb);
+                var currentUserDb = usersDb.FirstOrDefault(a => a.ProfileDetails.FullName == user);
+                if (currentUserDb != null)
+                {
+                    result.Add(currentUserDb);
+                }
             }
 
             return result;

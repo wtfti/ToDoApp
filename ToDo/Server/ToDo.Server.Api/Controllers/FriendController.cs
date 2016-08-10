@@ -1,10 +1,9 @@
 ﻿namespace ToDo.Api.Controllers
 {
-    using System.Linq;
     using System.Web.Http;
     using AutoMapper.QueryableExtensions;
     using Microsoft.AspNet.Identity;
-    using Models.Friend;
+    using Models.Account;
     using Services.Data.Contracts;
 
     [Authorize]
@@ -22,7 +21,7 @@
         {
             var result = this.service
                 .GetFriendshipsByUserId(this.User.Identity.GetUserId())
-                .ProjectTo<FriendResponseMondel>();
+                .ProjectTo<UserResponseModel>();
 
             return this.Ok(result);
         }

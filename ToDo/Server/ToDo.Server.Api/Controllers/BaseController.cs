@@ -32,9 +32,17 @@
         }
 
         [NonAction]
-        protected string CurrentUser()
+        protected string CurrentUserId()
         {
             string result = this.User.Identity.GetUserId();
+
+            return result;
+        }
+
+        [NonAction]
+        protected string CurrentUsername()
+        {
+            string result = this.User.Identity.GetUserName();
 
             return result;
         }

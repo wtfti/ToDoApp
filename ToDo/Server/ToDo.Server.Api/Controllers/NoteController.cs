@@ -34,11 +34,11 @@
 
             if (note.SharedWith.Length > 0)
             {
-                this.notesService.AddSharedNote(note.SharedWith, this.CurrentUser(), note.Title, note.Content, note.ExpiredOn);
+                this.notesService.AddSharedNote(note.SharedWith, this.CurrentUsername(), note.Title, note.Content, note.ExpiredOn);
             }
             else
             {
-                this.notesService.AddPrivateNote(this.CurrentUser(), note.Title, note.Content, note.ExpiredOn);
+                this.notesService.AddPrivateNote(this.CurrentUsername(), note.Title, note.Content, note.ExpiredOn);
             }
 
             return this.Ok(MessageConstants.CreateNote);
@@ -62,7 +62,7 @@
 
             var dbNote = this.notesService.GetNoteById(id.Value);
 
-            if (dbNote.UserId != this.CurrentUser())
+            if (dbNote.UserId != this.CurrentUserId())
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
@@ -81,7 +81,7 @@
             }
 
             var dbNotes = this.notesService
-                .GetNotes(this.CurrentUser(), page);
+                .GetNotes(this.CurrentUserId(), page);
 
             var dbNotesList = dbNotes.ToList();
 
@@ -90,7 +90,7 @@
             if (hasChange)
             {
                 dbNotes = this.notesService
-                    .GetNotes(this.CurrentUser(), page);
+                    .GetNotes(this.CurrentUserId(), page);
             }
 
             var result = dbNotes.ProjectTo<NoteResponseModel>();
@@ -106,10 +106,11 @@
                 return this.BadRequest(MessageConstants.InvalidPage);
             }
 
-            var dbNotes = this.notesService.GetSharedNotes(this.CurrentUser(), page);
+            var notes = this.notesService
+                .GetSharedNotes(this.CurrentUserId(), page)
+                .ProjectTo<SharedNoteResponseModel>();
 
-            var result = dbNotes.ProjectTo<SharedNoteResponseModel>();
-            return this.Ok(result);
+            return this.Ok(notes);
         }
 
         [HttpGet]
@@ -121,7 +122,7 @@
             }
 
             var dbNotes = this.notesService
-                .GetNotesFromToday(this.CurrentUser(), page);
+                .GetNotesFromToday(this.CurrentUserId(), page);
 
             var dbNotesList = dbNotes.ToList();
 
@@ -130,7 +131,7 @@
             if (hasChange)
             {
                 dbNotes = this.notesService
-                    .GetNotesFromToday(this.CurrentUser(), page);
+                    .GetNotesFromToday(this.CurrentUserId(), page);
             }
 
             var result = dbNotes.ProjectTo<NoteResponseModel>();
@@ -147,7 +148,7 @@
             }
 
             var dbNotes = this.notesService
-                .GetCompletedNotes(this.CurrentUser(), page);
+                .GetCompletedNotes(this.CurrentUserId(), page);
 
             var dbNotesList = dbNotes.ToList();
 
@@ -156,7 +157,7 @@
             if (hasChange)
             {
                 dbNotes = this.notesService
-                    .GetNotes(this.CurrentUser(), page);
+                    .GetNotes(this.CurrentUserId(), page);
             }
 
             var result = dbNotes.ProjectTo<NoteResponseModel>();
@@ -173,7 +174,7 @@
             }
 
             var dbNotes = this.notesService
-                .GetNotesWithExpirationDate(this.CurrentUser(), page);
+                .GetNotesWithExpirationDate(this.CurrentUserId(), page);
 
             var dbNotesList = dbNotes.ToList();
 
@@ -182,7 +183,7 @@
             if (hasChange)
             {
                 dbNotes = this.notesService
-                    .GetNotesWithExpirationDate(this.CurrentUser(), page);
+                    .GetNotesWithExpirationDate(this.CurrentUserId(), page);
             }
 
             var result = dbNotes.ProjectTo<NoteResponseModel>();
@@ -200,7 +201,7 @@
 
             var note = this.notesService
                 .GetNoteById(id);
-            if (note == null || note.UserId != this.CurrentUser())
+            if (note == null || note.UserId != this.CurrentUserId())
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
@@ -220,7 +221,7 @@
 
             var note = this.notesService.GetNoteById(id);
 
-            if (note == null || note.UserId != this.CurrentUser())
+            if (note == null || note.UserId != this.CurrentUserId())
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }

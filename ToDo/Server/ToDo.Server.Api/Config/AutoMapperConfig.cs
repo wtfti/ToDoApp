@@ -8,6 +8,7 @@
     using Data.Models;
     using Infrastructure.Ninject.Mapping;
     using Models.Account;
+    using Models.Note;
 
     public static class AutoMapperConfig
     {
@@ -44,6 +45,8 @@
 
                 a.CreateMap<User, UserResponseModel>()
                 .ForMember(x => x.FullName, z => z.MapFrom(user => user.ProfileDetails.FullName));
+                a.CreateMap<SharedNote, SharedNoteResponseModel>()
+                    .ForMember(users => users.Users, x => x.MapFrom(shared => shared.Users.Select(e => e.ProfileDetails.FullName)));
             });
         }
     }

@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using Data.Models;
-    using Infrastructure.Mapping;
+    using Infrastructure.Ninject.Mapping;
     using Server.Common.Constants;
 
     public class NoteResponseModel : IMapFrom<PrivateNote>

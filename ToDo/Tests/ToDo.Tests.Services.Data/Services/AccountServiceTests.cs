@@ -5,15 +5,15 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using ToDo.Data.Models;
     using ToDo.Data.Models.Account;
-    using ToDo.Services.Data;
     using ToDo.Services.Data.Contracts;
+    using ToDo.Services.Data.Services;
 
     [TestClass]
     public class AccountServiceTests
     {
         private InMemoryRepository<ProfileDetails> profileDetailsRepository;
         private InMemoryRepository<User> userRepository;
-        private InMemoryRepository<Friend> friendRepository;
+        private IFriendsService friendsService;
         private IAccountService service;
          
         [TestInitialize]
@@ -21,8 +21,8 @@
         {
             this.profileDetailsRepository = DepedencyObjectFactory.GetProfileDetailsRepository();
             this.userRepository = new InMemoryRepository<User>();
-            this.friendRepository = new InMemoryRepository<Friend>();
-            this.service = new AccountService(this.profileDetailsRepository, this.userRepository, this.friendRepository);
+            this.friendsService = new FriendsService(null, new InMemoryRepository<Friend>());
+            this.service = new AccountService(this.profileDetailsRepository, this.userRepository, this.friendsService);
         }
 
         [TestMethod]

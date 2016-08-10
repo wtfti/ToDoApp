@@ -5,8 +5,8 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using ToDo.Data.Models;
     using ToDo.Data.Models.Account;
-    using ToDo.Services.Data;
     using ToDo.Services.Data.Contracts;
+    using ToDo.Services.Data.Services;
 
     [TestClass]
     public class NoteServiceTests
@@ -17,7 +17,7 @@
         private InMemoryRepository<SharedNote> sharedNotesRepository;
         private InMemoryRepository<ProfileDetails> profileDetailsRepository;
         private InMemoryRepository<User> usersRepository;
-        private InMemoryRepository<Friend> friendRepository;
+        private IFriendsService friendsService;
         private IAccountService accountService;
 
         [TestInitialize]
@@ -27,8 +27,8 @@
             this.sharedNotesRepository = new InMemoryRepository<SharedNote>();
             this.profileDetailsRepository = new InMemoryRepository<ProfileDetails>();
             this.usersRepository = new InMemoryRepository<User>();
-            this.friendRepository = new InMemoryRepository<Friend>();
-            this.accountService = new AccountService(this.profileDetailsRepository, this.usersRepository, this.friendRepository);
+            this.friendsService = new FriendsService(null , new InMemoryRepository<Friend>());
+            this.accountService = new AccountService(this.profileDetailsRepository, this.usersRepository, this.friendsService);
             this.service = new NotesService(this.privateNotesRepository, this.sharedNotesRepository, this.accountService);
         }
 

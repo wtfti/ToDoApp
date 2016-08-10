@@ -6,7 +6,7 @@
     using System.Reflection;
     using AutoMapper;
     using Data.Models;
-    using Infrastructure.Mapping;
+    using Infrastructure.Ninject.Mapping;
     using Models.Account;
 
     public static class AutoMapperConfig

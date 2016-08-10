@@ -1,4 +1,4 @@
-﻿namespace ToDo.Services.Data
+﻿namespace ToDo.Services.Data.Services
 {
     using System;
     using System.Linq;

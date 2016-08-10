@@ -6,12 +6,11 @@ using ToDo.Api;
 namespace ToDo.Api
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Web;
     using Data;
     using Data.Common;
     using Data.Common.Contracts;
+    using Infrastructure.Ninject.Config;
     using Microsoft.AspNet.SignalR;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using Ninject;
@@ -84,25 +83,5 @@ namespace ToDo.Api
                     .SelectAllClasses()
                     .BindDefaultInterface());
         }        
-    }
-
-    public class SignalRNinjectDependencyResolver : DefaultDependencyResolver
-    {
-        private readonly IKernel _kernel;
-
-        public SignalRNinjectDependencyResolver(IKernel kernel)
-        {
-            _kernel = kernel;
-        }
-
-        public override object GetService(Type serviceType)
-        {
-            return _kernel.TryGet(serviceType) ?? base.GetService(serviceType);
-        }
-
-        public override IEnumerable<object> GetServices(Type serviceType)
-        {
-            return _kernel.GetAll(serviceType).Concat(base.GetServices(serviceType));
-        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace ToDo.Api.Models.Account
 {
     using Data.Models.Account;
-    using Infrastructure.Mapping;
+    using Infrastructure.Ninject.Mapping;
 
     public class UserProfileResponseModel : IMapFrom<ProfileDetails>
     {

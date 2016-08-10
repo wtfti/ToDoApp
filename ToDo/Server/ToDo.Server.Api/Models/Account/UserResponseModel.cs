@@ -1,15 +1,10 @@
 ﻿namespace ToDo.Api.Models.Account
 {
-    using AutoMapper;
     using Data.Models;
-    using Infrastructure.Mapping;
-    public class UserResponseModel : IMapFrom<User>, IHaveCustomMappings
+    using Infrastructure.Ninject.Mapping;
+
+    public class UserResponseModel : IMapFrom<User>
     {
-
         public string FullName { get; set; }
-
-        public void CreateMappings(IConfiguration configuration)
-        {
-        }
     }
 }

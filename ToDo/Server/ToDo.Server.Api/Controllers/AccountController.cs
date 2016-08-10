@@ -139,8 +139,7 @@
         public IHttpActionResult Users()
         {
             var usersDb = this.accountService
-                .GetRegistratedUsers(this.CurrentUser())
-                .ProjectTo<UserResponseModel>();
+                .GetRegistratedUsers(this.CurrentUser());
 
             return this.Ok(usersDb);
         }

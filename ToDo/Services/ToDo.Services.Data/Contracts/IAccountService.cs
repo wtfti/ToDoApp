@@ -7,6 +7,8 @@
 
     public interface IAccountService
     {
+        IQueryable<User> AllUsers();
+
         ProfileDetails ProfileDetails(string userId);
 
         void EditAccountSettings(string userId, string fullName, int? age, GenderType gender, string image, string path);
@@ -15,15 +17,9 @@
 
         User GetUserByUsername(string userId);
 
-        IQueryable<User> GetRegistratedUsers(string currentUser);
+        User GetUserByFullName(string fullname);
 
-        void AcceptRequest(Friend request);
-
-        void DeclineRequest(Friend request);
-
-        Friend GetFriendship(string firstUsername, string secondUsername);
-
-        void AddFriendRequest(string firstUser, string secondUser);
+        IEnumerable<string> GetRegistratedUsers(string currentUser);
 
         string GetBackground(string userId);
     }

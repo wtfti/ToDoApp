@@ -282,7 +282,7 @@
                     UserId = "User"
                 });
 
-            notesService.Setup(a => a.SetComplete(It.IsAny<PrivateNote>()));
+            notesService.Setup(a => a.SetCompletePrivateNote(It.IsAny<PrivateNote>()));
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(notesService.Object)

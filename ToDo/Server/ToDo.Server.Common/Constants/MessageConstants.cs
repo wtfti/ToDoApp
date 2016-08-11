@@ -21,5 +21,6 @@
         public const string NewPasswordIsNotSameAsConfirmPassword = "New password is not same as confirm password";
         public const string CurrentUserCannotRemoveThisNote = "Removing denied! Only creator can remove this note!";
         public const string CurrentUserCannotEditThisNote = "Operation denied! Only creator can edit this note!";
+        public const string CurrentUserCannotCompleteThisNote = "Operation denied! Only creator can complete this note!";
     }
 }

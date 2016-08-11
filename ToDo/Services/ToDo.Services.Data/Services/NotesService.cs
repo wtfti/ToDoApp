@@ -72,10 +72,16 @@
             this.sharedNotesData.SaveChanges();
         }
 
-        public void SetComplete(PrivateNote note)
+        public void SetCompletePrivateNote(PrivateNote note)
         {
             note.IsComplete = true;
             this.privateNotesData.SaveChanges();
+        }
+
+        public void SetCompleteSharedNote(SharedNote note)
+        {
+            note.IsComplete = true;
+            this.sharedNotesData.SaveChanges();
         }
 
         public void SetExpired(PrivateNote note)

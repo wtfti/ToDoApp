@@ -171,7 +171,7 @@
             {
                 IsComplete = false
             };
-            this.service.SetComplete(note);
+            this.service.SetCompletePrivateNote(note);
 
             Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
             Assert.IsTrue(note.IsComplete);

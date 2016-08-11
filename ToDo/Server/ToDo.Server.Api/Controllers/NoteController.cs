@@ -75,7 +75,12 @@
 
             User currentUser = sharedNote.Users.FirstOrDefault(u => u.Id == this.CurrentUserId());
 
-            if (currentUser != null && sharedNote.CreatedFrom != currentUser.ProfileDetails.FullName)
+            if (currentUser == null)
+            {
+                return this.BadRequest(MessageConstants.CurrentUserCannotEditThisNote);
+            }
+
+            if (sharedNote.CreatedFrom != currentUser.ProfileDetails.FullName)
             {
                 return this.BadRequest(MessageConstants.CurrentUserCannotEditThisNote);
             }
@@ -248,13 +253,31 @@
 
             var note = this.notesService.GetPrivateNoteById(id);
 
-            if (note == null || note.UserId != this.CurrentUserId())
+            if (note != null && note.UserId == this.CurrentUserId())
+            {
+                this.notesService.SetCompletePrivateNote(note);
+                return this.Ok();
+            }
+
+            var sharedNote = this.notesService.GetSharedNoteById(id);
+
+            if (sharedNote == null)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
-            this.notesService.SetComplete(note);
+            User currentUser = sharedNote.Users.FirstOrDefault(u => u.Id == this.CurrentUserId());
+            if (currentUser == null)
+            {
+                return this.BadRequest(MessageConstants.CurrentUserCannotCompleteThisNote);
+            }
 
+            if (sharedNote.CreatedFrom != currentUser.ProfileDetails.FullName)
+            {
+                return this.BadRequest(MessageConstants.CurrentUserCannotCompleteThisNote);
+            }
+
+            this.notesService.SetCompleteSharedNote(sharedNote);
             return this.Ok();
         }
 

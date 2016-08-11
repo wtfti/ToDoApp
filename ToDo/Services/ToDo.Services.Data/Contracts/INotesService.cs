@@ -37,6 +37,8 @@
 
         void SetExpired(PrivateNote note);
 
-        void SetComplete(PrivateNote note);
+        void SetCompletePrivateNote(PrivateNote note);
+
+        void SetCompleteSharedNote(SharedNote note);
     }
 }

@@ -61,9 +61,9 @@
             this.profileDetailsData.SaveChanges();
         }
 
-        public ICollection<User> GetUsersByFullName(IEnumerable<string> users)
+        public IList<User> GetUsersByFullName(IEnumerable<string> users)
         {
-            ICollection<User> result = new List<User>();
+            IList<User> result = new List<User>();
             List<User> usersDb = this.usersData.All().ToList();
 
             foreach (var user in users)

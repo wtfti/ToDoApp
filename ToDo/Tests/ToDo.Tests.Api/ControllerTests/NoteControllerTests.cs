@@ -183,7 +183,7 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
-                .Calling(q => q.RemoveNoteById(2))
+                .Calling(q => q.RemoveNoteById("2"))
                 .ShouldReturn()
                 .BadRequest()
                 .WithErrorMessage(MessageConstants.NoteDoesNotExist);
@@ -196,7 +196,7 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
-                .Calling(q => q.RemoveNoteById(1))
+                .Calling(q => q.RemoveNoteById("1"))
                 .ShouldReturn()
                 .BadRequest()
                 .WithErrorMessage(MessageConstants.NoteDoesNotExist);
@@ -209,7 +209,7 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("Wrong user"))
-                .Calling(q => q.RemoveNoteById(0))
+                .Calling(q => q.RemoveNoteById("0"))
                 .ShouldReturn()
                 .BadRequest()
                 .WithErrorMessage(MessageConstants.NoteDoesNotExist);
@@ -222,7 +222,7 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
-                .Calling(q => q.RemoveNoteById(1))
+                .Calling(q => q.RemoveNoteById("1"))
                 .ShouldReturn()
                 .Ok()
                 .WithResponseModel(MessageConstants.RemoveNote);
@@ -235,7 +235,7 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
-                .Calling(q => q.SetComplete(101))
+                .Calling(q => q.SetComplete("101"))
                 .ShouldReturn()
                 .BadRequest()
                 .WithErrorMessage(MessageConstants.NoteDoesNotExist);
@@ -248,7 +248,7 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User1"))
-                .Calling(q => q.SetComplete(1))
+                .Calling(q => q.SetComplete("1"))
                 .ShouldReturn()
                 .BadRequest()
                 .WithErrorMessage(MessageConstants.NoteDoesNotExist);
@@ -261,7 +261,7 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
                 .WithAuthenticatedUser(a => a.WithIdentifier("User1"))
-                .Calling(q => q.SetComplete(-1))
+                .Calling(q => q.SetComplete("-1"))
                 .ShouldReturn()
                 .BadRequest()
                 .WithErrorMessage(MessageConstants.NoteDoesNotExist);
@@ -271,10 +271,10 @@
         public void SetCompleteShouldReturnOk()
         {
             var notesService = new Mock<INotesService>();
-            notesService.Setup(a => a.GetNoteById(It.IsAny<int>()))
+            notesService.Setup(a => a.GetPrivateNoteById(It.IsAny<string>()))
                 .Returns(new PrivateNote()
                 {
-                    Id = 1,
+                    Id = "1",
                     Title = "TestTitle",
                     Content = "TestContent",
                     CreatedOn = DateTime.Now,
@@ -287,7 +287,7 @@
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(notesService.Object)
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
-                .Calling(q => q.SetComplete(1))
+                .Calling(q => q.SetComplete("1"))
                 .ShouldReturn()
                 .Ok();
         }
@@ -414,7 +414,7 @@
             {
                 new PrivateNote()
                 {
-                    Id = 1000,
+                    Id = "1000",
                     UserId = "User",
                     CreatedOn = DateTime.Now
                 },
@@ -460,10 +460,10 @@
             note.Title = "test";
             note.Content = "test";
             note.ExpiredOn = DateTime.Now.AddDays(1);
-            note.Id = 5;
+            note.Id = "5";
 
             var mock = new Mock<INotesService>();
-            mock.Setup(a => a.GetNoteById(It.IsAny<int>())).Returns(dbNote);
+            mock.Setup(a => a.GetPrivateNoteById(It.IsAny<string>())).Returns(dbNote);
 
             MyWebApi
                 .Controller<NoteController>()
@@ -499,7 +499,7 @@
             note.Title = "test";
             note.Content = "test";
             note.ExpiredOn = new DateTime?(new DateTime(2016, 1, 1));
-            note.Id = 1;
+            note.Id = "1";
 
             MyWebApi
                 .Controller<NoteController>()
@@ -518,7 +518,7 @@
             note.Title = "test";
             note.Content = "test";
             note.ExpiredOn = DateTime.Now.AddDays(1);
-            note.Id = -1;
+            note.Id = "-1";
 
             MyWebApi
                 .Controller<NoteController>()

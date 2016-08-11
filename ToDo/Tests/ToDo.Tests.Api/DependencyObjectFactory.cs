@@ -26,8 +26,8 @@
                 .Returns(GenerateNotes);
             notesService.Setup(a => a.GetCompletedNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateCompleteNotes);
-            notesService.Setup(a => a.RemoveNoteById(It.IsAny<PrivateNote>()));
-            notesService.Setup(a => a.GetNoteById(1))
+            notesService.Setup(a => a.RemovePrivateNoteById(It.IsAny<PrivateNote>()));
+            notesService.Setup(a => a.GetPrivateNoteById("1"))
                 .Returns(GenerateNotes().First());
 
             return notesService.Object;
@@ -59,7 +59,7 @@
             {
                 result.Add(new PrivateNote()
                 {
-                    Id = i,
+                    Id = i.ToString(),
                     Title = "TestTitle",
                     Content = "TestContent",
                     CreatedOn = DateTime.Now,
@@ -78,7 +78,7 @@
             {
                 result.Add(new PrivateNote()
                 {
-                    Id = i,
+                    Id = i.ToString(),
                     Title = "TestTitle",
                     Content = "TestContent",
                     CreatedOn = DateTime.Now,
@@ -98,7 +98,7 @@
             {
                 result.Add(new PrivateNote()
                 {
-                    Id = i,
+                    Id = i.ToString(),
                     CreatedOn = DateTime.Now,
                     UserId = "User",
                     IsComplete = false,

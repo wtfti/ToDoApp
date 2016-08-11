@@ -19,5 +19,6 @@
         public const string UnknownAttribute = "Unknown attribute";
         public const string InvalidPage = "Invalid Page";
         public const string NewPasswordIsNotSameAsConfirmPassword = "New password is not same as confirm password";
+        public const string CurrentUserIsNotCreatorOfNote = "Removing denied! Only creator can remove this note!";
     }
 }

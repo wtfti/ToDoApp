@@ -9,7 +9,7 @@
 
     public class SharedNoteResponseModel : IMapFrom<SharedNote>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         [MinLength(ValidationConstants.TitleMinLenght)]

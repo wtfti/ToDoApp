@@ -13,15 +13,18 @@
         private readonly IRepository<PrivateNote> privateNotesData;
         private readonly IRepository<SharedNote> sharedNotesData;
         private readonly IAccountService accountService;
+        private readonly IFriendsService friendService;
 
         public NotesService(
             IRepository<PrivateNote> privateNotesRepository,
             IRepository<SharedNote> sharedNotesRepository,
-            IAccountService accountService)
+            IAccountService accountService,
+            IFriendsService friendsService)
         {
             this.privateNotesData = privateNotesRepository;
             this.sharedNotesData = sharedNotesRepository;
             this.accountService = accountService;
+            this.friendService = friendsService;
         }
 
         public void ChangeNote(
@@ -63,10 +66,16 @@
             return notes;
         }
 
-        public void RemoveNoteById(PrivateNote note)
+        public void RemovePrivateNoteById(PrivateNote note)
         {
             this.privateNotesData.Delete(note);
             this.privateNotesData.SaveChanges();
+        }
+
+        public void RemoveSharedNoteById(SharedNote note)
+        {
+            this.sharedNotesData.Delete(note);
+            this.sharedNotesData.SaveChanges();
         }
 
         public void SetComplete(PrivateNote note)
@@ -81,9 +90,14 @@
             this.privateNotesData.SaveChanges();
         }
 
-        public PrivateNote GetNoteById(int id)
+        public PrivateNote GetPrivateNoteById(string id)
         {
             return this.privateNotesData.GetById(id);
+        }
+
+        public SharedNote GetSharedNoteById(string id)
+        {
+            return this.sharedNotesData.GetById(id);
         }
 
         public IQueryable<PrivateNote> GetNotes(
@@ -180,6 +194,7 @@
 
             var privateNoteDb = new PrivateNote()
             {
+                Id = DateTime.UtcNow.Ticks.ToString(),
                 UserId = currentUserDb.Id,
                 Title = title,
                 Content = content,
@@ -205,17 +220,17 @@
 
             foreach (var user in usersDb)
             {
-                foreach (var friend in user.Friends)
+                var friendship = this.friendService.GetFriendship(currentUserDb.UserName, user.UserName);
+
+                if (friendship != null)
                 {
-                    if (friend.UserId == currentUserDb.Id || friend.ContactUserId == currentUserDb.Id)
-                    {
-                        sharedWith.Add(user);
-                    }
+                    sharedWith.Add(user);
                 }
             }
 
             var sharedNoteDb = new SharedNote()
             {
+                Id = DateTime.UtcNow.Ticks.ToString(),
                 Title = title,
                 Content = content,
                 CreatedFrom = currentUserDb.ProfileDetails.FullName,

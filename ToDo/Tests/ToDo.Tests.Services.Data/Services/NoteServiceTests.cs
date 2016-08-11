@@ -46,7 +46,7 @@
         {
             var note = new PrivateNote()
             {
-                Id = 1,
+                Id = "1",
                 Title = "Title " + 1,
                 Content = "Content " + 1,
                 CreatedOn = DateTime.Now.AddDays(1),
@@ -56,7 +56,7 @@
 
             int count = this.service.All().Count();
 
-            this.service.RemoveNoteById(note);
+            this.service.RemovePrivateNoteById(note);
 
             Assert.AreEqual(count - 1, this.service.All().ToList().Count);
             Assert.AreEqual(2, this.service.All().ToList()[0].Id);
@@ -188,7 +188,7 @@
         [TestMethod]
         public void GetNotesWithExpiredDateShouldPass()
         {
-            var note = this.service.GetNoteById(10);
+            var note = this.service.GetPrivateNoteById("10");
             note.IsExpired = true;
             var result = this.service.GetNotesWithExpirationDate("expired", 1);
 
@@ -396,11 +396,11 @@
         [TestMethod]
         public void GetNoteByIdShouldPass()
         {
-            var result = this.service.GetNoteById(4);
+            var result = this.service.GetPrivateNoteById("4");
 
             var dbNote = new PrivateNote()
             {
-                Id = 5,
+                Id = "5",
                 Title = "Title " + 5,
                 Content = "Content " + 5,
                 CreatedOn = DateTime.Now.AddDays(5),
@@ -420,8 +420,8 @@
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void GetNoteByIdShouldReturnNull()
         {
-            this.service.GetNoteById(int.MaxValue);
-            this.service.GetNoteById(356);
+            this.service.GetPrivateNoteById(string.Empty);
+            this.service.GetPrivateNoteById("356");
         }
     }
 }

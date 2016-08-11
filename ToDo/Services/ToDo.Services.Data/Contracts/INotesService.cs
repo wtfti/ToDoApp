@@ -7,7 +7,9 @@
 
     public interface INotesService
     {
-        PrivateNote GetNoteById(int id);
+        PrivateNote GetPrivateNoteById(string id);
+
+        SharedNote GetSharedNoteById(string id);
 
         IQueryable<PrivateNote> GetCompletedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
@@ -27,7 +29,9 @@
 
         IQueryable<PrivateNote> All();
 
-        void RemoveNoteById(PrivateNote note);
+        void RemovePrivateNoteById(PrivateNote note);
+
+        void RemoveSharedNoteById(SharedNote note);
 
         void SetExpired(PrivateNote note);
 

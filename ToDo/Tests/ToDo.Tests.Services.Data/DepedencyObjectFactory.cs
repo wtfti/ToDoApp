@@ -29,7 +29,7 @@
                 {
                     noteRepository.Add(new PrivateNote()
                     {
-                        Id = i,
+                        Id = i.ToString(),
                         Title = "Title " + i,
                         Content = "Content " + i,
                         CreatedOn = DateTime.Now.AddDays(i),
@@ -41,7 +41,7 @@
                 {
                     noteRepository.Add(new PrivateNote()
                     {
-                        Id = i,
+                        Id = i.ToString(),
                         Title = "Expired Title " + i,
                         Content = "Expired Content " + i,
                         IsExpired = true,

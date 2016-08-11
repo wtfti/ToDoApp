@@ -54,7 +54,7 @@
                 .Routes()
                 .ShouldMap("api/Note/RemoveNoteById?id=5")
                 .WithHttpMethod(HttpMethod.Delete)
-                .To<NoteController>(a => a.RemoveNoteById(5));
+                .To<NoteController>(a => a.RemoveNoteById("5"));
         }
 
         [TestMethod]
@@ -74,7 +74,7 @@
                 .Routes()
                 .ShouldMap("api/Note/SetComplete?id=5")
                 .WithHttpMethod(HttpMethod.Put)
-                .To<NoteController>(a => a.SetComplete(5));
+                .To<NoteController>(a => a.SetComplete("5"));
         }
 
         [TestMethod]

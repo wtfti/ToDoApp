@@ -8,7 +8,7 @@
     public class NoteRequestModel
     {
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int? Id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty(Required = Required.Always)]
         [MinLength(ValidationConstants.TitleMinLenght)]

@@ -13,7 +13,7 @@
 
         void EditAccountSettings(string userId, string fullName, int? age, GenderType gender, string image, string path);
 
-        ICollection<User> GetUsersByFullName(IEnumerable<string> users);
+        IList<User> GetUsersByFullName(IEnumerable<string> users);
 
         User GetUserByUsername(string userId);
 

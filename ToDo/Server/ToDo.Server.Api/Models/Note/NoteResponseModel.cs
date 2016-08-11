@@ -8,7 +8,7 @@
 
     public class NoteResponseModel : IMapFrom<PrivateNote>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         [MinLength(ValidationConstants.TitleMinLenght)]

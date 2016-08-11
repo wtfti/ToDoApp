@@ -53,14 +53,14 @@
                 return this.BadRequest(MessageConstants.InvalidDate);
             }
 
-            int? id = note.Id;
+            string id = note.Id;
 
-            if (id == null || id.Value <= 0)
+            if (id == string.Empty)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
-            var dbNote = this.notesService.GetNoteById(id.Value);
+            var dbNote = this.notesService.GetPrivateNoteById(id);
 
             if (dbNote.UserId != this.CurrentUserId())
             {
@@ -192,34 +192,51 @@
         }
 
         [HttpDelete]
-        public IHttpActionResult RemoveNoteById(int id)
+        public IHttpActionResult RemoveNoteById(string id)
         {
-            if (id <= 0)
+            if (id == string.Empty)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
-            var note = this.notesService
-                .GetNoteById(id);
-            if (note == null || note.UserId != this.CurrentUserId())
+            var privateNote = this.notesService
+                .GetPrivateNoteById(id);
+            if (privateNote == null || privateNote.UserId != this.CurrentUserId())
             {
-                return this.BadRequest(MessageConstants.NoteDoesNotExist);
+                var sharedNote = this.notesService.GetSharedNoteById(id);
+
+                if (sharedNote != null)
+                {
+                    User currentUserDb = sharedNote.Users.FirstOrDefault(u => u.Id == this.CurrentUserId());
+                    if (currentUserDb == null || currentUserDb.ProfileDetails.FullName != sharedNote.CreatedFrom)
+                    {
+                        return this.BadRequest(MessageConstants.CurrentUserIsNotCreatorOfNote);
+                    }
+
+                    this.notesService.RemoveSharedNoteById(sharedNote);
+
+                    return this.Ok(MessageConstants.RemoveNote);
+                }
+                else
+                {
+                    return this.BadRequest(MessageConstants.NoteDoesNotExist);
+                }
             }
 
-            this.notesService.RemoveNoteById(note);
+            this.notesService.RemovePrivateNoteById(privateNote);
 
             return this.Ok(MessageConstants.RemoveNote);
         }
 
         [HttpPut]
-        public IHttpActionResult SetComplete(int id)
+        public IHttpActionResult SetComplete(string id)
         {
-            if (id <= 0)
+            if (id == string.Empty)
             {
                 return this.BadRequest(MessageConstants.NoteDoesNotExist);
             }
 
-            var note = this.notesService.GetNoteById(id);
+            var note = this.notesService.GetPrivateNoteById(id);
 
             if (note == null || note.UserId != this.CurrentUserId())
             {
@@ -241,7 +258,7 @@
             {
                 if (note.ExpiredOn != null && note.ExpiredOn <= dateNow && !note.IsComplete && !note.IsExpired)
                 {
-                    var dbNote = this.notesService.GetNoteById(note.Id);
+                    var dbNote = this.notesService.GetPrivateNoteById(note.Id);
                     this.notesService.SetExpired(dbNote);
                     hasChange = true;
                 }

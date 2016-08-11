@@ -1,8 +1,10 @@
 ﻿namespace ToDo.Api.Models.Note
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
     using Server.Common.Constants;
 
     public class NoteRequestModel

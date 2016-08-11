@@ -25,7 +25,9 @@
 
         void AddSharedNote(string[] users, string currentUser, string title, string content, DateTime? expireDate = null);
 
-        void ChangeNote(PrivateNote dbNote, string newTitle, string newContent, DateTime? newExpiredOn);
+        void ChangePrivateNote(PrivateNote dbNote, string newTitle, string newContent, DateTime? newExpiredOn);
+
+        void ChangeSharedNote(SharedNote dbNote, string newTitle, string newContent, DateTime? newExpiredOn);
 
         IQueryable<PrivateNote> All();
 

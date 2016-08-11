@@ -27,36 +27,30 @@
             this.friendService = friendsService;
         }
 
-        public void ChangeNote(
+        public void ChangePrivateNote(
             PrivateNote dbNote,
             string newTitle,
             string newContent,
             DateTime? newExpiredOn)
         {
-            bool hasChange = false;
+            dbNote.Title = newTitle;
+            dbNote.Content = newContent;
+            dbNote.ExpiredOn = newExpiredOn;
 
-            if (dbNote.Title != newTitle)
-            {
-                dbNote.Title = newTitle;
-                hasChange = true;
-            }
+            this.privateNotesData.SaveChanges();
+        }
 
-            if (dbNote.Content != newContent)
-            {
-                dbNote.Content = newContent;
-                hasChange = true;
-            }
+        public void ChangeSharedNote(
+            SharedNote dbNote,
+            string newTitle,
+            string newContent,
+            DateTime? newExpiredOn)
+        {
+            dbNote.Title = newTitle;
+            dbNote.Content = newContent;
+            dbNote.ExpiredOn = newExpiredOn;
 
-            if (dbNote.ExpiredOn != newExpiredOn)
-            {
-                dbNote.ExpiredOn = newExpiredOn;
-                hasChange = true;
-            }
-
-            if (hasChange)
-            {
-                this.privateNotesData.SaveChanges();
-            }
+            this.sharedNotesData.SaveChanges();
         }
 
         public IQueryable<PrivateNote> All()

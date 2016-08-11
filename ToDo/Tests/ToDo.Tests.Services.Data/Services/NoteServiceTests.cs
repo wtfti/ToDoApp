@@ -29,7 +29,7 @@
             this.usersRepository = new InMemoryRepository<User>();
             this.friendsService = new FriendsService(null , new InMemoryRepository<Friend>());
             this.accountService = new AccountService(this.profileDetailsRepository, this.usersRepository, this.friendsService);
-            this.service = new NotesService(this.privateNotesRepository, this.sharedNotesRepository, this.accountService);
+            this.service = new NotesService(this.privateNotesRepository, this.sharedNotesRepository, this.accountService, this.friendsService);
         }
 
         [TestMethod]
@@ -331,7 +331,7 @@
             string newContent = "content";
             DateTime? newExpirationDate = new DateTime(2016, 1, 1);
 
-            this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
+            this.service.ChangePrivateNote(dbNote, newTitle, newContent, newExpirationDate);
 
             Assert.AreEqual(0, this.privateNotesRepository.SaveChanges());
         }
@@ -350,7 +350,7 @@
             string newContent = "content";
             DateTime? newExpirationDate = new DateTime(2016, 1, 1);
 
-            this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
+            this.service.ChangePrivateNote(dbNote, newTitle, newContent, newExpirationDate);
 
             Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
         }
@@ -369,7 +369,7 @@
             string newContent = "content------";
             DateTime? newExpirationDate = new DateTime(2016, 1, 1);
 
-            this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
+            this.service.ChangePrivateNote(dbNote, newTitle, newContent, newExpirationDate);
 
             Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
         }
@@ -388,7 +388,7 @@
             string newContent = "content";
             DateTime? newExpirationDate = new DateTime(2016, 1, 2);
 
-            this.service.ChangeNote(dbNote, newTitle, newContent, newExpirationDate);
+            this.service.ChangePrivateNote(dbNote, newTitle, newContent, newExpirationDate);
 
             Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
         }

@@ -11,7 +11,9 @@
 
         SharedNote GetSharedNoteById(string id);
 
-        IQueryable<PrivateNote> GetCompletedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+        IQueryable<PrivateNote> GetCompletedPrivateNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+
+        IQueryable<SharedNote> GetCompletedSharedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
         IQueryable<PrivateNote> GetNotesFromToday(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
@@ -19,7 +21,9 @@
 
         IQueryable<SharedNote> GetSharedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
-        IQueryable<PrivateNote> GetNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+        IQueryable<PrivateNote> GetPrivateNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+
+        IQueryable<SharedNote> GetSharedNotesWithExpirationDate(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
         void AddPrivateNote(string user, string title, string content, DateTime? expireDate = null);
 
@@ -35,7 +39,9 @@
 
         void RemoveSharedNoteById(SharedNote note);
 
-        void SetExpired(PrivateNote note);
+        void SetExpiredPrivateNote(PrivateNote note);
+
+        void SetExpiredSharedNote(SharedNote note);
 
         void SetCompletePrivateNote(PrivateNote note);
 

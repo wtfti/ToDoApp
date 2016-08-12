@@ -5,11 +5,7 @@
         public const string CreateNote = "Note created!";
         public const string NoteDoesNotExist = "Requested note does not exists!";
         public const string RemoveNote = "Note removed!";
-        public const string TitleChange = "Title changed!";
-        public const string ContextChange = "Context changed!";
         public const string InvalidDate = "Invalid date!";
-        public const string SetDate = "Successfully set expire date!";
-        public const string ChangeDate = "Expire date changed!";
         public const string CreateUser = "Successfully created user!";
         public const string Logout = "Logout successful!";
         public const string EmailAlreadyTaken = "Email is already taken!";
@@ -22,5 +18,7 @@
         public const string CurrentUserCannotRemoveThisNote = "Removing denied! Only creator can remove this note!";
         public const string CurrentUserCannotEditThisNote = "Operation denied! Only creator can edit this note!";
         public const string CurrentUserCannotCompleteThisNote = "Operation denied! Only creator can complete this note!";
+        public const string NoteIsExpired = "Note is expired!";
+        public const string NoteIsCompleted = "Note is completed!";
     }
 }

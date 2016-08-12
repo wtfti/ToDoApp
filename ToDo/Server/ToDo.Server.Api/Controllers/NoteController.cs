@@ -62,6 +62,16 @@
 
             if (privateNote != null && privateNote.UserId == this.CurrentUserId())
             {
+                if (privateNote.IsComplete)
+                {
+                    return this.BadRequest(MessageConstants.NoteIsCompleted);
+                }
+
+                if (privateNote.IsExpired)
+                {
+                    return this.BadRequest(MessageConstants.NoteIsExpired);
+                }
+
                 this.notesService.ChangePrivateNote(privateNote, note.Title, note.Content, note.ExpiredOn);
                 return this.Ok();
             }
@@ -85,6 +95,16 @@
                 return this.BadRequest(MessageConstants.CurrentUserCannotEditThisNote);
             }
 
+            if (sharedNote.IsComplete)
+            {
+                return this.BadRequest(MessageConstants.NoteIsCompleted);
+            }
+
+            if (sharedNote.IsExpired)
+            {
+                return this.BadRequest(MessageConstants.NoteIsExpired);
+            }
+
             this.notesService.ChangeSharedNote(sharedNote, note.Title, note.Content, note.ExpiredOn);
             return this.Ok();
         }
@@ -100,7 +120,7 @@
             var dbNotes = this.notesService
                 .GetNotes(this.CurrentUserId(), page);
 
-            var dbNotesList = dbNotes.ToList();
+            var dbNotesList = dbNotes.ProjectTo<NoteDataModel>().ToList();
 
             bool hasChange = this.CheckIfNotesAreExpired(dbNotesList);
 
@@ -124,10 +144,21 @@
             }
 
             var notes = this.notesService
-                .GetSharedNotes(this.CurrentUserId(), page)
-                .ProjectTo<SharedNoteResponseModel>();
+                .GetSharedNotes(this.CurrentUserId(), page);
 
-            return this.Ok(notes);
+            List<NoteDataModel> notesAsList = notes.ProjectTo<NoteDataModel>().ToList();
+
+            bool hasChange = this.CheckIfNotesAreExpired(notesAsList);
+
+            if (hasChange)
+            {
+                notes = this.notesService
+                .GetSharedNotes(this.CurrentUserId(), page);
+            }
+
+            var response = notes.ProjectTo<NoteResponseModel>();
+
+            return this.Ok(response);
         }
 
         [HttpGet]
@@ -141,7 +172,7 @@
             var dbNotes = this.notesService
                 .GetNotesFromToday(this.CurrentUserId(), page);
 
-            var dbNotesList = dbNotes.ToList();
+            List<NoteDataModel> dbNotesList = dbNotes.ProjectTo<NoteDataModel>().ToList();
 
             bool hasChange = this.CheckIfNotesAreExpired(dbNotesList);
 
@@ -164,20 +195,19 @@
                 return this.BadRequest(MessageConstants.InvalidPage);
             }
 
-            var dbNotes = this.notesService
-                .GetCompletedNotes(this.CurrentUserId(), page);
+            var privateNotes = this.notesService
+                .GetCompletedPrivateNotes(this.CurrentUserId(), page)
+                .ProjectTo<NoteResponseModel>()
+                .ToList();
 
-            var dbNotesList = dbNotes.ToList();
+            var sharedNotes = this.notesService
+                .GetCompletedSharedNotes(this.CurrentUserId(), page)
+                .ProjectTo<NoteResponseModel>()
+                .ToList();
 
-            bool hasChange = this.CheckIfNotesAreExpired(dbNotesList);
-
-            if (hasChange)
-            {
-                dbNotes = this.notesService
-                    .GetNotes(this.CurrentUserId(), page);
-            }
-
-            var result = dbNotes.ProjectTo<NoteResponseModel>();
+            List<NoteResponseModel> result = new List<NoteResponseModel>(privateNotes.Count + sharedNotes.Count);
+            result.AddRange(privateNotes);
+            result.AddRange(sharedNotes);
 
             return this.Ok(result);
         }
@@ -190,20 +220,19 @@
                 return this.BadRequest(MessageConstants.InvalidPage);
             }
 
-            var dbNotes = this.notesService
-                .GetNotesWithExpirationDate(this.CurrentUserId(), page);
+            var privateNotes = this.notesService
+                .GetPrivateNotesWithExpirationDate(this.CurrentUserId(), page)
+                .ProjectTo<NoteResponseModel>()
+                .ToList();
 
-            var dbNotesList = dbNotes.ToList();
+            var sharedNotes = this.notesService
+                .GetSharedNotesWithExpirationDate(this.CurrentUserId(), page)
+                .ProjectTo<NoteResponseModel>()
+                .ToList();
 
-            bool hasChange = this.CheckIfNotesAreExpired(dbNotesList);
-
-            if (hasChange)
-            {
-                dbNotes = this.notesService
-                    .GetNotesWithExpirationDate(this.CurrentUserId(), page);
-            }
-
-            var result = dbNotes.ProjectTo<NoteResponseModel>();
+            List<NoteResponseModel> result = new List<NoteResponseModel>(privateNotes.Count + sharedNotes.Count);
+            result.AddRange(privateNotes);
+            result.AddRange(sharedNotes);
 
             return this.Ok(result);
         }
@@ -282,7 +311,7 @@
         }
 
         [NonAction]
-        private bool CheckIfNotesAreExpired(IList<PrivateNote> dbNotes)
+        private bool CheckIfNotesAreExpired(IList<NoteDataModel> dbNotes)
         {
             bool hasChange = false;
             DateTime dateNow = DateTime.Now;
@@ -291,9 +320,21 @@
             {
                 if (note.ExpiredOn != null && note.ExpiredOn <= dateNow && !note.IsComplete && !note.IsExpired)
                 {
-                    var dbNote = this.notesService.GetPrivateNoteById(note.Id);
-                    this.notesService.SetExpired(dbNote);
-                    hasChange = true;
+                    var privateNote = this.notesService.GetPrivateNoteById(note.Id);
+                    if (privateNote != null)
+                    {
+                        this.notesService.SetExpiredPrivateNote(privateNote);
+                        hasChange = true;
+                    }
+                    else
+                    {
+                        var sharedNote = this.notesService.GetSharedNoteById(note.Id);
+                        if (sharedNote != null)
+                        {
+                            this.notesService.SetExpiredSharedNote(sharedNote);
+                            hasChange = true;
+                        }
+                    }
                 }
             }
 

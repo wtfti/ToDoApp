@@ -333,7 +333,7 @@
             var notes = new List<PrivateNote>();
 
             var notesService = new Mock<INotesService>();
-            notesService.Setup(a => a.GetCompletedNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+            notesService.Setup(a => a.GetCompletedPrivateNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(notes.AsQueryable());
 
             MyWebApi

@@ -22,9 +22,9 @@
                 .Returns(GenerateNotes);
             notesService.Setup(a => a.GetNotesFromToday(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateTodayNotes);
-            notesService.Setup(a => a.GetNotesWithExpirationDate(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+            notesService.Setup(a => a.GetPrivateNotesWithExpirationDate(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateNotes);
-            notesService.Setup(a => a.GetCompletedNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+            notesService.Setup(a => a.GetCompletedPrivateNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GenerateCompleteNotes);
             notesService.Setup(a => a.RemovePrivateNoteById(It.IsAny<PrivateNote>()));
             notesService.Setup(a => a.GetPrivateNoteById("1"))

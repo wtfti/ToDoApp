@@ -158,7 +158,7 @@
             {
                 IsExpired = false
             };
-            this.service.SetExpired(note);
+            this.service.SetExpiredPrivateNote(note);
 
             Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
             Assert.IsTrue(note.IsExpired);
@@ -180,7 +180,7 @@
         [TestMethod]
         public void GetNotesWithExpiredDateShouldReturnEmptyCollection()
         {
-            var result = this.service.GetNotesWithExpirationDate("101", 1);
+            var result = this.service.GetPrivateNotesWithExpirationDate("101", 1);
 
             Assert.AreEqual(0, result.Count());
         }
@@ -190,7 +190,7 @@
         {
             var note = this.service.GetPrivateNoteById("10");
             note.IsExpired = true;
-            var result = this.service.GetNotesWithExpirationDate("expired", 1);
+            var result = this.service.GetPrivateNotesWithExpirationDate("expired", 1);
 
             Assert.AreEqual(10, result.Count());
             Assert.IsTrue(result.Any(a => a.UserId == "expired"));
@@ -208,7 +208,7 @@
                 });
             }
 
-            var result = this.service.GetCompletedNotes("1", 1);
+            var result = this.service.GetCompletedPrivateNotes("1", 1);
 
             Assert.AreEqual(0, result.Count());
         }
@@ -225,7 +225,7 @@
                 });
             }
 
-            var result = this.service.GetCompletedNotes("complete", 1);
+            var result = this.service.GetCompletedPrivateNotes("complete", 1);
 
             Assert.AreEqual(10, result.Count());
             Assert.IsTrue(result.Any(a => a.IsComplete));

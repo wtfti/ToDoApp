@@ -84,10 +84,15 @@
             this.sharedNotesData.SaveChanges();
         }
 
-        public void SetExpired(PrivateNote note)
+        public void SetExpiredPrivateNote(PrivateNote note)
         {
             note.IsExpired = true;
             this.privateNotesData.SaveChanges();
+        }
+        public void SetExpiredSharedNote(SharedNote note)
+        {
+            note.IsExpired = true;
+            this.sharedNotesData.SaveChanges();
         }
 
         public PrivateNote GetPrivateNoteById(string id)
@@ -122,6 +127,7 @@
         {
             var notes = this.sharedNotesData
                 .All()
+                .Where(note => !note.IsExpired && !note.IsComplete)
                 .ToList()
                 .Where(note => note.Users.Any(u => u.Id == user))
                 .OrderBy(q => q.Content)
@@ -146,7 +152,8 @@
                     !a.IsExpired &&
                     a.CreatedOn != null);
 
-            var todayNotes = notes.ToList()
+            var todayNotes = notes
+                .ToList()
                 .Where(a => a.CreatedOn.Date == today.Date)
                 .OrderBy(q => q.Content)
                 .Skip((page * pageSize) - pageSize)
@@ -156,13 +163,14 @@
             return todayNotes;
         }
 
-        public IQueryable<PrivateNote> GetCompletedNotes(
-            string user,
+        public IQueryable<PrivateNote> GetCompletedPrivateNotes(
+            string userId,
             int page,
             int pageSize = ValidationConstants.DefaultPageSize)
         {
-            var notes = this.privateNotesData.All()
-                .Where(a => a.UserId == user && a.IsComplete)
+            var notes = this.privateNotesData
+                .All()
+                .Where(a => a.UserId == userId && a.IsComplete)
                 .OrderBy(q => q.Content)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);
@@ -170,16 +178,53 @@
             return notes;
         }
 
-        public IQueryable<PrivateNote> GetNotesWithExpirationDate(
+        public IQueryable<SharedNote> GetCompletedSharedNotes(
+            string userId,
+            int page,
+            int pageSize = ValidationConstants.DefaultPageSize)
+        {
+            var notes = this.sharedNotesData
+                .All()
+                .Where(a => a.IsComplete)
+                .ToList()
+                .Where(u => u.Users.Any(user => user.Id == userId))
+                .OrderBy(q => q.Content)
+                .Skip((page * pageSize) - pageSize)
+                .Take(pageSize)
+                .AsQueryable();
+
+            return notes;
+        }
+
+        public IQueryable<PrivateNote> GetPrivateNotesWithExpirationDate(
             string user, 
             int page, 
             int pageSize = ValidationConstants.DefaultPageSize)
         {
-            var notes = this.privateNotesData.All()
+            var notes = this.privateNotesData
+                .All()
                 .Where(a => a.IsExpired && a.UserId == user)
                 .OrderBy(w => w.Id)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);
+
+            return notes;
+        }
+
+        public IQueryable<SharedNote> GetSharedNotesWithExpirationDate(
+            string userId, 
+            int page,
+            int pageSize = ValidationConstants.DefaultPageSize)
+        {
+            var notes = this.sharedNotesData
+                .All()
+                .Where(a => a.IsExpired)
+                .ToList()
+                .Where(u => u.Users.Any(user => user.Id == userId))
+                .OrderBy(w => w.Id)
+                .Skip((page * pageSize) - pageSize)
+                .Take(pageSize)
+                .AsQueryable();
 
             return notes;
         }

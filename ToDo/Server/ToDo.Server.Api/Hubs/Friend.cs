@@ -7,6 +7,7 @@
     using Microsoft.AspNet.SignalR;
     using Services.Data.Contracts;
 
+    [Authorize]
     public class Friend : Hub
     {
         private static readonly ConcurrentDictionary<string, string> FullNameToConnectionId =
@@ -27,33 +28,32 @@
 
         public void FriendRequest(string recieverFullName)
         {
+            string senderUsername = this.Context.User.Identity.GetUserName();
             string recieverConnectionId;
 
             if (FullNameToConnectionId.TryGetValue(recieverFullName, out recieverConnectionId))
             {
-                string sender = this.Context.User.Identity.GetUserName();
                 string reciever = FullNameToUsername[recieverFullName];
-                var existFriendship = this.friendsService.GetFriendship(sender, reciever);
+                var existFriendship = this.friendsService.GetFriendship(senderUsername, reciever);
 
-                if (sender != reciever && existFriendship == null)
+                if (senderUsername != reciever && existFriendship == null)
                 {
-                    this.friendsService.AddFriendRequest(sender, reciever);
-                    this.Clients.Client(recieverConnectionId).newFriendRequest(UsernameToFullName[sender]);
+                    this.friendsService.AddFriendRequest(senderUsername, reciever);
+                    this.Clients.Client(recieverConnectionId).newFriendRequest(UsernameToFullName[senderUsername]);
                 }
             }
             else
             {
-                var user = this.accountService.GetUserByFullName(recieverFullName);
+                var recieverUser = this.accountService.GetUserByFullName(recieverFullName);
 
-                if (user != null)
+                if (recieverUser != null)
                 {
-                    string sender = this.Context.User.Identity.GetUserName();
-                    string reciever = user.ProfileDetails.FullName;
-                    var existFriendship = this.friendsService.GetFriendship(sender, reciever);
+                    string recieverUsername = recieverUser.UserName;
+                    var existFriendship = this.friendsService.GetFriendship(senderUsername, recieverUsername);
 
-                    if (sender != reciever && existFriendship == null)
+                    if (senderUsername != recieverUsername && existFriendship == null)
                     {
-                        this.friendsService.AddFriendRequest(sender, reciever);
+                        this.friendsService.AddFriendRequest(senderUsername, recieverUsername);
                     }
                 }
             }
@@ -61,13 +61,13 @@
 
         public void AcceptRequest(string senderFullName)
         {
-            string currentUser = this.Context.User.Identity.GetUserName();
+            string currentUsername = this.Context.User.Identity.GetUserName();
             string secondUser;
             FullNameToUsername.TryGetValue(senderFullName, out secondUser);
 
-            if (currentUser != null && secondUser != null)
+            if (currentUsername != null && secondUser != null)
             {
-                var request = this.friendsService.GetFriendship(currentUser, secondUser);
+                var request = this.friendsService.GetFriendship(currentUsername, secondUser);
 
                 if (request != null && request.Status == Status.Pending)
                 {
@@ -77,7 +77,7 @@
 
                     if (FullNameToConnectionId.TryGetValue(senderFullName, out connectionId))
                     {
-                        this.Clients.Client(connectionId).acceptedRequest(UsernameToFullName[currentUser]);
+                        this.Clients.Client(connectionId).acceptedRequest(UsernameToFullName[currentUsername]);
                     }
                 }
             }
@@ -87,7 +87,7 @@
 
                 if (user != null)
                 {
-                    var request = this.friendsService.GetFriendship(currentUser, user.UserName);
+                    var request = this.friendsService.GetFriendship(currentUsername, user.UserName);
 
                     if (request != null && request.Status == Status.Pending)
                     {
@@ -99,16 +99,31 @@
 
         public void DeclineRequest(string senderFullName)
         {
-            string firstUser = this.Context.User.Identity.GetUserName();
-            string secondUser = FullNameToUsername[senderFullName];
+            string currentUsername = this.Context.User.Identity.GetUserName();
+            string senderUsername;
 
-            if (firstUser != null && secondUser != null)
+            if (currentUsername != null && UsernameToFullName.TryGetValue(senderFullName, out senderUsername))
             {
-                var request = this.friendsService.GetFriendship(firstUser, secondUser);
+                var request = this.friendsService.GetFriendship(currentUsername, senderUsername);
 
                 if (request != null && request.Status == Status.Pending)
                 {
                     this.friendsService.DeclineRequest(request);
+                }
+            }
+            else
+            {
+                var senderUser = this.accountService.GetUserByFullName(senderFullName);
+
+                if (senderUser != null)
+                {
+                    senderUsername = senderUser.UserName;
+                    var request = this.friendsService.GetFriendship(currentUsername, senderUsername);
+
+                    if (request != null && request.Status == Status.Pending)
+                    {
+                        this.friendsService.DeclineRequest(request);
+                    }
                 }
             }
         }

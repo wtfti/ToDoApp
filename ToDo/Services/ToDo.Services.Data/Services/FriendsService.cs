@@ -69,7 +69,7 @@
         {
             var pendingRequests = this.friendsData
                 .All()
-                .Where(u => (u.UserId == userId || u.ContactUserId == userId) &&
+                .Where(u => (u.ContactUserId == userId) &&
                             u.Status == Status.Pending).ToList();
             var users = this.usersData.All().Where(u => u.Id != userId).ToList();
 

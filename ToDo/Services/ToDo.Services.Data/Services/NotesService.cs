@@ -7,6 +7,7 @@
     using Server.Common.Constants;
     using ToDo.Data.Common.Contracts;
     using ToDo.Data.Models;
+    using ToDo.Data.Models.Account;
 
     public class NotesService : INotesService
     {
@@ -267,7 +268,7 @@
             {
                 var friendship = this.friendService.GetFriendship(currentUserDb.UserName, user.UserName);
 
-                if (friendship != null)
+                if (friendship != null && friendship.Status == Status.Accepted)
                 {
                     sharedWith.Add(user);
                 }

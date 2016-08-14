@@ -49,7 +49,8 @@
         {
             var friends = this.friendsData
                 .All()
-                .Where(a => a.UserId == userId || a.ContactUserId == userId)
+                .Where(a => (a.UserId == userId || a.ContactUserId == userId) &&
+                            a.Status == Status.Accepted)
                 .ToList();
             var allUsers = this.usersData
                 .All()

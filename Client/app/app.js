@@ -6,24 +6,22 @@
             .when('/', {
                 templateUrl: 'app/home-page/home-page-view.html',
                 controller: 'HomePageController',
-                controllerAs: 'home'
+                controllerAs: 'homeCtrl'
             })
-            .otherwise({ redirectTo: '/' });
-    }
-
-    function run(auth) {
-        if (auth.isAuthenticated()) {
-            auth.getIdentity();
-        }
+            .when('/dashboard', {
+                templateUrl: 'app/dashboard-page/dashboard-page-view.html',
+                controller: 'DashboardPageController',
+                controllerAs: 'dashboardCtrl'
+            })
+            .otherwise({redirectTo: '/'});
     }
 
     angular.module('ToDoApp.services', []);
     angular.module('ToDoApp.data', []);
     angular.module('ToDoApp.controllers', ['ToDoApp.data', 'ToDoApp.services']);
 
-    angular.module('ToDoApp', ['ngRoute', 'ngCookies', 'angular-loading-bar', 'ToDoApp.controllers'])
+    angular.module('ToDoApp', ['ngRoute', 'ngCookies', 'ngAnimate', 'angular-loading-bar', 'ui.bootstrap', 'ToDoApp.controllers'])
         .config(['$routeProvider', config])
-        .run(['auth', run])
         .value('toastr', toastr)
-        .constant('baseUrl', 'http://localhost:33178/api');
+        .constant('baseUrl', 'http://localhost:33178/api/');
 }());

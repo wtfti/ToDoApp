@@ -1,16 +1,24 @@
-(function() {
+(function () {
     'use strict';
 
-    var homePageController = function homePageController(auth) {
-        this.text = 'test';
+    var homePageController = function homePageController($scope, $uibModal) {
+        $scope.openLoginModal = function () {
+            $uibModal.open({
+                animation: true,
+                templateUrl: 'app/home-page/home-login-view.html',
+                controller: 'LoginInstanceController'
+            });
+        };
 
-        console.log(auth);
-        this.register = function () {
-            
+        $scope.openRegisterModal = function () {
+            $uibModal.open({
+                animation: true,
+                templateUrl: 'app/home-page/home-register-view.html',
+                controller: 'RegisterInstanceController'
+            });
         }
     };
 
-    angular
-        .module('ToDoApp.controllers')
-        .controller('HomePageController', ['auth', 'notifier', homePageController]);
+    angular.module('ToDoApp.controllers')
+        .controller('HomePageController', ['$scope', '$uibModal', homePageController]);
 }());

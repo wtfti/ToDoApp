@@ -1,3 +1,41 @@
-<div>
-    {{home.text}}
-</div>
+<nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand page-scroll" href="#">ToDoApp</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="page-scroll" ng-click="openLoginModal()" href>Login</a>
+                </li>
+                <li>
+                    <a class="page-scroll" ng-click="openRegisterModal()" href>Sign In</a>
+                </li>
+                <li>
+                    <a class="page-scroll" href="view/about.html">About</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+
+<header>
+    <div class="header-content">
+        <div class="header-content-inner">
+            <h1 id="homeHeading">Make your things in time</h1>
+            <hr>
+            <p>Organize your daily tasks easier</p>
+            <a  ng-click="openRegisterModal()" class="btn btn-primary btn-xl page-scroll">Get
+                free account</a>
+        </div>
+    </div>
+</header>

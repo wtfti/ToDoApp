@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="ToDoApp">
 <head>
     <meta charset="UTF-8">
-    <title>Home Page</title>
-
+    <title ng-bind="title"></title>
     <script src="libs/angular.js"></script>
     <script src="libs/angular-route.min.js"></script>
     <script src="libs/angular-cookies.min.js"></script>
@@ -14,23 +13,25 @@
     <link rel="stylesheet" type="text/css" href="content/toastr.css">
     <link rel="stylesheet" type="text/css" href="content/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="content/loading-bar.css">
-    <link rel="stylesheet" type="text/css" href="content/home.css">
     <link rel="stylesheet" type="text/css" href="content/font-awesome.min.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
           rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic'
           rel='stylesheet' type='text/css'>
 </head>
-<body ng-app="ToDoApp" ng-cloak ng-view>
+<body ng-cloak ng-view ng-style="{ 'background-image': backgroundImage}">
 
 <script src="libs/jquery.js"></script>
 <script src="libs/toastr.js"></script>
 <script src="libs/loading-bar.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-css/1.0.8/angular-css.min.js"></script>
 <script src="app/app.js"></script>
 <script src="app/identity/auth-service.js"></script>
 <script src="app/identity/identity-service.js"></script>
+<script src="app/common/background-service.js"></script>
 <script src="app/dashboard-page/dashboard-page-controller.js"></script>
 <script src="app/common/base-data.js"></script>
+<script src="app/dashboard-page/notes-directive.js"></script>
 <script src="app/common/notifer-service.js"></script>
 <script src="app/home-page/home-page-controller.js"></script>
 <script src="app/home-page/home-login-controller.js"></script>

@@ -14,7 +14,7 @@
                 deferred.reject();
             }
             else {
-                var URL = baseUrl.serverPath + url;
+                var URL = baseUrl + url;
 
                 $http.get(URL)
                     .then(function (data) {

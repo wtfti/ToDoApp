@@ -14,6 +14,42 @@
 
                 return deferred.promise;
             },
+            getNotesFromToday: function () {
+                var deferred = $q.defer();
+
+                data.get(NOTE_PREFIX + '/GetNotesFromToday').then(function (response) {
+                    deferred.resolve(response.data);
+                });
+
+                return deferred.promise;
+            },
+            getSharedNotes: function () {
+                var deferred = $q.defer();
+
+                data.get(NOTE_PREFIX + '/GetSharedNotes').then(function (response) {
+                    deferred.resolve(response.data);
+                });
+
+                return deferred.promise;
+            },
+            getNotesWithExpirationDate: function () {
+                var deferred = $q.defer();
+
+                data.get(NOTE_PREFIX + '/GetNotesWithExpirationDate').then(function (response) {
+                    deferred.resolve(response.data);
+                });
+
+                return deferred.promise;
+            },
+            getCompletedNotes: function () {
+                var deferred = $q.defer();
+
+                data.get(NOTE_PREFIX + '/GetCompletedNotes').then(function (response) {
+                    deferred.resolve(response.data);
+                });
+
+                return deferred.promise;
+            },
             addNewNote: function (note) {
                 var deferred = $q.defer();
 

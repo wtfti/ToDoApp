@@ -4,8 +4,8 @@
            ng-attr-id="{{note.Id}}"
            ng-attr-title="{{note.Title}}"
            ng-attr-content="{{note.Content}}"
-           ng-attr-created="{{note.Created}}"
-           ng-attr-expired="{{note.Expired}}"
+           ng-attr-created="{{note.CreatedOn}}"
+           ng-attr-expired="{{note.ExpiredOn}}"
            ng-attr-isExpired="{{note.IsExpired}}"
            ng-attr-isCompleted="{{note.IsCompleted}}"
            ng-attr-createdFrom="{{note.CreatedFrom}}"
@@ -14,6 +14,17 @@
     <label for="checkbox">
         <span>{{note.Content}}</span>
     </label>
-    <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+    <i class="glyphicon glyphicon-pencil" ng-click="dashboardCtrl.openEditNoteModal(
+    {
+        id: note.Id,
+        title: note.Title,
+        content: note.Content,
+        created: note.CreatedOn,
+        expired: note.ExpiredOn,
+        isExpired: note.IsExpired,
+        isCompleted: note.IsCompleted,
+        createdFrom: note.CreatedFrom,
+        sharedWith: note.SharedWith
+    })" aria-hidden="true"></i>
     <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
 </div>

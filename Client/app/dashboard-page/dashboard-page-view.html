@@ -55,19 +55,19 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
                 <li class="active">
-                    <a href="#" id="navAllNotes"><i class="fa fa-fw fa-tasks"></i> All notes</a>
+                    <a href ng-click="dashboardCtrl.changeTab(0)" id="navAllNotes"><i class="fa fa-fw fa-tasks"></i> All notes</a>
                 </li>
                 <li>
-                    <a href="#" id="navToday"><i class="fa fa-fw fa-bell-o"></i> Today</a>
+                    <a href ng-click="dashboardCtrl.changeTab(1)" id="navToday"><i class="fa fa-fw fa-bell-o"></i> Today</a>
                 </li>
                 <li>
-                    <a href="#" id="navAssigned"><i class="fa fa-fw fa-share"></i> Assigned to me</a>
+                    <a href ng-click="dashboardCtrl.changeTab(2)" id="navAssigned"><i class="fa fa-fw fa-share"></i> Assigned to me</a>
                 </li>
                 <li>
-                    <a href="#" id="navExpired"><i class="fa fa-fw fa-clock-o"></i> Expired</a>
+                    <a href ng-click="dashboardCtrl.changeTab(3)" id="navExpired"><i class="fa fa-fw fa-clock-o"></i> Expired</a>
                 </li>
                 <li>
-                    <a href="#" id="navFinished"><i class="fa fa-fw fa-check-square-o"></i> Finished</a>
+                    <a href ng-click="dashboardCtrl.changeTab(4)" id="navFinished"><i class="fa fa-fw fa-check-square-o"></i> Finished</a>
                 </li>
             </ul>
         </div>
@@ -79,7 +79,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div id="container-navigation-note-menu">
-                        <i class="fa fa-plus" id="addIcon" aria-hidden="true"></i>
+                        <i class="fa fa-plus" id="addIcon" ng-click="dashboardCtrl.openAddNoteModal()" aria-hidden="true"></i>
                         <span>
                                 Sort by:
                             </span>

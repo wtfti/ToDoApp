@@ -1,18 +1,18 @@
 <div class="checkbox checkbox-info checkbox-circle" ng-repeat="note in notesData">
     <input id="checkbox"
            class="styled"
-           ng-attr-id="{{note.id}}"
-           ng-attr-title="{{note.title}}"
-           ng-attr-content="{{note.content}}"
-           ng-attr-created="{{note.created}}"
-           ng-attr-expired="{{note.expired}}"
-           ng-attr-isExpired="{{note.isExpired}}"
-           ng-attr-isCompleted="{{note.isCompleted}}"
-           ng-attr-createdFrom="{{note.createdFrom}}"
-           ng-attr-sharedwith="{{note.sharedWith}}"
+           ng-attr-id="{{note.Id}}"
+           ng-attr-title="{{note.Title}}"
+           ng-attr-content="{{note.Content}}"
+           ng-attr-created="{{note.Created}}"
+           ng-attr-expired="{{note.Expired}}"
+           ng-attr-isExpired="{{note.IsExpired}}"
+           ng-attr-isCompleted="{{note.IsCompleted}}"
+           ng-attr-createdFrom="{{note.CreatedFrom}}"
+           ng-attr-sharedwith="{{note.SharedWith}}"
            type="checkbox">
     <label for="checkbox">
-        <span>{{note.content}}</span>
+        <span>{{note.Content}}</span>
     </label>
     <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
     <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>

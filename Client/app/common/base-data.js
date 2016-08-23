@@ -35,7 +35,7 @@
                 deferred.reject();
             }
             else {
-                var URL = baseUrl.serverPath + url;
+                var URL = baseUrl + url;
 
                 $http.post(URL, data, headers)
                     .then(function (data) {
@@ -48,9 +48,53 @@
             return deferred.promise;
         }
 
+        function del(url, data, authorize) {
+            var deferred = $q.defer();
+
+            if (authorize && !identity.isAuthenticated()) {
+                notifier.error(authorizationErrorMessage);
+                deferred.reject();
+            }
+            else {
+                var URL = baseUrl + url;
+
+                $http.delete(URL, data, headers)
+                    .then(function (data) {
+                        deferred.resolve(data);
+                    }, function (err) {
+                        deferred.reject(err);
+                    });
+            }
+
+            return deferred.promise;
+        }
+
+        function update(url, data, authorize) {
+            var deferred = $q.defer();
+
+            if (authorize && !identity.isAuthenticated()) {
+                notifier.error(authorizationErrorMessage);
+                deferred.reject();
+            }
+            else {
+                var URL = baseUrl + url;
+
+                $http.update(URL, data, headers)
+                    .then(function (data) {
+                        deferred.resolve(data);
+                    }, function (err) {
+                        deferred.reject(err);
+                    });
+            }
+
+            return deferred.promise;
+        }
+
         return {
             get: get,
-            post: post
+            post: post,
+            delete: del,
+            update: update
         };
     };
 

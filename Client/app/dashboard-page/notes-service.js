@@ -50,10 +50,10 @@
 
                 return deferred.promise;
             },
-            addNewNote: function (note) {
+            addNote: function (note) {
                 var deferred = $q.defer();
 
-                data.post(NOTE_PREFIX + 'AddNote', note).then(function (response) {
+                data.post(NOTE_PREFIX + '/AddNote', note).then(function (response) {
                     deferred.resolve(response.data);
                 }, function (response) {
                     deferred.reject(response.data);
@@ -64,7 +64,7 @@
             editNote: function (note) {
                 var deferred = $q.defer();
 
-                data.update(NOTE_PREFIX + 'AddNote', note).then(function (response) {
+                data.put(NOTE_PREFIX + '/ChangeNote', note).then(function (response) {
                     deferred.resolve(response.data);
                 }, function (response) {
                     deferred.reject(response.data);
@@ -75,10 +75,21 @@
             removeNote: function (id) {
                 var deferred = $q.defer();
 
-                data.delete(NOTE_PREFIX + 'AddNote', id).then(function (response) {
+                data.delete(NOTE_PREFIX + '/RemoveNoteById', id).then(function (response) {
                     deferred.resolve(response.data);
                 }, function (response) {
                     deferred.reject(response.data);
+                });
+
+                return deferred.promise;
+            },
+            setComplete: function (id) {
+                var deferred = $q.defer();
+
+                data.put(NOTE_PREFIX + '/SetComplete', id).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function (response) {
+                    deferred.reject(response.data)
                 });
 
                 return deferred.promise;

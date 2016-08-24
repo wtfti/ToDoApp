@@ -54,20 +54,24 @@
         <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li class="active">
-                    <a href ng-click="dashboardCtrl.changeTab(0)" id="navAllNotes"><i class="fa fa-fw fa-tasks"></i> All notes</a>
+                <li ng-class="{'active': dashboardCtrl.activeTab.active == 0}">
+                    <a href ng-click="dashboardCtrl.changeTab(0)" id="navAllNotes"><i class="fa fa-fw fa-tasks"></i> All
+                        notes</a>
                 </li>
-                <li>
+                <li ng-class="{'active': dashboardCtrl.activeTab.active == 1}">
                     <a href ng-click="dashboardCtrl.changeTab(1)" id="navToday"><i class="fa fa-fw fa-bell-o"></i> Today</a>
                 </li>
-                <li>
-                    <a href ng-click="dashboardCtrl.changeTab(2)" id="navAssigned"><i class="fa fa-fw fa-share"></i> Assigned to me</a>
+                <li ng-class="{'active': dashboardCtrl.activeTab.active == 2}">
+                    <a href ng-click="dashboardCtrl.changeTab(2)" id="navAssigned"><i class="fa fa-fw fa-share"></i>
+                        Assigned to me</a>
                 </li>
-                <li>
-                    <a href ng-click="dashboardCtrl.changeTab(3)" id="navExpired"><i class="fa fa-fw fa-clock-o"></i> Expired</a>
+                <li ng-class="{'active': dashboardCtrl.activeTab.active == 3}">
+                    <a href ng-click="dashboardCtrl.changeTab(3)" id="navExpired"><i class="fa fa-fw fa-clock-o"></i>
+                        Expired</a>
                 </li>
-                <li>
-                    <a href ng-click="dashboardCtrl.changeTab(4)" id="navFinished"><i class="fa fa-fw fa-check-square-o"></i> Finished</a>
+                <li ng-class="{'active': dashboardCtrl.activeTab.active == 4}">
+                    <a href ng-click="dashboardCtrl.changeTab(4)" id="navFinished"><i
+                            class="fa fa-fw fa-check-square-o"></i> Finished</a>
                 </li>
             </ul>
         </div>
@@ -78,31 +82,30 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
+
                     <div id="container-navigation-note-menu">
-                        <i class="fa fa-plus" id="addIcon" ng-click="dashboardCtrl.openAddNoteModal()" aria-hidden="true"></i>
+                        <i class="fa fa-plus" id="addIcon" ng-click="dashboardCtrl.openAddNoteModal()"
+                           aria-hidden="true"></i>
                         <span>
                                 Sort by:
                             </span>
-                        <div class="dropdown" id="sortDrop">
-                            <button class="btn btn-warning dropdown-toggle" type="button"
-                                    data-toggle="dropdown">
-                                <span id="sortDropDownText">Title Asc </span>
-                                <span class="caret"></span>
+                        <div class="btn-group" uib-dropdown is-open="status.isopen">
+                            <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle
+                                    ng-disabled="disabled">
+                                {{dashboardCtrl.sortByText}} <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="#">Title Asc <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#">Title Desc <i class="fa fa-sort-alpha-desc" aria-hidden="true"></i></a>
-                                </li>
-                                <li><a href="#">Date Asc <i class="fa fa-sort-amount-asc" aria-hidden="true"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#">Date Desc <i class="fa fa-sort-amount-desc" aria-hidden="true"></i></a>
-                                </li>
+                            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                                <li role="menuitem"><a href ng-click="dashboardCtrl.sortBy(0)">Title Asc <i class="fa fa-sort-alpha-asc"
+                                                                             aria-hidden="true"></i></a></li>
+                                <li role="menuitem"><a href ng-click="dashboardCtrl.sortBy(1)">Title Desc <i class="fa fa-sort-alpha-desc"
+                                                                              aria-hidden="true"></i></a></li>
+                                <li role="menuitem"><a href ng-click="dashboardCtrl.sortBy(2)">Date Asc <i class="fa fa-sort-amount-asc"
+                                                                            aria-hidden="true"></i></a></li>
+                                <li role="menuitem"><a href ng-click="dashboardCtrl.sortBy(3)">Date Desc <i class="fa fa-sort-amount-desc"
+                                                                             aria-hidden="true"></i></a></li>
                             </ul>
                         </div>
+
                     </div>
                 </div>
             </div>

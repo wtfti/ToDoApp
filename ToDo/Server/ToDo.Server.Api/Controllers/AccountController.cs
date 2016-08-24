@@ -1,9 +1,11 @@
 ﻿namespace ToDo.Api.Controllers
 {
+    using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
     using System.Web.Hosting;
     using System.Web.Http;
+    using AutoMapper.QueryableExtensions;
     using Data.Models;
     using Data.Models.Account;
     using Infrastructure.Validation;
@@ -141,6 +143,16 @@
                 .GetRegistratedUsers(this.CurrentUserId());
 
             return this.Ok(usersDb);
+        }
+
+        [HttpGet]
+        public IHttpActionResult Identity()
+        {
+            string id = this.CurrentUserId();
+
+            var identity = this.accountService.GetIdentity(id).ProjectTo<IdentityResponseModel>().First();
+
+            return this.Ok(identity);
         }
     }
 }

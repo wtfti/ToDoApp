@@ -21,7 +21,7 @@
         {
             var result = this.service
                 .GetFriendshipsByUserId(this.User.Identity.GetUserId())
-                .ProjectTo<UserResponseModel>();
+                .ProjectTo<FriendResponseModel>();
 
             return this.Ok(result);
         }

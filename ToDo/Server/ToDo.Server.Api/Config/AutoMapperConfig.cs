@@ -43,7 +43,9 @@
                     a.CreateMap(dest, source);
                 }
 
-                a.CreateMap<User, UserResponseModel>()
+                a.CreateMap<User, FriendResponseModel>()
+                .ForMember(x => x.FullName, z => z.MapFrom(user => user.ProfileDetails.FullName));
+                a.CreateMap<User, IdentityResponseModel>()
                 .ForMember(x => x.FullName, z => z.MapFrom(user => user.ProfileDetails.FullName));
                 a.CreateMap<SharedNote, NoteResponseModel>()
                     .ForMember(users => users.Users, x => x.MapFrom(shared => shared.Users.Select(e => e.ProfileDetails.FullName)));

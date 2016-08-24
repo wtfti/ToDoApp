@@ -25,14 +25,16 @@
             this.friendsService = friendsService;
         }
 
-        public IQueryable<User> AllUsers()
-        {
-            return this.usersData.All();
-        }
-
         public ProfileDetails ProfileDetails(string userId)
         {
             var user = this.profileDetailsData.All().Single(a => a.Id == userId);
+
+            return user;
+        }
+
+        public IQueryable<User> GetIdentity(string id)
+        {
+            IQueryable<User> user = this.usersData.All().Where(a => a.Id == id);
 
             return user;
         }

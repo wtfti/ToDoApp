@@ -223,10 +223,11 @@
     <Compile Include="Infrastructure\Ninject\Mapping\IMapFrom.cs" />
     <Compile Include="Infrastructure\Validation\ValidateModelAttribute.cs" />
     <Compile Include="ModelBinders\NoteRequestModelBinder.cs" />
+    <Compile Include="Models\Account\IdentityResponseModel.cs" />
     <Compile Include="Models\Account\UserProfileRequestModel.cs" />
     <Compile Include="Models\Account\UserProfileResponseModel.cs" />
     <Compile Include="Models\Account\RegisterRequestModel.cs" />
-    <Compile Include="Models\Account\UserResponseModel.cs" />
+    <Compile Include="Models\Account\FriendResponseModel.cs" />
     <Compile Include="Models\Friend\FriendResponseMondel.cs" />
     <Compile Include="Models\Hubs\FriendRequest.cs" />
     <Compile Include="Models\Note\NoteDataModel.cs" />

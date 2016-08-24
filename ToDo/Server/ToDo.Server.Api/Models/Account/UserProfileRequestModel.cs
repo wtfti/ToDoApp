@@ -1,6 +1,5 @@
 ﻿namespace ToDo.Api.Models.Account
 {
-    using System.ComponentModel.DataAnnotations;
     using Data.Models.Account;
 
     public class UserProfileRequestModel

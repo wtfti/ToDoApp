@@ -1,10 +1,8 @@
 ﻿namespace ToDo.Api
 {
-    using System;
     using System.Reflection;
     using System.Web;
     using System.Web.Http;
-    using Microsoft.AspNet.SignalR;
     using Server.Common.Constants;
 
     public class WebApiApplication : HttpApplication

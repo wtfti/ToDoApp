@@ -7,9 +7,9 @@
 
     public interface IAccountService
     {
-        IQueryable<User> AllUsers();
-
         ProfileDetails ProfileDetails(string userId);
+
+        IQueryable<User> GetIdentity(string id);
 
         void EditAccountSettings(string userId, string fullName, int? age, GenderType gender, string image, string path);
 

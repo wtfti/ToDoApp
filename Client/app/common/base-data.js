@@ -69,7 +69,7 @@
             return deferred.promise;
         }
 
-        function update(url, data, authorize) {
+        function put(url, data, authorize) {
             var deferred = $q.defer();
 
             if (authorize && !identity.isAuthenticated()) {
@@ -79,7 +79,7 @@
             else {
                 var URL = baseUrl + url;
 
-                $http.update(URL, data, headers)
+                $http.put(URL, data, headers)
                     .then(function (data) {
                         deferred.resolve(data);
                     }, function (err) {
@@ -94,7 +94,7 @@
             get: get,
             post: post,
             delete: del,
-            update: update
+            put: put
         };
     };
 

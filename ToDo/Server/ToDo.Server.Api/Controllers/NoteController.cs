@@ -287,7 +287,7 @@
                 this.notesService.SetCompletePrivateNote(note);
                 return this.Ok();
             }
-
+            
             var sharedNote = this.notesService.GetSharedNoteById(id);
 
             if (sharedNote == null)

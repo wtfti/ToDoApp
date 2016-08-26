@@ -1,0 +1,15 @@
+<p class="input-group">
+    <input type="text" ng-readonly="true" class="form-control"
+           uib-datepicker-popup="{{dateTimepickerCtrl.formatDate}}"
+           ng-model="dateTimepickerCtrl.datepicker" is-open="dateTimepickerCtrl.dp.opened"
+           datepicker-options="dateTimepickerCtrl.inlineOptions" placeholder="Can be empty"
+           ng-change="dateTimepickerCtrl.dateOnChange()"/>
+    <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="dateTimepickerCtrl.openDatePicker()"><i
+                    class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+</p>
+<div ng-hide="dateTimepickerCtrl.datepicker === undefined">
+    <div uib-timepicker ng-model="dateTimepickerCtrl.time" hour-step="1"
+         minute-step="1" show-meridian="true" ng-change="dateTimepickerCtrl.timeOnChange()"></div>
+</div>

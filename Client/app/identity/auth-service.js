@@ -56,9 +56,27 @@
             return defered.promise;
         };
 
+        var getIdentity = function () {
+            var deferred = $q.defer();
+
+            $http.get(baseUrl + 'Account/Identity')
+                .success(function (identityResponse) {
+                    var user = {
+                        userName: identityResponse.Username,
+                        fullName: identityResponse.FullName
+                    };
+
+                    identity.setUser(user);
+                    deferred.resolve(user);
+                });
+
+            return deferred.promise;
+        };
+
         return {
             register: register,
             login: login,
+            getIdentity: getIdentity,
             isAuthenticated: function () {
                 return !!$cookies.get(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
             },

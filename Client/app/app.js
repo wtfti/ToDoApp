@@ -20,10 +20,16 @@
             .otherwise({redirectTo: '/'});
     }
 
-    var run = function ($rootScope) {
+    var run = function ($rootScope, auth, notifier) {
         $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
             $rootScope.title = current.$$route.title;
         });
+
+        if (auth.isAuthenticated()) {
+            auth.getIdentity().then(function (identity) {
+                //notifier.success('Welcome back, ' + identity.fullName + '!');
+            });
+        }
     };
 
     angular.module('ToDoApp.services', []);
@@ -31,9 +37,9 @@
     angular.module('ToDoApp.data', []);
     angular.module('ToDoApp.controllers', ['ToDoApp.data', 'ToDoApp.services']);
 
-    angular.module('ToDoApp', ['ngRoute', 'ngCookies', 'ngAnimate', 'angular-loading-bar', 'ui.bootstrap', 'ToDoApp.controllers',
-        'angularCSS', 'ToDoApp.directives'])
-        .run(['$rootScope', run])
+    angular.module('ToDoApp', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap',
+        'angularMoment', 'ToDoApp.controllers', 'angularCSS', 'ToDoApp.directives'])
+        .run(['$rootScope', 'auth', 'notifier', run])
         .config(['$routeProvider', config])
         .value('toastr', toastr)
         .constant('baseUrl', 'http://localhost:33178/api/');

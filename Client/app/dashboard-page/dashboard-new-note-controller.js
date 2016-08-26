@@ -1,24 +1,28 @@
 (function () {
     'use strict';
 
-    var newNoteMOdalInstanceController = function newNoteMOdalInstanceController($uibModalInstance, notesService, notifier) {
+    var newNoteMOdalInstanceController = function newNoteMOdalInstanceController(
+        $uibModalInstance,
+        notesService,
+        notifier,
+        dateTimePickerService) {
         this.addNote = function () {
             var title = this.title;
             var content = this.content;
-            var expired = this.expired;
+            var expiredDate = dateTimePickerService.getDateTime();
 
-            if (title.length < 3 || title.length > 30) {
+            if (!title || (title.length < 3 || title.length > 30)) {
                 notifier.error('Title is too short or too long. [3, 30] chars long')
             }
 
-            if (content < 1 || content > 100) {
+            if (!content || (content < 1 || content > 100)) {
                 notifier.error('Content is too short or too long. [1, 100] chars long')
             }
 
             var note = {
                 Title: title,
                 Content: content,
-                ExpiredOn: angular.isUndefined(expired) ? "" : expired,
+                ExpiredOn: expiredDate ? expiredDate : '',
                 SharedWith: []
             };
 
@@ -26,7 +30,7 @@
                 $uibModalInstance.close('close');
                 notifier.success(response);
             }, function (error) {
-                notifier.error(error);
+                notifier.error(error.Message);
             })
         };
 
@@ -36,5 +40,5 @@
     };
 
     angular.module('ToDoApp.controllers')
-        .controller('NewNoteModalInstanceController', ['$uibModalInstance', 'notesService', 'notifier', newNoteMOdalInstanceController]);
+        .controller('NewNoteModalInstanceController', ['$uibModalInstance', 'notesService', 'notifier', 'dateTimePickerService', newNoteMOdalInstanceController]);
 }());

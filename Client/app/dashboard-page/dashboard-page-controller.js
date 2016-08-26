@@ -1,13 +1,12 @@
 (function () {
     'use strict';
 
-    var dashboardPageController = function dashboardPageController(background, $scope, identity, notesService, $uibModal) {
+    var dashboardPageController = function dashboardPageController(background, $scope, identity, notesService, $uibModal, notifier) {
         var vm = this;
         var sort = 0;
-        var base64Image = background.getBackground();
 
         this.sortByText = 'Title Asc';
-        $scope.backgroundImage = 'url(' + base64Image + ')';
+        $scope.backgroundImage = 'url(' + background.getBackground() + ')';
 
         this.openAddNoteModal = function () {
             var instance = $uibModal.open({
@@ -26,6 +25,15 @@
             active: 1
         };
 
+        this.setComplete = function (id) {
+            notesService.setComplete(id).then(function (response) {
+                notifier.success(response);
+                vm.changeTab(vm.activeTab.active);
+            }, function (error) {
+                notifier.error(error);
+            })
+        };
+
         this.openEditNoteModal = function (note) {
             $uibModal.open({
                 animation: true,
@@ -38,6 +46,15 @@
                     }
                 }
             });
+        };
+
+        this.deleteNote = function (id) {
+            notesService.removeNote(id).then(function (response) {
+                notifier.success(response);
+                vm.changeTab(vm.activeTab.active);
+            }, function (error) {
+                notifier.error(error);
+            })
         };
 
         this.sortBy = function (index) {
@@ -140,5 +157,6 @@
     };
 
     angular.module('ToDoApp.controllers')
-        .controller('DashboardPageController', ['background', '$scope', 'identity', 'notesService', '$uibModal',  dashboardPageController]);
+        .controller('DashboardPageController', ['background', '$scope', 'identity', 'notesService', '$uibModal',
+            'notifier', dashboardPageController]);
 }());

@@ -1,4 +1,5 @@
-<div class="checkbox checkbox-info checkbox-circle" ng-repeat="note in notesData">
+<div class="checkbox checkbox-info checkbox-circle" ng-repeat="note in notesData" ng-click="dashboardCtrl.setComplete(note.Id);
+$event.stopPropagation()">
     <input id="checkbox"
            class="styled"
            ng-attr-id="{{note.Id}}"
@@ -7,24 +8,20 @@
            ng-attr-created="{{note.CreatedOn}}"
            ng-attr-expired="{{note.ExpiredOn}}"
            ng-attr-isExpired="{{note.IsExpired}}"
-           ng-attr-isCompleted="{{note.IsCompleted}}"
+           ng-attr-isComplete="{{note.IsComplete}}"
            ng-attr-createdFrom="{{note.CreatedFrom}}"
            ng-attr-sharedwith="{{note.SharedWith}}"
-           type="checkbox">
+           type="checkbox" ng-checked="note.IsComplete" ng-disabled="note.IsComplete || note.IsExpired">
     <label for="checkbox">
         <span>{{note.Content}}</span>
     </label>
-    <i class="glyphicon glyphicon-pencil" ng-click="dashboardCtrl.openEditNoteModal(
+    <i class="glyphicon glyphicon-pencil" ng-hide="note.IsComplete || note.IsExpired || (note.CreatedFrom && (note.CreatedFrom != dashboardCtrl.fullName))" ng-click="dashboardCtrl.openEditNoteModal(
     {
         id: note.Id,
         title: note.Title,
         content: note.Content,
-        created: note.CreatedOn,
         expired: note.ExpiredOn,
-        isExpired: note.IsExpired,
-        isCompleted: note.IsCompleted,
-        createdFrom: note.CreatedFrom,
         sharedWith: note.SharedWith
-    })" aria-hidden="true"></i>
-    <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+    });$event.stopPropagation()"></i>
+    <i class="glyphicon glyphicon-trash" ng-click="dashboardCtrl.deleteNote(note.Id);$event.stopPropagation()" ng-hide="note.CreatedFrom && (note.CreatedFrom != dashboardCtrl.fullName)"></i>
 </div>

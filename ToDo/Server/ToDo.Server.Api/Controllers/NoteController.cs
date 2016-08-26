@@ -27,7 +27,7 @@
         [ValidateModel]
         public IHttpActionResult AddNote([ModelBinder(typeof(NoteRequestModelBinder))]NoteRequestModel note)
         {
-            if (note.ExpiredOn != null && note.ExpiredOn <= DateTime.Now)
+            if (note.ExpiredOn != null && note.ExpiredOn <= DateTime.Now.AddMinutes(ValidationConstants.MinutesToAdd))
             {
                 return this.BadRequest(MessageConstants.InvalidDate);
             }
@@ -48,7 +48,7 @@
         [ValidateModel]
         public IHttpActionResult ChangeNote([ModelBinder(typeof(NoteRequestModelBinder))]NoteRequestModel note)
         {
-            if (note.ExpiredOn != null && note.ExpiredOn <= DateTime.Now)
+            if (note.ExpiredOn != null && note.ExpiredOn < DateTime.Now.AddMinutes(ValidationConstants.MinutesToAdd))
             {
                 return this.BadRequest(MessageConstants.InvalidDate);
             }

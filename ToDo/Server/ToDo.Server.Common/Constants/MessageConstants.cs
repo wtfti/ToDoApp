@@ -5,7 +5,7 @@
         public const string CreateNote = "Note created!";
         public const string NoteDoesNotExist = "Requested note does not exists!";
         public const string RemoveNote = "Note removed!";
-        public const string InvalidDate = "Invalid date!";
+        public const string InvalidDate = "Invalid date! Minimum possible date is today and shoul be at 30 minutes from now!";
         public const string CreateUser = "Successfully created user!";
         public const string Logout = "Logout successful!";
         public const string EmailAlreadyTaken = "Email is already taken!";

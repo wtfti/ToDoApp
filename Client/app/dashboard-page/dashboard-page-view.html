@@ -18,19 +18,7 @@
         </div>
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
-            <li>
-
-            </li>
-
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-bell"></i>
-                    <span class="badge" id="alertsCounter"></span>
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu alert-dropdown" id="alertsUl">
-
-                </ul>
+            <li class="dropdown" uib-dropdown friend-request>
             </li>
 
             <li class="dropdown">
@@ -95,14 +83,18 @@
                                 {{dashboardCtrl.sortByText}} <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                                <li role="menuitem"><a href ng-click="dashboardCtrl.sortBy(0)">Title Asc <i class="fa fa-sort-alpha-asc"
-                                                                             aria-hidden="true"></i></a></li>
-                                <li role="menuitem"><a href ng-click="dashboardCtrl.sortBy(1)">Title Desc <i class="fa fa-sort-alpha-desc"
-                                                                              aria-hidden="true"></i></a></li>
-                                <li role="menuitem"><a href ng-click="dashboardCtrl.sortBy(2)">Date Asc <i class="fa fa-sort-amount-asc"
-                                                                            aria-hidden="true"></i></a></li>
-                                <li role="menuitem"><a href ng-click="dashboardCtrl.sortBy(3)">Date Desc <i class="fa fa-sort-amount-desc"
-                                                                             aria-hidden="true"></i></a></li>
+                                <li><a href ng-click="dashboardCtrl.sortBy(0)">Title Asc <i
+                                        class="fa fa-sort-alpha-asc"
+                                        aria-hidden="true"></i></a></li>
+                                <li><a href ng-click="dashboardCtrl.sortBy(1)">Title Desc <i
+                                        class="fa fa-sort-alpha-desc"
+                                        aria-hidden="true"></i></a></li>
+                                <li><a href ng-click="dashboardCtrl.sortBy(2)">Date Asc <i
+                                        class="fa fa-sort-amount-asc"
+                                        aria-hidden="true"></i></a></li>
+                                <li><a href ng-click="dashboardCtrl.sortBy(3)">Date Desc <i
+                                        class="fa fa-sort-amount-desc"
+                                        aria-hidden="true"></i></a></li>
                             </ul>
                         </div>
 

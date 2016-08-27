@@ -1,7 +1,13 @@
 (function () {
     'use strict';
 
-    var dashboardPageController = function dashboardPageController(background, $scope, identity, notesService, $uibModal, notifier) {
+    var dashboardPageController = function dashboardPageController(
+        background,
+        $scope,
+        identity,
+        notesService,
+        $uibModal,
+        notifier) {
         var vm = this;
         var sort = 0;
 
@@ -162,5 +168,5 @@
 
     angular.module('ToDoApp.controllers')
         .controller('DashboardPageController', ['background', '$scope', 'identity', 'notesService', '$uibModal',
-            'notifier', dashboardPageController]);
+            'notifier', 'signalR', dashboardPageController]);
 }());

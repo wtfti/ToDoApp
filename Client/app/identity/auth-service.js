@@ -1,14 +1,14 @@
 (function () {
     'use strict';
 
-    var authService = function authService($http, $q, $cookies, identity, baseUrl) {
+    var authService = function authService($http, $q, $cookies, identity, globalConstants) {
         var TOKEN_KEY = 'authentication';
 
         var register = function register(user) {
             var defered = $q.defer();
 
             $http
-                .post(baseUrl + 'Account/Register', user)
+                .post(globalConstants.baseUrl + 'Account/Register', user)
                 .then(function (response) {
                     defered.resolve(response.data);
                 }, function (err) {
@@ -23,7 +23,7 @@
 
             var data = "grant_type=password&username=" + (user.username || '') + '&password=' + (user.password || '');
 
-            $http.post(baseUrl + 'Account/login', data, {
+            $http.post(globalConstants.baseUrl + 'Account/login', data, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
@@ -59,7 +59,7 @@
         var getIdentity = function () {
             var deferred = $q.defer();
 
-            $http.get(baseUrl + 'Account/Identity')
+            $http.get(globalConstants.baseUrl + 'Account/Identity')
                 .success(function (identityResponse) {
                     var user = {
                         userName: identityResponse.Username,
@@ -90,5 +90,5 @@
 
     angular
         .module('ToDoApp.services')
-        .factory('auth', ['$http', '$q', '$cookies', 'identity', 'baseUrl', authService]);
+        .factory('auth', ['$http', '$q', '$cookies', 'identity', 'globalConstants', authService]);
 }());

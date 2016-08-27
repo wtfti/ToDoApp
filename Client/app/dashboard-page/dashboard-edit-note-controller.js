@@ -13,6 +13,7 @@
         var DATETIMEFORMAT = 'DD/MM/YYYY HH:mm';
         this.title = noteDetails.title;
         this.content = noteDetails.content;
+        this.created = moment(noteDetails.created).format(DATETIMEFORMAT);
         this.expired = noteDetails.expired ? moment(noteDetails.expired).format(DATETIMEFORMAT) : undefined;
         this.sharedWith = [];
 

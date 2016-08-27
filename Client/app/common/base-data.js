@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var baseData = function baseData($http, $q, baseUrl, notifier, identity) {
+    var baseData = function baseData($http, $q, globalConstants, notifier, identity) {
         var headers = {
                 'Content-Type': 'application/json'
             };
@@ -14,7 +14,7 @@
                 deferred.reject();
             }
             else {
-                var URL = baseUrl + url;
+                var URL = globalConstants.baseUrl + url;
 
                 $http.get(URL)
                     .then(function (data) {
@@ -35,7 +35,7 @@
                 deferred.reject();
             }
             else {
-                var URL = baseUrl + url;
+                var URL = globalConstants.baseUrl + url;
 
                 $http.post(URL, data, headers)
                     .then(function (data) {
@@ -56,7 +56,7 @@
                 deferred.reject();
             }
             else {
-                var URL = baseUrl + url;
+                var URL = globalConstants.baseUrl + url;
 
                 $http.delete(URL, data, headers)
                     .then(function (data) {
@@ -77,7 +77,7 @@
                 deferred.reject();
             }
             else {
-                var URL = baseUrl + url;
+                var URL = globalConstants.baseUrl + url;
 
                 $http.put(URL, data, headers)
                     .then(function (data) {
@@ -100,5 +100,5 @@
 
     angular
         .module('ToDoApp.data')
-        .factory('data', ['$http', '$q', 'baseUrl', 'notifier', 'identity', baseData]);
+        .factory('data', ['$http', '$q', 'globalConstants', 'notifier', 'identity', baseData]);
 }());

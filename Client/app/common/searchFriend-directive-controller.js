@@ -1,27 +1,20 @@
 (function () {
     'use strict';
 
-    var searchFriendDirectiveController = function searchFriendDirectiveController($scope, data) {
+    var searchFriendDirectiveController = function searchFriendDirectiveController($scope, data, signalR) {
         var vm = this;
+
+        signalR.initialize();
+
         $scope.getUsers = function(value) {
-        //     $.ajax({
-        //         method: 'GET',
-        //         url: BASE_URL + ACCOUNT_URL + 'Users',
-        //         headers: {'Authorization': 'Bearer ' + authToken}
-        //     })
-        //         .done(function (response) {
-        //             let arr = [];
-        //
-        //             for (let user of response) {
-        //                 arr.push(user)
-        //             }
-        //
-        //             asyncResults(substringMatcher(query, arr));
-        //         });
-        // }, 700);
             return data.get('Account/Users').then(function(response){
                 return substringMatcher(value, response.data)
             });
+        };
+
+        this.onSelect = function ($item) {
+            signalR.sendRequest($item);
+            vm.selectedFriend = '';
         };
     };
 
@@ -40,5 +33,5 @@
 
     angular
         .module('ToDoApp.controllers')
-        .controller('SearchFriendDirectiveController', ['$scope', 'data', searchFriendDirectiveController]);
+        .controller('SearchFriendDirectiveController', ['$scope', 'data', 'signalR', searchFriendDirectiveController]);
 }());

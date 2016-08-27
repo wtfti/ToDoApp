@@ -1,0 +1,18 @@
+<a href uib-dropdown-toggle>
+    <i class="fa fa-bell"></i>
+    <span class="badge">{{friendRequestDirectiveCtrl.friendRequestCount}}</span>
+    <b class="caret"></b>
+</a>
+<ul uib-dropdown-menu>
+    <li ng-repeat="request in friendRequestDirectiveCtrl.friendRequests">
+        <div class="col-xs-12 col-sm-2">
+            <i class="fa fa-user-plus" aria-hidden="true"></i>
+        </div>
+        <div class="col-xs-12 col-sm-10">
+            <span class="name">{{request}}</span>
+            <br>
+            <i class="glyphicon glyphicon-ok"></i>
+            <i class="glyphicon glyphicon-remove"></i>
+        </div>
+    </li>
+</ul>

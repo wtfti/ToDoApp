@@ -40,5 +40,6 @@
     };
 
     angular.module('ToDoApp.controllers')
-        .controller('NewNoteModalInstanceController', ['$uibModalInstance', 'notesService', 'notifier', 'dateTimePickerService', newNoteMOdalInstanceController]);
+        .controller('NewNoteModalInstanceController', ['$uibModalInstance', 'notesService', 'notifier',
+            'dateTimePickerService', newNoteMOdalInstanceController]);
 }());

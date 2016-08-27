@@ -41,6 +41,10 @@
         'angularMoment', 'ToDoApp.controllers', 'angularCSS', 'ToDoApp.directives'])
         .run(['$rootScope', 'auth', 'notifier', run])
         .config(['$routeProvider', config])
+        .value('jQuery', jQuery)
         .value('toastr', toastr)
-        .constant('baseUrl', 'http://localhost:33178/api/');
+        .constant('globalConstants', {
+            'baseUrl': 'http://localhost:33178/api/',
+            'signalRUrl': 'http://localhost:33178/signalr'
+        });
 }());

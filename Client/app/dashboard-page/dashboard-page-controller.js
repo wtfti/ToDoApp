@@ -6,7 +6,11 @@
         var sort = 0;
 
         this.sortByText = 'Title Asc';
-        $scope.backgroundImage = 'url(' + background.getBackground() + ')';
+        background.getBackground().then(function (backgroundBase64Image) {
+            $scope.backgroundImage = 'url(' + backgroundBase64Image + ')';
+        }, function (error) {
+            notifier.error(error);
+        });
 
         this.openAddNoteModal = function () {
             var instance = $uibModal.open({

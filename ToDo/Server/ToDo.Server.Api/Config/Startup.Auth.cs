@@ -4,6 +4,7 @@
     using Data;
     using Microsoft.AspNet.Identity;
     using Microsoft.Owin;
+    using Microsoft.Owin.Cors;
     using Microsoft.Owin.Security.Cookies;
     using Microsoft.Owin.Security.OAuth;
     using Owin;

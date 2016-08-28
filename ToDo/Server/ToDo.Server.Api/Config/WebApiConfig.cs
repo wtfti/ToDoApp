@@ -1,6 +1,7 @@
 ﻿namespace ToDo.Api
 {
     using System.Web.Http;
+    using System.Web.Http.Cors;
     using System.Web.Http.ModelBinding.Binders;
     using ModelBinders;
     using Models.Note;

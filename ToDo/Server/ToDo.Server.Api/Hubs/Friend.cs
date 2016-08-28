@@ -85,7 +85,7 @@
 
                     if (FullNameToConnectionId.TryGetValue(UsernameToFullName[currentUsername], out currentUserConnectionId))
                     {
-                        this.Clients.Client(currentUserConnectionId).acceptedRequest(UsernameToFullName[senderFullName]);
+                        this.Clients.Client(currentUserConnectionId).acceptedRequest(senderFullName);
                     }
                 }
             }
@@ -93,13 +93,20 @@
             {
                 var user = this.accountService.GetUserByFullName(senderFullName);
 
-                if (user != null)
+                if (user != null && currentUsername != null)
                 {
                     var request = this.friendsService.GetFriendship(currentUsername, user.UserName);
 
                     if (request != null && request.Status == Status.Pending)
                     {
+                        string currentUserConnectionId;
+
                         this.friendsService.AcceptRequest(request);
+
+                        if (FullNameToConnectionId.TryGetValue(UsernameToFullName[currentUsername], out currentUserConnectionId))
+                        {
+                            this.Clients.Client(currentUserConnectionId).acceptedRequest(senderFullName);
+                        }
                     }
                 }
             }

@@ -31,6 +31,7 @@
             string senderUsername = this.Context.User.Identity.GetUserName();
             string recieverConnectionId;
 
+            // check if user is connected to server(online)
             if (FullNameToConnectionId.TryGetValue(recieverFullName, out recieverConnectionId))
             {
                 string reciever = FullNameToUsername[recieverFullName];
@@ -62,22 +63,29 @@
         public void AcceptRequest(string senderFullName)
         {
             string currentUsername = this.Context.User.Identity.GetUserName();
-            string secondUser;
-            FullNameToUsername.TryGetValue(senderFullName, out secondUser);
+            string senderUsername;
+            FullNameToUsername.TryGetValue(senderFullName, out senderUsername);
 
-            if (currentUsername != null && secondUser != null)
+            // check if user is connected to server(online)
+            if (currentUsername != null && senderUsername != null)
             {
-                var request = this.friendsService.GetFriendship(currentUsername, secondUser);
+                var request = this.friendsService.GetFriendship(currentUsername, senderUsername);
 
                 if (request != null && request.Status == Status.Pending)
                 {
                     this.friendsService.AcceptRequest(request);
 
-                    string connectionId;
+                    string senderConnectionId;
+                    string currentUserConnectionId;
 
-                    if (FullNameToConnectionId.TryGetValue(senderFullName, out connectionId))
+                    if (FullNameToConnectionId.TryGetValue(senderFullName, out senderConnectionId))
                     {
-                        this.Clients.Client(connectionId).acceptedRequest(UsernameToFullName[currentUsername]);
+                        this.Clients.Client(senderConnectionId).acceptedRequest(UsernameToFullName[currentUsername]);
+                    }
+
+                    if (FullNameToConnectionId.TryGetValue(UsernameToFullName[currentUsername], out currentUserConnectionId))
+                    {
+                        this.Clients.Client(currentUserConnectionId).acceptedRequest(UsernameToFullName[senderFullName]);
                     }
                 }
             }
@@ -102,13 +110,17 @@
             string currentUsername = this.Context.User.Identity.GetUserName();
             string senderUsername;
 
-            if (currentUsername != null && UsernameToFullName.TryGetValue(senderFullName, out senderUsername))
+            // check if user is connected to server(online)
+            if (currentUsername != null && UsernameToFullName.TryGetValue(senderFullName, out senderUsername)) 
             {
                 var request = this.friendsService.GetFriendship(currentUsername, senderUsername);
 
                 if (request != null && request.Status == Status.Pending)
                 {
+                    string senderConnectionId = FullNameToConnectionId[UsernameToFullName[senderUsername]];
                     this.friendsService.DeclineRequest(request);
+                    this.Clients.Client(senderConnectionId)
+                        .declinedRequest(UsernameToFullName[currentUsername]);
                 }
             }
             else

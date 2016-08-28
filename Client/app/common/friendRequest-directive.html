@@ -11,8 +11,8 @@
         <div class="col-xs-12 col-sm-10">
             <span class="name">{{request}}</span>
             <br>
-            <i class="glyphicon glyphicon-ok"></i>
-            <i class="glyphicon glyphicon-remove"></i>
+            <i class="glyphicon glyphicon-ok" ng-click="friendRequestDirectiveCtrl.acceptFriendRequest(request)"></i>
+            <i class="glyphicon glyphicon-remove" ng-click="friendRequestDirectiveCtrl.declineFriendRequest(request)"></i>
         </div>
     </li>
 </ul>

@@ -12,10 +12,11 @@
         var vm = this;
         var DATETIMEFORMAT = 'DD/MM/YYYY HH:mm';
         this.title = noteDetails.title;
+        this.createdFrom = noteDetails.createdFrom;
         this.content = noteDetails.content;
         this.created = moment(noteDetails.created).format(DATETIMEFORMAT);
         this.expired = noteDetails.expired ? moment(noteDetails.expired).format(DATETIMEFORMAT) : undefined;
-        this.sharedWith = [];
+        this.sharedWith = noteDetails.sharedWith;
 
         this.sendChanges = function () {
             var note = {
@@ -23,7 +24,7 @@
                 Title: vm.title,
                 Content: vm.content,
                 ExpiredOn: vm.expired === undefined ? '' : vm.expired,
-                SharedWith: []
+                SharedWith: noteDetails.sharedWith
             };
 
             notesService.editNote(note).then(function (response) {

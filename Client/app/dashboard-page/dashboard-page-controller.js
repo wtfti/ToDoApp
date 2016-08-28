@@ -5,9 +5,12 @@
         background,
         $scope,
         identity,
+        auth,
         notesService,
         $uibModal,
-        notifier) {
+        notifier,
+        signalR,
+        friendService) {
         var vm = this;
         var sort = 0;
 
@@ -31,19 +34,6 @@
             })
         };
 
-        this.activeTab = {
-            active: 1
-        };
-
-        this.setComplete = function (id) {
-            notesService.setComplete(id).then(function (response) {
-                notifier.success(response);
-                vm.changeTab(vm.activeTab.active);
-            }, function (error) {
-                notifier.error(error);
-            })
-        };
-
         this.openEditNoteModal = function (note) {
             $uibModal.open({
                 animation: true,
@@ -56,6 +46,19 @@
                     }
                 }
             });
+        };
+
+        this.activeTab = {
+            active: 1
+        };
+
+        this.setComplete = function (id) {
+            notesService.setComplete(id).then(function (response) {
+                notifier.success(response);
+                vm.changeTab(vm.activeTab.active);
+            }, function (error) {
+                notifier.error(error);
+            })
         };
 
         this.deleteNote = function (id) {
@@ -163,10 +166,12 @@
             vm.fullName = user.fullName;
         });
 
+        this.logout = auth.logout;
+
         this.changeTab(0);
     };
 
     angular.module('ToDoApp.controllers')
-        .controller('DashboardPageController', ['background', '$scope', 'identity', 'notesService', '$uibModal',
-            'notifier', 'signalR', dashboardPageController]);
+        .controller('DashboardPageController', ['background', '$scope', 'identity', 'auth', 'notesService', '$uibModal',
+            'notifier', 'signalR', 'friendService', dashboardPageController]);
 }());

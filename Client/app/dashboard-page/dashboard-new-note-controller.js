@@ -5,7 +5,12 @@
         $uibModalInstance,
         notesService,
         notifier,
-        dateTimePickerService) {
+        dateTimePickerService,
+        friendService) {
+        var vm = this;
+        var selectedFriends = [];
+        this.selectedUsers = selectedFriends;
+
         this.addNote = function () {
             var title = this.title;
             var content = this.content;
@@ -23,7 +28,7 @@
                 Title: title,
                 Content: content,
                 ExpiredOn: expiredDate ? expiredDate : '',
-                SharedWith: []
+                SharedWith: selectedFriends
             };
 
             notesService.addNote(note).then(function (response) {
@@ -34,6 +39,18 @@
             })
         };
 
+        friendService.getFriends().then(function (response) {
+            vm.friends = response;
+        }, function () {
+            notifier.error('Cannot load friends :(')
+        });
+
+        this.addFriend = function (name) {
+            selectedFriends.push(name);
+            var index = vm.friends.indexOf(name);
+            vm.friends.splice(index, 1);
+        };
+
         this.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
@@ -41,5 +58,5 @@
 
     angular.module('ToDoApp.controllers')
         .controller('NewNoteModalInstanceController', ['$uibModalInstance', 'notesService', 'notifier',
-            'dateTimePickerService', newNoteMOdalInstanceController]);
+            'dateTimePickerService', 'friendService', newNoteMOdalInstanceController]);
 }());

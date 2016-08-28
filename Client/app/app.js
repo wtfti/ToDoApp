@@ -17,17 +17,25 @@
                 title: 'Dashboard',
                 css: ['content/dashboard.css', 'content/typeaheadjs.css', 'content/awesome-bootstrap-checkbox.css']
             })
+            .when('/settings', {
+                templateUrl: 'app/settings-page/settings-page-view.html',
+                controller: 'SettingsPageController',
+                controllerAs: 'settingsCtrl',
+                title: 'Settings',
+                css: ['content/dashboard.css', 'content/typeaheadjs.css', 'content/awesome-bootstrap-checkbox.css']
+            })
             .otherwise({redirectTo: '/'});
     }
 
-    var run = function ($rootScope, auth, notifier) {
+    var run = function ($rootScope, auth, notifier, $location) {
         $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
             $rootScope.title = current.$$route.title;
         });
 
         if (auth.isAuthenticated()) {
             auth.getIdentity().then(function (identity) {
-                //notifier.success('Welcome back, ' + identity.fullName + '!');
+                notifier.success('Welcome back, ' + identity.fullName + '!');
+                $location.path('/dashboard')
             });
         }
     };
@@ -39,7 +47,7 @@
 
     angular.module('ToDoApp', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap',
         'angularMoment', 'ToDoApp.controllers', 'angularCSS', 'ToDoApp.directives'])
-        .run(['$rootScope', 'auth', 'notifier', run])
+        .run(['$rootScope', 'auth', 'notifier', '$location', run])
         .config(['$routeProvider', config])
         .value('jQuery', jQuery)
         .value('toastr', toastr)

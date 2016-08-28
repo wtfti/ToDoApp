@@ -1,18 +1,31 @@
 (function () {
     'use strict';
 
-    var friendRequestDirectiveController = function friendRequestDirectiveController(friendRequestService, notifier) {
-        var vm= this;
+    var friendRequestDirectiveController = function friendRequestDirectiveController(friendService, notifier, $timeout) {
+        var vm = this;
+        var getFriendRequests = function () {
+            friendService.getFriendRequests().then(function (friends) {
+                vm.friendRequests = friends;
+                vm.friendRequestCount = friends.length > 0 ? friends.length : '';
+            }, function (error) {
+                notifier.error(error);
+            });
+        };
 
-        friendRequestService.getFriendRequests().then(function (friends) {
-            vm.friendRequests = friends;
-            vm.friendRequestCount = friends.length;
-        }, function (error) {
-            notifier.error(error);
-        })
+        getFriendRequests();
+        this.acceptFriendRequest = function (name) {
+            friendService.acceptFriendRequest(name);
+            $timeout(getFriendRequests, 2000);
+        };
+
+        this.declineFriendRequest = function (name) {
+            friendService.declineFriendRequest(name);
+            $timeout(getFriendRequests, 2000);
+        }
     };
 
     angular
         .module('ToDoApp.controllers')
-        .controller('FriendRequestDirectiveController', ['friendRequestService', 'notifier', friendRequestDirectiveController]);
+        .controller('FriendRequestDirectiveController', ['friendService', 'notifier', '$timeout',
+            friendRequestDirectiveController]);
 }());

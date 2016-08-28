@@ -6,45 +6,49 @@
         <div class="form-group" id="createdFromForm" ng-class="{'hidden': !editNoteModalInstanceCtrl.createdFrom}">
             <label for="createdFromInput" class="col-sm-2 control-label">Created from</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model="editNoteModalInstanceCtrl.createdFrom" id="createdFromInput"
+                <input type="text" class="form-control" ng-model="editNoteModalInstanceCtrl.createdFrom"
+                       id="createdFromInput"
                        placeholder="Created from" disabled>
             </div>
         </div>
         <div class="form-group">
             <label for="editTitleInput" class="col-sm-2 control-label">Title</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model="editNoteModalInstanceCtrl.title" id="editTitleInput" placeholder="Title">
+                <input type="text" class="form-control" ng-model="editNoteModalInstanceCtrl.title" id="editTitleInput"
+                       placeholder="Title">
             </div>
         </div>
         <div class="form-group">
             <label for="editContentInput" class="col-sm-2 control-label">Content</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model="editNoteModalInstanceCtrl.content" id="editContentInput" placeholder="Content">
+                <input type="text" class="form-control" ng-model="editNoteModalInstanceCtrl.content"
+                       id="editContentInput" placeholder="Content">
             </div>
         </div>
         <div class="form-group">
             <label for="editCreatedOnDatePicker" class="col-sm-2 control-label">Created on</label>
             <div class="col-sm-10">
-                <input type='text' class="form-control" ng-model="editNoteModalInstanceCtrl.created" id='editCreatedOnDatePicker' ng-disabled="true"/>
+                <input type='text' class="form-control" ng-model="editNoteModalInstanceCtrl.created"
+                       id='editCreatedOnDatePicker' ng-disabled="true"/>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">Expired on</label>
             <div class="col-sm-10" date-Time-Picker ng-hide="editNoteModalInstanceCtrl.expired"></div>
             <div class="col-sm-10">
-                <input type='text' class="form-control" ng-hide="!editNoteModalInstanceCtrl.expired" ng-model="editNoteModalInstanceCtrl.expired" id='editExpiredOnDatePicker'
+                <input type='text' class="form-control" ng-hide="!editNoteModalInstanceCtrl.expired"
+                       ng-model="editNoteModalInstanceCtrl.expired" id='editExpiredOnDatePicker'
                        placeholder="Empty"/>
             </div>
         </div>
-        <div class="form-group" id="sharedWithForm">
-            <label for="sharedWithDropdown" class="col-sm-2 control-label">Shared with</label>
-            <div class="col-sm-10 dropdown" id="sharedWithDropdown">
-                <button class="btn btn-warning dropdown-toggle" type="button"
-                        data-toggle="dropdown">
-                    <span>Friends </span>
-                    <span class="caret"></span>
+        <div class="form-group" ng-hide="!editNoteModalInstanceCtrl.createdFrom">
+            <label class="col-sm-2 control-label">Shared With</label>
+            <div class="col-sm-10" uib-dropdown>
+                <button type="button" class="btn btn-primary" uib-dropdown-toggle>
+                    Users<span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" uib-dropdown-menu>
+                    <li ng-repeat="fr in editNoteModalInstanceCtrl.sharedWith"><a href>{{fr}}</a></li>
                 </ul>
             </div>
         </div>
@@ -53,5 +57,7 @@
 <div class="modal-footer">
     <button type="button" class="btn btn-default closeEditForm" ng-click="editNoteModalInstanceCtrl.cancel()">Close
     </button>
-    <button type="button" class="btn btn-primary" ng-click="editNoteModalInstanceCtrl.sendChanges()" id="saveChangesEditForm">Save changes</button>
+    <button type="button" class="btn btn-primary" ng-click="editNoteModalInstanceCtrl.sendChanges()"
+            id="saveChangesEditForm">Save changes
+    </button>
 </div>

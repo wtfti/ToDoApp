@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var authService = function authService($http, $q, $cookies, identity, globalConstants) {
+    var authService = function authService($http, $q, $cookies, identity, globalConstants, $location) {
         var TOKEN_KEY = 'authentication';
 
         var register = function register(user) {
@@ -58,9 +58,10 @@
 
         var getIdentity = function () {
             var deferred = $q.defer();
+            $http.defaults.headers.common.Authorization = 'Bearer ' + sessionStorage.getItem(TOKEN_KEY);
 
             $http.get(globalConstants.baseUrl + 'Account/Identity')
-                .success(function (identityResponse) {
+                .then(function (identityResponse) {
                     var user = {
                         userName: identityResponse.Username,
                         fullName: identityResponse.FullName
@@ -81,14 +82,19 @@
                 return !!$cookies.get(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
             },
             logout: function () {
-                $cookies.remove(TOKEN_KEY);
-                $http.defaults.headers.common.Authorization = null;
-                identity.removeUser();
+                $http.post(globalConstants.baseUrl + 'Account/Logout').then(function () {
+                    $cookies.remove(TOKEN_KEY);
+                    sessionStorage.removeItem(TOKEN_KEY);
+                    sessionStorage.removeItem('background');
+                    $http.defaults.headers.common.Authorization = null;
+                    identity.removeUser();
+                    $location.path('/');
+                })
             }
         };
     };
 
     angular
         .module('ToDoApp.services')
-        .factory('auth', ['$http', '$q', '$cookies', 'identity', 'globalConstants', authService]);
+        .factory('auth', ['$http', '$q', '$cookies', 'identity', 'globalConstants', '$location', authService]);
 }());

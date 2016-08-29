@@ -136,6 +136,14 @@
         }
 
         [HttpGet]
+        public IHttpActionResult GetNotesCount()
+        {
+            int count = this.notesService.GetPrivateNotesCount(this.CurrentUserId());
+
+            return this.Ok(count);
+        }
+
+        [HttpGet]
         public IHttpActionResult GetSharedNotes(int page = 1)
         {
             if (page <= 0)
@@ -159,6 +167,14 @@
             var response = notes.ProjectTo<NoteResponseModel>();
 
             return this.Ok(response);
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetSharedNotesCount()
+        {
+            int count = this.notesService.GetSharedNotesCount(this.CurrentUserId());
+
+            return this.Ok(count);
         }
 
         [HttpGet]
@@ -188,6 +204,14 @@
         }
 
         [HttpGet]
+        public IHttpActionResult GetNotesFromTodayCount()
+        {
+            int count = this.notesService.GetTodayNotesCount(this.CurrentUserId());
+
+            return this.Ok(count);
+        }
+
+        [HttpGet]
         public IHttpActionResult GetCompletedNotes(int page = 1)
         {
             if (page <= 0)
@@ -213,6 +237,14 @@
         }
 
         [HttpGet]
+        public IHttpActionResult GetCompletedNotesCount()
+        {
+            int count = this.notesService.GetCompletedNotesCount(this.CurrentUserId());
+
+            return this.Ok(count);
+        }
+
+        [HttpGet]
         public IHttpActionResult GetNotesWithExpirationDate(int page = 1)
         {
             if (page <= 0)
@@ -235,6 +267,14 @@
             result.AddRange(sharedNotes);
 
             return this.Ok(result);
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetNotesWithExparationDateCount()
+        {
+            int count = this.notesService.GetExpiredNotesCount(this.CurrentUserId());
+
+            return this.Ok(count);
         }
 
         [HttpDelete]

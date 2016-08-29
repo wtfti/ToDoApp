@@ -96,6 +96,63 @@
             this.sharedNotesData.SaveChanges();
         }
 
+        public int GetPrivateNotesCount(string id)
+        {
+            int count = this.privateNotesData.All().Count(a => !a.IsComplete && !a.IsExpired && a.UserId == id);
+
+            return count;
+        }
+
+        public int GetTodayNotesCount(string id)
+        {
+            DateTime today = DateTime.Now;
+            int count =
+                this.privateNotesData.All()
+                    .Count(
+                        a =>
+                            !a.IsComplete &&
+                            !a.IsExpired &&
+                            a.UserId == id &&
+                            a.CreatedOn.Day == today.Day &&
+                            a.CreatedOn.Month == today.Month &&
+                            a.CreatedOn.Year == today.Year);
+
+            return count;
+        }
+
+        public int GetSharedNotesCount(string id)
+        {
+            int count = this.sharedNotesData
+                .All()
+                .Where(note => !note.IsExpired && !note.IsComplete)
+                .ToList()
+                .Where(note => note.Users.Any(u => u.Id == id))
+                .Count();
+
+            return count;
+        }
+
+        public int GetExpiredNotesCount(string id)
+        {
+            int count = this.privateNotesData
+                .All()
+                .Count(a => a.IsExpired && a.UserId == id);
+
+            return count;
+        }
+
+        public int GetCompletedNotesCount(string id)
+        {
+            int count = this.sharedNotesData
+                .All()
+                .Where(a => a.IsComplete)
+                .ToList()
+                .Where(u => u.Users.Any(user => user.Id == id))
+                .Count();
+
+            return count;
+        }
+
         public PrivateNote GetPrivateNoteById(string id)
         {
             return this.privateNotesData.GetById(id);
@@ -114,7 +171,7 @@
             var privateNotes = this.privateNotesData
                 .All()
                 .Where(a => a.UserId == user && !a.IsComplete && !a.IsExpired)
-                .OrderBy(q => q.Content)
+                .OrderBy(q => q.CreatedOn)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);
 
@@ -131,7 +188,7 @@
                 .Where(note => !note.IsExpired && !note.IsComplete)
                 .ToList()
                 .Where(note => note.Users.Any(u => u.Id == user))
-                .OrderBy(q => q.Content)
+                .OrderBy(q => q.CreatedOn)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize)
                 .AsQueryable();
@@ -156,7 +213,7 @@
             var todayNotes = notes
                 .ToList()
                 .Where(a => a.CreatedOn.Date == today.Date)
-                .OrderBy(q => q.Content)
+                .OrderBy(q => q.CreatedOn)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize)
                 .AsQueryable();
@@ -172,7 +229,7 @@
             var notes = this.privateNotesData
                 .All()
                 .Where(a => a.UserId == userId && a.IsComplete)
-                .OrderBy(q => q.Content)
+                .OrderBy(q => q.CreatedOn)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);
 
@@ -189,7 +246,7 @@
                 .Where(a => a.IsComplete)
                 .ToList()
                 .Where(u => u.Users.Any(user => user.Id == userId))
-                .OrderBy(q => q.Content)
+                .OrderBy(q => q.CreatedOn)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize)
                 .AsQueryable();
@@ -205,7 +262,7 @@
             var notes = this.privateNotesData
                 .All()
                 .Where(a => a.IsExpired && a.UserId == user)
-                .OrderBy(w => w.Id)
+                .OrderBy(w => w.CreatedOn)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);
 
@@ -222,7 +279,7 @@
                 .Where(a => a.IsExpired)
                 .ToList()
                 .Where(u => u.Users.Any(user => user.Id == userId))
-                .OrderBy(w => w.Id)
+                .OrderBy(w => w.CreatedOn)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize)
                 .AsQueryable();

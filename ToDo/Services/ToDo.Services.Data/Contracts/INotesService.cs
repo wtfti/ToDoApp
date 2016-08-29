@@ -7,6 +7,16 @@
 
     public interface INotesService
     {
+        int GetPrivateNotesCount(string id);
+
+        int GetTodayNotesCount(string id);
+
+        int GetSharedNotesCount(string id);
+
+        int GetExpiredNotesCount(string id);
+
+        int GetCompletedNotesCount(string id);
+
         PrivateNote GetPrivateNoteById(string id);
 
         SharedNote GetSharedNoteById(string id);

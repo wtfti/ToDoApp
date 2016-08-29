@@ -73,7 +73,7 @@
                 }
 
                 this.notesService.ChangePrivateNote(privateNote, note.Title, note.Content, note.ExpiredOn);
-                return this.Ok();
+                return this.Ok(MessageConstants.ChangedNoteParamsSuccessful);
             }
 
             var sharedNote = this.notesService.GetSharedNoteById(note.Id);
@@ -106,7 +106,7 @@
             }
 
             this.notesService.ChangeSharedNote(sharedNote, note.Title, note.Content, note.ExpiredOn);
-            return this.Ok();
+            return this.Ok(MessageConstants.ChangedNoteParamsSuccessful);
         }
 
         [HttpGet]
@@ -325,7 +325,7 @@
             if (note != null && note.UserId == this.CurrentUserId())
             {
                 this.notesService.SetCompletePrivateNote(note);
-                return this.Ok();
+                return this.Ok(MessageConstants.CompletedNoteSucessful);
             }
             
             var sharedNote = this.notesService.GetSharedNoteById(id);
@@ -347,7 +347,7 @@
             }
 
             this.notesService.SetCompleteSharedNote(sharedNote);
-            return this.Ok();
+            return this.Ok(MessageConstants.CompletedNoteSucessful);
         }
 
         [NonAction]

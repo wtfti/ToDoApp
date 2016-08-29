@@ -46,7 +46,7 @@
             dbUser.FullName = fullName;
             dbUser.Age = age;
             dbUser.Gender = gender;
-            if (image != null && dbUser.Background.Value != image)
+            if (!string.IsNullOrEmpty(image) && dbUser.Background.Value != image)
             {
                 using (var fs = new FileStream(path, FileMode.OpenOrCreate))
                 {

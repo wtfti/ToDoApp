@@ -80,7 +80,7 @@
                 return this.BadRequest();
             }
 
-            return this.Ok();
+            return this.Ok(MessageConstants.ChangedPasswordSuccessful);
         }
 
         [HttpPost]
@@ -123,7 +123,7 @@
                 user.Image,
                 HostingEnvironment.MapPath(string.Format(ValidationConstants.CustomBackgroundFileName, userId)));
 
-            return this.Ok();
+            return this.Ok(MessageConstants.ProfileChangedSuccessful);
         }
 
         [HttpGet]

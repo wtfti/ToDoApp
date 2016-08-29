@@ -20,6 +20,8 @@
         public const int MinutesToAdd = 29;
         public const int MinAge = 4;
         public const int MaxAge = 117;
+        public const int MinGender = 0;
+        public const int MaxGender = 2;
         public const string EmailRegexPattern = @"(([^<>()\[\]\\.,;:\s@""]+(\.[^<>()\[\]\\.,;:\s@""]+)*)|("".+""))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$";
     }
 }

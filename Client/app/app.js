@@ -22,7 +22,8 @@
                 controller: 'SettingsPageController',
                 controllerAs: 'settingsCtrl',
                 title: 'Settings',
-                css: ['content/dashboard.css', 'content/typeaheadjs.css', 'content/awesome-bootstrap-checkbox.css']
+                css: ['content/settings.css', 'content/typeaheadjs.css', 'content/awesome-bootstrap-checkbox.css',
+                    'content/colorpicker.min.css']
             })
             .otherwise({redirectTo: '/'});
     }
@@ -35,7 +36,7 @@
         if (auth.isAuthenticated()) {
             auth.getIdentity().then(function (identity) {
                 notifier.success('Welcome back, ' + identity.fullName + '!');
-                $location.path('/dashboard')
+                //$location.path('/dashboard')
             });
         }
     };
@@ -46,7 +47,7 @@
     angular.module('ToDoApp.controllers', ['ToDoApp.data', 'ToDoApp.services']);
 
     angular.module('ToDoApp', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap',
-        'angularMoment', 'ToDoApp.controllers', 'angularCSS', 'ToDoApp.directives'])
+        'angularMoment', 'ToDoApp.controllers', 'angularCSS', 'colorpicker.module', 'ToDoApp.directives'])
         .run(['$rootScope', 'auth', 'notifier', '$location', run])
         .config(['$routeProvider', config])
         .value('jQuery', jQuery)

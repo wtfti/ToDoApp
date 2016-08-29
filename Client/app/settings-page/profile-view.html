@@ -1,0 +1,73 @@
+<div class="col-md-offset-3">
+    <form class="form-horizontal col-md-8">
+        <div class="panel panel-default row">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="glyphicon glyphicon-wrench"></i> Profile settings</h3>
+            </div>
+            <div class="panel-body">
+                <label for="fullNameInput" class="col-md-2 control-label">Full name</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="fullNameInput" placeholder="Full name">
+                </div>
+                <label for="ageInput" class="col-md-2 control-label">Age</label>
+                <div class="col-md-10">
+                    <input type="number" class="form-control" id="ageInput" placeholder="Age">
+                </div>
+                <label class="col-md-2 control-label">Gender</label>
+                <div class="col-md-10 dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="genderDropdown"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="text">None</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="genderMenuItem">None</a></li>
+                        <li><a href="#" class="genderMenuItem">Male</a></li>
+                        <li><a href="#" class="genderMenuItem">Female</a></li>
+                    </ul>
+                </div>
+                <label for="emailInput" class="col-md-2 control-label">Email</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="emailInput" placeholder="Email"
+                           disabled>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-paint-brush"></i> Personalization</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-sm-10" uib-dropdown>
+                            <button type="button" class="btn btn-info" uib-dropdown-toggle>
+                                {{profileTabDirectiveCtrl.backgroundDropdown}}<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" uib-dropdown-menu>
+                                <li>
+                                    <a href ng-click="profileTabDirectiveCtrl.backgroundDropdown = 'Background color'">Background
+                                        color</a>
+                                </li>
+                                <li>
+                                    <a href ng-click="profileTabDirectiveCtrl.backgroundDropdown = 'Background image'">Background
+                                        image</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div ng-hide="profileTabDirectiveCtrl.backgroundDropdown != 'Background color'">
+                        <input colorpicker type="text" ng-model="profileTabDirectiveCtrl.colorPicker" />
+                    </div>
+                    <div ng-hide="profileTabDirectiveCtrl.backgroundDropdown != 'Background image'">
+                        <i class="glyphicon glyphicon-plus" id="addImageIcon"></i>
+                        <img id="currentBackgroundImage" ng-src="{{profileTabDirectiveCtrl.currentBackground}}">
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer col-md-12">
+                <button type="button" class="btn btn-primary" id="saveBtnSettings">Save
+                    changes
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

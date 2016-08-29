@@ -1,8 +1,9 @@
 (function() {
     'use strict';
 
-    var signalRService = function signalRService(jQuery, $rootScope, globalConstants, notifier) {
+    var signalRService = function signalRService(jQuery, $rootScope, globalConstants, notifier, $q) {
         var proxy = null;
+        var deferred = $q.defer();
 
         var initialize = function () {
             //Getting the connection object
@@ -17,7 +18,7 @@
             });
 
             proxy.on('newFriendRequest', function (fromFullName) {
-                console.log('new friend request')
+                deferred.resolve();
             });
 
             proxy.on('declinedRequest', function (name) {
@@ -29,7 +30,6 @@
         };
 
         var sendRequest = function (name) {
-            //Invoking greetAll method defined in hub
             proxy.invoke('friendRequest', name);
             notifier.success('Friend request is sent to ' + name);
         };
@@ -42,15 +42,20 @@
             proxy.invoke('acceptRequest', name);
         };
 
+        var newRequest = function () {
+            return deferred.promise;
+        };
+
         return {
             initialize: initialize,
             sendRequest: sendRequest,
             declineRequest: declineRequest,
-            acceptRequest: acceptRequest
+            acceptRequest: acceptRequest,
+            newRequest: newRequest
         };
     };
 
     angular
         .module('ToDoApp.services')
-        .factory('signalR', ['jQuery', '$rootScope', 'globalConstants', 'notifier', signalRService]);
+        .factory('signalR', ['jQuery', '$rootScope', 'globalConstants', 'notifier', '$q', signalRService]);
 }());

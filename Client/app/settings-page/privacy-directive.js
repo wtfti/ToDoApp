@@ -1,3 +1,16 @@
-/**
- * Created by h4xz0r on 8/29/2016.
- */
+(function () {
+    'use strict';
+
+    var privacyTabDirective = function privacyTabDirective() {
+        return {
+            restrict: 'A',
+            templateUrl: 'app/settings-page/privacy-view.html',
+            controller: 'PrivacyTabDirectiveController',
+            controllerAs: 'privactTabDirectiveCtrl'
+        };
+    };
+
+    angular
+        .module('ToDoApp.directives')
+        .directive('privacyTab', [privacyTabDirective]);
+}());

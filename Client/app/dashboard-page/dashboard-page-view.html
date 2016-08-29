@@ -107,7 +107,7 @@
             </div>
         </div>
 
-        <div class="row col-lg-offset-5" >
+        <div class="row col-lg-offset-5" ng-hide="dashboardCtrl.totalItems / 10 <= 1">
             <ul uib-pagination total-items="dashboardCtrl.totalItems" max-size="10"
                 ng-model="dashboardCtrl.currentPage" ng-change="dashboardCtrl.pageChanged()"></ul>
         </div>

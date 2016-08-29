@@ -3,6 +3,7 @@
 
     var friendService = function friendService(data, $q, signalR) {
         var FRIEND_KEY = 'Friend/';
+        var vm = this;
 
         return {
             getFriendRequests: function () {
@@ -32,6 +33,9 @@
                 });
 
                 return deferred.promise;
+            },
+            newFriendRequest: function () {
+                return signalR.newRequest();
             }
         };
     };

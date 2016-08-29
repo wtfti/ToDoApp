@@ -14,21 +14,16 @@ body {
     }
 }
 
-#addImageIcon{
-    padding-bottom: 0.7em;
-    font-size: 3em;
-    cursor: pointer;
-}
-
-#currentBackgroundImage {
+#currentBackgroundImage,
+#imagePreview {
     padding-bottom: 1em;
     height: 4em;
     width: 4em;
     padding-left: 0.4em;
 }
 
-#addImageIcon:hover {
-    color: #7c797d;
+#imageChooseButton {
+    margin-bottom: 1em;
 }
 
 #addImageBtn {

@@ -7,7 +7,8 @@
             <div class="panel-body">
                 <label class="col-md-2">Full name</label>
                 <div class="col-md-10">
-                    <input type="text" class="form-control" ng-model="profileTabDirectiveCtrl.fullName" placeholder="Full name">
+                    <input type="text" class="form-control" ng-model="profileTabDirectiveCtrl.fullName"
+                           placeholder="Full name">
                 </div>
                 <label class="col-md-2">Age</label>
                 <div class="col-md-10">
@@ -27,7 +28,8 @@
                 </div>
                 <label class="col-md-2">Email</label>
                 <div class="col-md-10">
-                    <input type="email" class="form-control" ng-model="profileTabDirectiveCtrl.email" placeholder="Email"
+                    <input type="email" class="form-control" ng-model="profileTabDirectiveCtrl.email"
+                           placeholder="Email"
                            disabled>
                 </div>
             </div>
@@ -54,11 +56,14 @@
                         </div>
                     </div>
                     <div ng-hide="profileTabDirectiveCtrl.backgroundDropdown != 'Background color'">
-                        <input colorpicker type="text" ng-model="profileTabDirectiveCtrl.colorPicker" />
+                        <input colorpicker type="text" ng-model="profileTabDirectiveCtrl.colorPicker"/>
                     </div>
                     <div ng-hide="profileTabDirectiveCtrl.backgroundDropdown != 'Background image'">
-                        <i class="glyphicon glyphicon-plus" id="addImageIcon"></i>
-                        <img id="currentBackgroundImage" ng-src="{{profileTabDirectiveCtrl.currentBackground}}">
+                        <input ng-model="profileTabDirectiveCtrl.photo"
+                               onchange="angular.element(this).scope().file_changed(this)"
+                               type="file" accept="image/*" id="imageChooseButton"/>
+                        <img id="imagePreview" ng-src="{{profileTabDirectiveCtrl.imagePreview}}">
+                        <img ng-hide="!profileTabDirectiveCtrl.currentBackground" id="currentBackgroundImage" ng-src="{{profileTabDirectiveCtrl.currentBackground}}">
                     </div>
                 </div>
             </div>

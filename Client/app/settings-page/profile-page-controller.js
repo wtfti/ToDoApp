@@ -1,16 +1,16 @@
 (function () {
     'use strict';
 
-    var profileTabDirectiveController = function profileTabDirectiveController(background, data, notifier, $location) {
+    var profileTabDirectiveController = function profileTabDirectiveController(background, data, notifier, $scope) {
         var vm = this;
         this.backgroundDropdown = 'Background color';
 
-        background.getBackground().then(function (background) {
-            if(background.lenght > 10) {
-                vm.currentBackground = background;
+        background.getBackground().then(function (back) {
+            if (back.indexOf('base64') > 0) {
+                vm.currentBackground = back;
             }
             else {
-                vm.colorPicker = background;
+                vm.colorPicker = back;
             }
         });
 
@@ -22,14 +22,34 @@
             vm.email = details.Email;
         });
 
+        $scope.file_changed = function (element) {
+            var photofile = element.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $scope.$apply(function () {
+                    $scope.prev_img = e.target.result;
+                    vm.imagePreview = $scope.prev_img;
+                });
+            };
+            reader.readAsDataURL(photofile);
+        };
+
         this.sendChanges = function () {
             var image;
 
             if (vm.backgroundDropdown == 'Background color') {
-                image = vm.colorPicker;
+                var isOk = /^#[0-9A-F]{6}$/i.test(vm.colorPicker);
+                if (isOk) {
+                    image = vm.colorPicker;
+                }
+                else {
+                    notifier.error('Color value is not valid!')
+                }
             }
             else {
-                // convert image to base64
+                if ($scope.prev_img) {
+                    image = $scope.prev_img;
+                }
             }
 
             var details = {
@@ -41,7 +61,11 @@
 
             data.put('Account/Edit', details).then(function (response) {
                 notifier.success(response.data);
-                $location.path('/settings');
+
+                if (image) {
+                    background.setBackground(image);
+                    background.loadBackground();
+                }
             }, function (error) {
                 notifier.error(error.data);
             })
@@ -50,5 +74,5 @@
 
     angular
         .module('ToDoApp.controllers')
-        .controller('ProfileTabDirectiveController', ['background', 'data', 'notifier', '$location', profileTabDirectiveController]);
+        .controller('ProfileTabDirectiveController', ['background', 'data', 'notifier', '$scope', profileTabDirectiveController]);
 }());

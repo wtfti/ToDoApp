@@ -1,12 +1,12 @@
 (function() {
     'use strict';
 
-    var backgroundService = function backgroundService(data, $q) {
+    var backgroundService = function backgroundService(data, $q, $rootScope) {
         var BACKGROUND_KEY = 'background';
-        var deferred = $q.defer();
 
         return {
             getBackground: function () {
+                var deferred = $q.defer();
                 var background = sessionStorage.getItem(BACKGROUND_KEY);
 
                 if (background) {
@@ -22,11 +22,32 @@
                 });
 
                 return deferred.promise;
+            },
+            setBackground: function (value) {
+                sessionStorage.setItem(BACKGROUND_KEY, value);
+            },
+            loadBackground: function () {
+                var deferred = $q.defer();
+
+                this.getBackground().then(function (backgroundBase64Image) {
+                    if (backgroundBase64Image.indexOf('base64') > 0) {
+                        $rootScope.backgroundImage = 'url(' + backgroundBase64Image + ')';
+                        deferred.resolve();
+                    }
+                    else {
+                        $rootScope.backgroundColor = backgroundBase64Image;
+                        deferred.resolve();
+                    }
+                }, function () {
+                    deferred.reject('Failed to load background');
+                });
+
+                return deferred.promise;
             }
         };
     };
 
     angular
         .module('ToDoApp.services')
-        .factory('background', ['data', '$q', backgroundService]);
+        .factory('background', ['data', '$q', '$rootScope', backgroundService]);
 }());

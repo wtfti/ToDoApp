@@ -6,7 +6,7 @@
             restrict: 'A',
             templateUrl: 'app/settings-page/privacy-view.html',
             controller: 'PrivacyTabDirectiveController',
-            controllerAs: 'privactTabDirectiveCtrl'
+            controllerAs: 'privacyTabDirectiveCtrl'
         };
     };
 

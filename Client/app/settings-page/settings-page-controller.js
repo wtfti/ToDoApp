@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var settingsPageController = function settingsPageController($rootScope, background, notifier, identity) {
+    var settingsPageController = function settingsPageController($rootScope, background, notifier, identity, auth) {
         var vm = this;
         this.currentPage = 1;
         this.activeTab = {
@@ -29,8 +29,10 @@
                     break;
             }
         };
+
+        this.logout = auth.logout;
     };
 
     angular.module('ToDoApp.controllers')
-        .controller('SettingsPageController', ['$rootScope', 'background', 'notifier', 'identity', settingsPageController]);
+        .controller('SettingsPageController', ['$rootScope', 'background', 'notifier', 'identity', 'auth', settingsPageController]);
 }());

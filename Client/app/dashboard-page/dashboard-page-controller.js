@@ -1,19 +1,16 @@
 (function () {
     'use strict';
 
-    var dashboardPageController = function dashboardPageController(
-        background,
-        $scope,
-        identity,
-        auth,
-        notesService,
-        $uibModal,
-        notifier,
-        signalR,
-        friendService) {
+    var dashboardPageController = function dashboardPageController(background,
+                                                                   $scope,
+                                                                   identity,
+                                                                   auth,
+                                                                   notesService,
+                                                                   $uibModal,
+                                                                   notifier) {
         var vm = this;
         var sort = 0;
-
+        this.currentPage = 1;
         this.sortByText = 'Title Asc';
         background.getBackground().then(function (backgroundBase64Image) {
             $scope.backgroundImage = 'url(' + backgroundBase64Image + ')';
@@ -128,31 +125,31 @@
             switch (id) {
                 case 0: // All notes
                     vm.activeTab.active = 0;
-                    notesService.getNotes().then(function (data) {
+                    notesService.getNotes(vm.currentPage).then(function (data) {
                         $scope.notesData = data;
                     });
                     break;
                 case 1: // Today
                     vm.activeTab.active = 1;
-                    notesService.getNotesFromToday().then(function (data) {
+                    notesService.getNotesFromToday(vm.currentPage).then(function (data) {
                         $scope.notesData = data;
                     });
                     break;
                 case 2: //Assigned to me
                     vm.activeTab.active = 2;
-                    notesService.getSharedNotes().then(function (data) {
+                    notesService.getSharedNotes(vm.currentPage).then(function (data) {
                         $scope.notesData = data;
                     });
                     break;
                 case 3: // Expired
                     vm.activeTab.active = 3;
-                    notesService.getNotesWithExpirationDate().then(function (data) {
+                    notesService.getNotesWithExpirationDate(vm.currentPage).then(function (data) {
                         $scope.notesData = data;
                     });
                     break;
                 case 4: // Finished
                     vm.activeTab.active = 4;
-                    notesService.getCompletedNotes().then(function (data) {
+                    notesService.getCompletedNotes(vm.currentPage).then(function (data) {
                         $scope.notesData = data;
                     });
                     break;
@@ -160,11 +157,19 @@
                     // TODO add error
                     break;
             }
+
+            notesService.getNotesCount(id).then(function (count) {
+                vm.totalItems = count;
+            })
         };
 
         identity.getUser().then(function (user) {
             vm.fullName = user.fullName;
         });
+
+        this.pageChanged = function () {
+            vm.changeTab(vm.activeTab.active);
+        };
 
         this.logout = auth.logout;
 
@@ -173,5 +178,5 @@
 
     angular.module('ToDoApp.controllers')
         .controller('DashboardPageController', ['background', '$scope', 'identity', 'auth', 'notesService', '$uibModal',
-            'notifier', 'signalR', 'friendService', dashboardPageController]);
+            'notifier', dashboardPageController]);
 }());

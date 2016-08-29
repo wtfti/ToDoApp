@@ -5,46 +5,41 @@
         var NOTE_PREFIX = 'Note';
 
         return {
-            getNotes: function () {
+            getNotes: function (page) {
                 var deferred = $q.defer();
-
-                data.get(NOTE_PREFIX + '/GetNotes').then(function (response) {
+                data.get(NOTE_PREFIX + '/GetNotes?page=' + page).then(function (response) {
                     deferred.resolve(response.data);
                 });
 
                 return deferred.promise;
             },
-            getNotesFromToday: function () {
+            getNotesFromToday: function (page) {
                 var deferred = $q.defer();
-
-                data.get(NOTE_PREFIX + '/GetNotesFromToday').then(function (response) {
+                data.get(NOTE_PREFIX + '/GetNotesFromToday?page=' + page).then(function (response) {
                     deferred.resolve(response.data);
                 });
 
                 return deferred.promise;
             },
-            getSharedNotes: function () {
+            getSharedNotes: function (page) {
                 var deferred = $q.defer();
-
-                data.get(NOTE_PREFIX + '/GetSharedNotes').then(function (response) {
+                data.get(NOTE_PREFIX + '/GetSharedNotes?page=' + page).then(function (response) {
                     deferred.resolve(response.data);
                 });
 
                 return deferred.promise;
             },
-            getNotesWithExpirationDate: function () {
+            getNotesWithExpirationDate: function (page) {
                 var deferred = $q.defer();
-
-                data.get(NOTE_PREFIX + '/GetNotesWithExpirationDate').then(function (response) {
+                data.get(NOTE_PREFIX + '/GetNotesWithExpirationDate?page=' + page).then(function (response) {
                     deferred.resolve(response.data);
                 });
 
                 return deferred.promise;
             },
-            getCompletedNotes: function () {
+            getCompletedNotes: function (page) {
                 var deferred = $q.defer();
-
-                data.get(NOTE_PREFIX + '/GetCompletedNotes').then(function (response) {
+                data.get(NOTE_PREFIX + '/GetCompletedNotes?page=' + page).then(function (response) {
                     deferred.resolve(response.data);
                 });
 
@@ -52,7 +47,6 @@
             },
             addNote: function (note) {
                 var deferred = $q.defer();
-
                 data.post(NOTE_PREFIX + '/AddNote', note).then(function (response) {
                     deferred.resolve(response.data);
                 }, function (response) {
@@ -63,7 +57,6 @@
             },
             editNote: function (note) {
                 var deferred = $q.defer();
-
                 data.put(NOTE_PREFIX + '/ChangeNote', note).then(function (response) {
                     deferred.resolve(response.data);
                 }, function (response) {
@@ -74,7 +67,6 @@
             },
             removeNote: function (id) {
                 var deferred = $q.defer();
-
                 data.delete(NOTE_PREFIX + '/RemoveNoteById/' + id).then(function (response) {
                     deferred.resolve(response.data);
                 }, function (response) {
@@ -85,12 +77,46 @@
             },
             setComplete: function (id) {
                 var deferred = $q.defer();
-
                 data.put(NOTE_PREFIX + '/SetComplete/' + id).then(function (response) {
                     deferred.resolve(response.data);
                 }, function (response) {
                     deferred.reject(response.data.Message)
                 });
+
+                return deferred.promise;
+            },
+            getNotesCount: function (page) {
+                var deferred = $q.defer();
+                switch (page) {
+                    case 0:
+                        data.get(NOTE_PREFIX + '/GetNotesCount').then(function (response) {
+                            deferred.resolve(response.data);
+                        });
+                        break;
+                    case 1:
+                        data.get(NOTE_PREFIX + '/GetNotesFromTodayCount').then(function (response) {
+                            deferred.resolve(response.data);
+                        });
+                        break;
+                    case 2:
+                        data.get(NOTE_PREFIX + '/GetSharedNotesCount').then(function (response) {
+                            deferred.resolve(response.data);
+                        });
+                        break;
+                    case 3:
+                        data.get(NOTE_PREFIX + '/GetNotesWithExparationDateCount').then(function (response) {
+                            deferred.resolve(response.data);
+                        });
+                        break;
+                    case 4:
+                        data.get(NOTE_PREFIX + '/GetCompletedNotesCount').then(function (response) {
+                            deferred.resolve(response.data);
+                        });
+                        break;
+                    default:
+                        deferred.reject();
+                        break;
+                }
 
                 return deferred.promise;
             }

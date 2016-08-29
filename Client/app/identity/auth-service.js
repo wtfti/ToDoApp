@@ -60,11 +60,10 @@
             var deferred = $q.defer();
             $http.defaults.headers.common.Authorization = 'Bearer ' + sessionStorage.getItem(TOKEN_KEY);
 
-            $http.get(globalConstants.baseUrl + 'Account/Identity')
-                .then(function (identityResponse) {
+            $http.get(globalConstants.baseUrl + 'Account/Identity').then(function (identityResponse) {
                     var user = {
-                        userName: identityResponse.Username,
-                        fullName: identityResponse.FullName
+                        userName: identityResponse.data.Username,
+                        fullName: identityResponse.data.FullName
                     };
 
                     identity.setUser(user);

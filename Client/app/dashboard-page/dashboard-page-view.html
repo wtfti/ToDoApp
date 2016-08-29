@@ -106,5 +106,10 @@
             <div class="col-lg-12" notes notesData>
             </div>
         </div>
+
+        <div class="row col-lg-offset-5" >
+            <ul uib-pagination total-items="dashboardCtrl.totalItems" max-size="10"
+                ng-model="dashboardCtrl.currentPage" ng-change="dashboardCtrl.pageChanged()"></ul>
+        </div>
     </div>
 </div>

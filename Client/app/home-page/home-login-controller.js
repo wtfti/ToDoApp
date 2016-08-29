@@ -2,15 +2,17 @@
     'use strict';
 
     var loginInstanceController = function loginInstanceController($scope, $uibModalInstance, $location, auth, notifier) {
-        $scope.login = function () {
-            var mail = $scope.mail;
-            var password = $scope.password;
-            var rememberMe = $scope.rememberCheckbox;
+        var vm = this;
+
+        this.login = function () {
+            var mail = vm.mail;
+            var password = vm.password;
+            var rememberMe = vm.rememberCheckbox;
 
             if (mail && password) {
                 var user = {
-                    username: $scope.mail,
-                    password: $scope.password
+                    username: vm.mail,
+                    password: vm.password
                 };
 
                 auth.login(user, rememberMe).then(function () {
@@ -27,7 +29,7 @@
             }
         };
 
-        $scope.cancel = function () {
+        this.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
     };

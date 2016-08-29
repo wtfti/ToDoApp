@@ -5,30 +5,29 @@
                 <h3 class="panel-title"><i class="glyphicon glyphicon-wrench"></i> Profile settings</h3>
             </div>
             <div class="panel-body">
-                <label for="fullNameInput" class="col-md-2 control-label">Full name</label>
+                <label class="col-md-2">Full name</label>
                 <div class="col-md-10">
-                    <input type="text" class="form-control" id="fullNameInput" placeholder="Full name">
+                    <input type="text" class="form-control" ng-model="profileTabDirectiveCtrl.fullName" placeholder="Full name">
                 </div>
-                <label for="ageInput" class="col-md-2 control-label">Age</label>
+                <label class="col-md-2">Age</label>
                 <div class="col-md-10">
-                    <input type="number" class="form-control" id="ageInput" placeholder="Age">
+                    <input type="number" class="form-control" ng-model="profileTabDirectiveCtrl.age" placeholder="Age">
                 </div>
-                <label class="col-md-2 control-label">Gender</label>
-                <div class="col-md-10 dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="genderDropdown"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span class="text">None</span>
+                <label class="col-md-2">Gender</label>
+                <div class="col-md-10" uib-dropdown>
+                    <button class="btn btn-default dropdown-toggle" type="button" uib-dropdown-toggle>
+                        <span>{{profileTabDirectiveCtrl.gender}}</span>
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" class="genderMenuItem">None</a></li>
-                        <li><a href="#" class="genderMenuItem">Male</a></li>
-                        <li><a href="#" class="genderMenuItem">Female</a></li>
+                    <ul uib-dropdown-menu>
+                        <li><a href ng-click="profileTabDirectiveCtrl.gender = 'None'">None</a></li>
+                        <li><a href ng-click="profileTabDirectiveCtrl.gender = 'Male'">Male</a></li>
+                        <li><a href ng-click="profileTabDirectiveCtrl.gender = 'Female'">Female</a></li>
                     </ul>
                 </div>
-                <label for="emailInput" class="col-md-2 control-label">Email</label>
+                <label class="col-md-2">Email</label>
                 <div class="col-md-10">
-                    <input type="text" class="form-control" id="emailInput" placeholder="Email"
+                    <input type="email" class="form-control" ng-model="profileTabDirectiveCtrl.email" placeholder="Email"
                            disabled>
                 </div>
             </div>
@@ -64,7 +63,7 @@
                 </div>
             </div>
             <div class="panel-footer col-md-12">
-                <button type="button" class="btn btn-primary" id="saveBtnSettings">Save
+                <button type="button" class="btn btn-primary" ng-click="profileTabDirectiveCtrl.sendChanges()">Save
                     changes
                 </button>
             </div>

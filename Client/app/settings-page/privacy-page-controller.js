@@ -1,11 +1,11 @@
 (function () {
     'use strict';
 
-    var privacyTabDirectiveController = function privacyTabDirectiveController() {
+    var privacyTabDirectiveController = function privacyTabDirectiveController(data) {
 
     };
 
     angular
         .module('ToDoApp.controllers')
-        .controller('PrivacyTabDirectiveController', [privacyTabDirectiveController]);
+        .controller('PrivacyTabDirectiveController', ['data', privacyTabDirectiveController]);
 }());

@@ -39,6 +39,10 @@
                 //$location.path('/dashboard')
             });
         }
+        else {
+            notifier.error('You are not logged in!');
+            $location.path('/');
+        }
     };
 
     angular.module('ToDoApp.services', []);

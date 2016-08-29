@@ -6,7 +6,8 @@
             $uibModal.open({
                 animation: true,
                 templateUrl: 'app/home-page/home-login-view.html',
-                controller: 'LoginInstanceController'
+                controller: 'LoginInstanceController',
+                controllerAs: 'loginInstanceCtrl'
             });
         };
 
@@ -14,7 +15,8 @@
             $uibModal.open({
                 animation: true,
                 templateUrl: 'app/home-page/home-register-view.html',
-                controller: 'RegisterInstanceController'
+                controller: 'RegisterInstanceController',
+                controllerAs: 'registerInstanceCtrl'
             });
         }
     };

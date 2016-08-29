@@ -9,7 +9,12 @@
         };
 
         background.getBackground().then(function (backgroundBase64Image) {
-            $scope.backgroundImage = 'url(' + backgroundBase64Image + ')';
+            if (backgroundBase64Image.lenght > 10) {
+                $scope.backgroundImage = 'url(' + backgroundBase64Image + ')';
+            }
+            else {
+                $scope.backgroundColor = backgroundBase64Image;
+            }
         }, function (error) {
             notifier.error(error);
         });

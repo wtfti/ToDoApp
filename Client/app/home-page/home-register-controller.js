@@ -1,12 +1,14 @@
 (function () {
     'use strict';
 
-    var registerInstanceController = function registerInstanceController($scope, $uibModalInstance, auth, notifier) {
-        $scope.register = function () {
-            var mail = $scope.mail;
-            var fullName = $scope.fullName;
-            var password = $scope.password;
-            var confirmPassword = $scope.confirmPassword;
+    var registerInstanceController = function registerInstanceController($uibModalInstance, auth, notifier) {
+        var vm = this;
+
+        this.register = function () {
+            var mail = vm.mail;
+            var fullName = vm.fullName;
+            var password = vm.password;
+            var confirmPassword = vm.confirmPassword;
 
             if (password != confirmPassword) {
                 notifier.error('Password and confirm password are not the same')
@@ -28,11 +30,11 @@
             }
         };
 
-        $scope.cancel = function () {
+        this.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
     };
 
     angular.module('ToDoApp.controllers')
-        .controller('RegisterInstanceController', ['$scope', '$uibModalInstance', 'auth', 'notifier', registerInstanceController]);
+        .controller('RegisterInstanceController', ['$uibModalInstance', 'auth', 'notifier', registerInstanceController]);
 }());

@@ -15,7 +15,7 @@
                     vm.password = '';
                     vm.newPassword = '';
                     vm.confirmPassword = '';
-                    
+
                     notifier.success(response.data);
                 }, function (error) {
                     notifier.error(error.data);

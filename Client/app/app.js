@@ -22,8 +22,14 @@
                 controller: 'SettingsPageController',
                 controllerAs: 'settingsCtrl',
                 title: 'Settings',
-                css: ['content/settings.css', 'content/typeaheadjs.css', 'content/awesome-bootstrap-checkbox.css',
-                    'content/colorpicker.min.css']
+                css: ['content/settings.css', 'content/typeaheadjs.css', 'content/colorpicker.min.css']
+            })
+            .when('/about', {
+                templateUrl: 'app/about-page/about-page-view.html',
+                controller: 'AboutPageController',
+                controllerAs: 'aboutCtrl',
+                title: 'About',
+                css: ['content/about.css']
             })
             .otherwise({redirectTo: '/'});
     }
@@ -36,7 +42,7 @@
         if (auth.isAuthenticated()) {
             auth.getIdentity().then(function (identity) {
                 notifier.success('Welcome back, ' + identity.fullName + '!');
-                //$location.path('/dashboard')
+                $location.path('/dashboard')
             });
         }
         else {

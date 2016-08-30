@@ -61,35 +61,52 @@
             $http.defaults.headers.common.Authorization = 'Bearer ' + sessionStorage.getItem(TOKEN_KEY);
 
             $http.get(globalConstants.baseUrl + 'Account/Identity').then(function (identityResponse) {
-                    var user = {
-                        userName: identityResponse.data.Username,
-                        fullName: identityResponse.data.FullName
-                    };
+                var user = {
+                    userName: identityResponse.data.Username,
+                    fullName: identityResponse.data.FullName
+                };
 
-                    identity.setUser(user);
-                    deferred.resolve(user);
-                });
+                identity.setUser(user);
+                deferred.resolve(user);
+            });
 
             return deferred.promise;
+        };
+
+        var isAuthenticated = function () {
+            return !!$cookies.get(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+        };
+
+        var getToken = function () {
+            var token = $cookies.get(TOKEN_KEY);
+
+            if (token) {
+                return token;
+            }
+
+            token = sessionStorage.getItem(TOKEN_KEY);
+
+            return token;
+        };
+
+        var logout = function () {
+            $http.post(globalConstants.baseUrl + 'Account/Logout').then(function () {
+                $cookies.remove(TOKEN_KEY);
+                sessionStorage.removeItem(TOKEN_KEY);
+                sessionStorage.removeItem('background');
+                $http.defaults.headers.common.Authorization = null;
+                identity.removeUser();
+                $location.path('/');
+            })
         };
 
         return {
             register: register,
             login: login,
             getIdentity: getIdentity,
-            isAuthenticated: function () {
-                return !!$cookies.get(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
-            },
-            logout: function () {
-                $http.post(globalConstants.baseUrl + 'Account/Logout').then(function () {
-                    $cookies.remove(TOKEN_KEY);
-                    sessionStorage.removeItem(TOKEN_KEY);
-                    sessionStorage.removeItem('background');
-                    $http.defaults.headers.common.Authorization = null;
-                    identity.removeUser();
-                    $location.path('/');
-                })
-            }
+            isAuthenticated: isAuthenticated,
+            getToken: getToken,
+            logout: logout
         };
     };
 

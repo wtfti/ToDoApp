@@ -1,32 +1,41 @@
 (function() {
     'use strict';
 
-    var signalRService = function signalRService(jQuery, $rootScope, globalConstants, notifier, $q) {
+    var signalRService = function signalRService(jQuery, $rootScope, globalConstants, notifier, $q, auth) {
         var proxy = null;
         var deferred = $q.defer();
+        var isInit = false;
 
         var initialize = function () {
-            //Getting the connection object
-            var connection = jQuery.hubConnection(globalConstants.signalRUrl, {useDefaultPath: false});
+            if (!isInit) {
+                jQuery.signalR.ajaxDefaults = jQuery.extend(true, {}, $.signalR.ajaxDefaults, {
+                    headers: {
+                        "Authorization": "Bearer " + auth.getToken()
+                    }
+                });
+                //Getting the connection object
+                var connection = jQuery.hubConnection(globalConstants.signalRUrl, {useDefaultPath: false});
 
-            //Creating proxy
-            proxy = connection.createHubProxy('friend');
+                //Creating proxy
+                proxy = connection.createHubProxy('friend');
 
 
-            proxy.on('acceptedRequest', function (name) {
-                notifier.success('You and ' + name + ' are now friends :)');
-            });
+                proxy.on('acceptedRequest', function (name) {
+                    notifier.success('You and ' + name + ' are now friends :)');
+                });
 
-            proxy.on('newFriendRequest', function (fromFullName) {
-                deferred.resolve();
-            });
+                proxy.on('newFriendRequest', function (fromFullName) {
+                    deferred.resolve();
+                });
 
-            proxy.on('declinedRequest', function (name) {
-                notifier.warning(name + ' has declined your friend request. You are not able to send a new request again.');
-            });
+                proxy.on('declinedRequest', function (name) {
+                    notifier.warning(name + ' has declined your friend request. You are not able to send a new request again.');
+                });
 
-            //Starting connection
-            connection.start();
+                //Starting connection
+                connection.start();
+                isInit = true;
+            }
         };
 
         var sendRequest = function (name) {
@@ -57,5 +66,5 @@
 
     angular
         .module('ToDoApp.services')
-        .factory('signalR', ['jQuery', '$rootScope', 'globalConstants', 'notifier', '$q', signalRService]);
+        .factory('signalR', ['jQuery', '$rootScope', 'globalConstants', 'notifier', '$q', 'auth', signalRService]);
 }());

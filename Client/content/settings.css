@@ -1,7 +1,6 @@
 body {
     position: relative;
-    min-width: 100%;
-    min-height: 100%;
+    width: 99%;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -12,6 +11,10 @@ body {
     body {
         margin-top: 50px;
     }
+}
+
+.panel {
+    margin-top: 1em;
 }
 
 #currentBackgroundImage,

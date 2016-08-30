@@ -25,12 +25,15 @@
         $scope.file_changed = function (element) {
             var photofile = element.files[0];
             var reader = new FileReader();
+
             reader.onload = function (e) {
                 $scope.$apply(function () {
                     $scope.prev_img = e.target.result;
                     vm.imagePreview = $scope.prev_img;
                 });
             };
+
+            if (photofile)
             reader.readAsDataURL(photofile);
         };
 
@@ -39,11 +42,13 @@
 
             if (vm.backgroundDropdown == 'Background color') {
                 var isOk = /^#[0-9A-F]{6}$/i.test(vm.colorPicker);
-                if (isOk) {
-                    image = vm.colorPicker;
-                }
-                else {
-                    notifier.error('Color value is not valid!')
+                if (vm.colorPicker) {
+                    if (isOk) {
+                        image = vm.colorPicker;
+                    }
+                    else {
+                        notifier.error('Color value is not valid!')
+                    }
                 }
             }
             else {

@@ -34,9 +34,17 @@
             .otherwise({redirectTo: '/'});
     }
 
-    var run = function ($rootScope, auth, notifier, $location) {
+    var run = function ($rootScope, $location, auth, notifier) {
         $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
             $rootScope.title = current.$$route.title;
+        });
+
+        $rootScope.$on('$routeChangeStart', function(next, current) {
+            var authenticated = auth.isAuthenticated();
+
+            if (authenticated && current.$$route.originalPath == '/') {
+                $location.path('/dashboard');
+            }
         });
 
         if (auth.isAuthenticated()) {
@@ -58,7 +66,7 @@
 
     angular.module('ToDoApp', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap',
         'angularMoment', 'ToDoApp.controllers', 'angularCSS', 'colorpicker.module', 'ToDoApp.directives'])
-        .run(['$rootScope', 'auth', 'notifier', '$location', run])
+        .run(['$rootScope', '$location', 'auth', 'notifier', run])
         .config(['$routeProvider', config])
         .value('jQuery', jQuery)
         .value('toastr', toastr)

@@ -43,6 +43,32 @@
                 });
 
                 return deferred.promise;
+            },
+            loadBackgroundFromCache: function () {
+                var deferred = $q.defer();
+                var background;
+
+                this.getBackground().then(function (backgroundSrc) {
+                    background = backgroundSrc;
+
+                    if (background) {
+                        if (background.indexOf('base64') > 0) {
+                            $rootScope.backgroundImage = 'url(' + background + ')';
+                            deferred.resolve();
+                        }
+                        else {
+                            $rootScope.backgroundColor = background;
+                            deferred.resolve();
+                        }
+                    }
+                    else {
+                        deferred.reject()
+                    }
+                }, function () {
+                    deferred.reject();
+                });
+
+                return deferred.promise;
             }
         };
     };

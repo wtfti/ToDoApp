@@ -1,7 +1,9 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
 body {
     position: relative;
-    min-width: 100%;
-    min-height: 100%;
+    width: 99%;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -134,7 +136,6 @@ ul.alert-dropdown {
     padding: 7px;
     border: 2px solid #000000;
     background-color: rgba(0, 0, 0, .3);
-
 }
 
 #container-navigation-note-menu>span {

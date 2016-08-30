@@ -7,13 +7,14 @@
                                                                    auth,
                                                                    notesService,
                                                                    $uibModal,
-                                                                   notifier) {
+                                                                   notifier,
+                                                                   $location) {
         var vm = this;
         var sort = 0;
         this.currentPage = 1;
         this.sortByText = 'Title Asc';
 
-        background.loadBackground().then(null, function (error) {
+        background.loadBackgroundFromCache().then(null, function (error) {
             notifier.error(error);
         });
 
@@ -31,7 +32,7 @@
         };
 
         this.openEditNoteModal = function (note) {
-            $uibModal.open({
+            var instance = $uibModal.open({
                 animation: true,
                 templateUrl: 'app/dashboard-page/dashboard-edit-note-view.html',
                 controller: 'EditNoteModalInstanceController',
@@ -42,6 +43,10 @@
                     }
                 }
             });
+
+            instance.result.then(function () {
+                vm.changeTab(vm.activeTab.active);
+            })
         };
 
         this.activeTab = {
@@ -170,12 +175,20 @@
             vm.changeTab(vm.activeTab.active);
         };
 
-        this.logout = auth.logout;
+        this.redirectToHome = function () {
+            if (!auth.isAuthenticated()) {
+                $location.path('/');
+            }
+        };
+
+        this.logout = function () {
+            auth.logout();
+        };
 
         this.changeTab(0);
     };
 
     angular.module('ToDoApp.controllers')
         .controller('DashboardPageController', ['background', '$scope', 'identity', 'auth', 'notesService', '$uibModal',
-            'notifier', dashboardPageController]);
+            'notifier', '$location', dashboardPageController]);
 }());

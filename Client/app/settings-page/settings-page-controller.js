@@ -1,14 +1,23 @@
 (function () {
     'use strict';
 
-    var settingsPageController = function settingsPageController($rootScope, background, notifier, identity, auth) {
+    var settingsPageController = function settingsPageController($rootScope, background, notifier, identity, auth, $location) {
         var vm = this;
         this.currentPage = 1;
         this.activeTab = {
             active: 0
         };
 
-        background.loadBackground().then(null, function (error) {
+        this.redirectToHome = function () {
+            if (auth.isAuthenticated()) {
+                $location.path('/dashboard');
+            }
+            else {
+                $location.path('/');
+            }
+        };
+
+        background.loadBackgroundFromCache().then(null, function (error) {
             notifier.error(error);
         });
 
@@ -30,9 +39,12 @@
             }
         };
 
-        this.logout = auth.logout;
+        this.logout = function () {
+            auth.logout();
+        };
     };
 
     angular.module('ToDoApp.controllers')
-        .controller('SettingsPageController', ['$rootScope', 'background', 'notifier', 'identity', 'auth', settingsPageController]);
+        .controller('SettingsPageController', ['$rootScope', 'background', 'notifier', 'identity', 'auth',
+            '$location', settingsPageController]);
 }());

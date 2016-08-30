@@ -2,9 +2,11 @@
 {
     using System.Net.Http;
     using System.Web.Http;
+    using System.Web.Http.Cors;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.Owin;
 
+    [EnableCors(origins: "http://localhost:8090", headers: "*", methods: "*")]
     public abstract class BaseController : ApiController
     {
         private ApplicationUserManager userManager;

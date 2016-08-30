@@ -2,12 +2,13 @@
 {
     using System.Collections.Concurrent;
     using System.Threading.Tasks;
+    using System.Web.Http.Cors;
     using Data.Models.Account;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.SignalR;
     using Services.Data.Contracts;
 
-    [Authorize]
+    [EnableCors(origins: "http://localhost:8090", headers: "*", methods: "*")]
     public class Friend : Hub
     {
         private static readonly ConcurrentDictionary<string, string> FullNameToConnectionId =

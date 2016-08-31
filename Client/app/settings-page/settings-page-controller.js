@@ -1,7 +1,8 @@
 (function () {
     'use strict';
 
-    var settingsPageController = function settingsPageController($rootScope, background, notifier, identity, auth, $location) {
+    var settingsPageController = function settingsPageController($rootScope, background, notifier, identity,
+                                                                 auth, $location, signalR) {
         var vm = this;
         this.currentPage = 1;
         this.activeTab = {
@@ -41,10 +42,11 @@
 
         this.logout = function () {
             auth.logout();
+            signalR.stop();
         };
     };
 
     angular.module('ToDoApp.controllers')
         .controller('SettingsPageController', ['$rootScope', 'background', 'notifier', 'identity', 'auth',
-            '$location', settingsPageController]);
+            '$location', 'signalR', settingsPageController]);
 }());

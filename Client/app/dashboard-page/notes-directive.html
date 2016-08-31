@@ -1,5 +1,6 @@
 <div class="checkbox checkbox-info checkbox-circle" ng-repeat="note in notesData" ng-click="dashboardCtrl.setComplete(note.Id);
-$event.stopPropagation()">
+$event.stopPropagation()" tooltip-placement="top" uib-tooltip="Title: {{note.Title}}  ; {{note.ExpiredOn ? 'Expired on: ' +
+dashboardCtrl.getFormattedDateTime(note.ExpiredOn) : ''}}">
     <input id="checkbox"
            class="styled"
            ng-attr-id="{{note.Id}}"

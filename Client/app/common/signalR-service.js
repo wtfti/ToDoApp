@@ -5,6 +5,7 @@
         var proxy = null;
         var deferred = $q.defer();
         var isInit = false;
+        var connection;
 
         var initialize = function () {
             if (!isInit) {
@@ -13,18 +14,16 @@
                         "Authorization": "Bearer " + auth.getToken()
                     }
                 });
-                //Getting the connection object
-                var connection = jQuery.hubConnection(globalConstants.signalRUrl, {useDefaultPath: false});
 
-                //Creating proxy
-                proxy = connection.createHubProxy('friend');
+                connection = jQuery.hubConnection(globalConstants.signalRUrl, {useDefaultPath: false});
 
+                proxy = connection.createHubProxy('Friend');
 
                 proxy.on('acceptedRequest', function (name) {
                     notifier.success('You and ' + name + ' are now friends :)');
                 });
 
-                proxy.on('newFriendRequest', function (fromFullName) {
+                proxy.on('newFriendRequest', function () {
                     deferred.resolve();
                 });
 
@@ -32,10 +31,13 @@
                     notifier.warning(name + ' has declined your friend request. You are not able to send a new request again.');
                 });
 
-                //Starting connection
                 connection.start();
                 isInit = true;
             }
+        };
+
+        var stopSignalR = function () {
+            connection.stop();
         };
 
         var sendRequest = function (name) {
@@ -60,7 +62,11 @@
             sendRequest: sendRequest,
             declineRequest: declineRequest,
             acceptRequest: acceptRequest,
-            newRequest: newRequest
+            newRequest: newRequest,
+            stop: stopSignalR,
+            proxyy: function () {
+                return proxy;
+            }
         };
     };
 

@@ -35,7 +35,7 @@
                 return deferred.promise;
             },
             newFriendRequest: function () {
-                return signalR.newRequest();
+                signalR.newRequest();
             }
         };
     };

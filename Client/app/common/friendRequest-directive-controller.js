@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var friendRequestDirectiveController = function friendRequestDirectiveController(friendService, notifier, $timeout) {
+    var friendRequestDirectiveController = function friendRequestDirectiveController(friendService, notifier, $timeout, signalR) {
         var vm = this;
         var getFriendRequests = function () {
             friendService.getFriendRequests().then(function (friends) {
@@ -23,13 +23,14 @@
         };
 
         getFriendRequests();
-        friendService.newFriendRequest().then(function () {
+        var proxy = signalR.proxyy()
+        proxy.on('newFriendRequest', function () {
             getFriendRequests();
-        })
+        });
     };
 
     angular
         .module('ToDoApp.controllers')
-        .controller('FriendRequestDirectiveController', ['friendService', 'notifier', '$timeout',
+        .controller('FriendRequestDirectiveController', ['friendService', 'notifier', '$timeout', 'signalR',
             friendRequestDirectiveController]);
 }());

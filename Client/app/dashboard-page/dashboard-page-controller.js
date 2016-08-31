@@ -1,14 +1,8 @@
 (function () {
     'use strict';
 
-    var dashboardPageController = function dashboardPageController(background,
-                                                                   $scope,
-                                                                   identity,
-                                                                   auth,
-                                                                   notesService,
-                                                                   $uibModal,
-                                                                   notifier,
-                                                                   $location) {
+    var dashboardPageController = function dashboardPageController(background, $scope, identity, auth, notesService,
+                                                                   $uibModal, notifier, $location, signalR) {
         var vm = this;
         var sort = 0;
         this.currentPage = 1;
@@ -181,8 +175,13 @@
             }
         };
 
+        this.getFormattedDateTime = function (date) {
+            return moment(date).format('DD/MM/YYYY HH:mm');
+        };
+
         this.logout = function () {
             auth.logout();
+            signalR.stop();
         };
 
         this.changeTab(0);
@@ -190,5 +189,5 @@
 
     angular.module('ToDoApp.controllers')
         .controller('DashboardPageController', ['background', '$scope', 'identity', 'auth', 'notesService', '$uibModal',
-            'notifier', '$location', dashboardPageController]);
+            'notifier', '$location', 'signalR', dashboardPageController]);
 }());

@@ -66,6 +66,48 @@
             return friendsEnumerable.AsQueryable();
         }
 
+        public IQueryable<User> GetPendingFriendRequestsByUserId(string userId)
+        {
+            var friends = this.friendsData
+                .All()
+                .Where(a => (a.UserId == userId || a.ContactUserId == userId) &&
+                            a.Status == Status.Pending)
+                .ToList();
+            var allUsers = this.usersData
+                .All()
+                .Where(u => u.Id != userId)
+                .ToList();
+
+            var friendsEnumerable =
+               from friend in friends
+               from user in allUsers
+               where friend.UserId == user.Id || friend.ContactUserId == user.Id
+               select user;
+
+            return friendsEnumerable.AsQueryable();
+        }
+
+        public IQueryable<User> GetDeclinedFriendRequestsByUserId(string userId)
+        {
+            var friends = this.friendsData
+                .All()
+                .Where(a => (a.UserId == userId || a.ContactUserId == userId) &&
+                            a.Status == Status.Declined)
+                .ToList();
+            var allUsers = this.usersData
+                .All()
+                .Where(u => u.Id != userId)
+                .ToList();
+
+            var friendsEnumerable =
+               from friend in friends
+               from user in allUsers
+               where friend.UserId == user.Id || friend.ContactUserId == user.Id
+               select user;
+
+            return friendsEnumerable.AsQueryable();
+        }
+
         public IEnumerable<string> PendingFriendRequests(string userId)
         {
             var pendingRequests = this.friendsData

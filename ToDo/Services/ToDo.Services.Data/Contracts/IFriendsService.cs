@@ -15,6 +15,10 @@
 
         IQueryable<User> GetFriendshipsByUserId(string userId);
 
+        IQueryable<User> GetPendingFriendRequestsByUserId(string userId);
+
+        IQueryable<User> GetDeclinedFriendRequestsByUserId(string userId);
+
         IEnumerable<string> PendingFriendRequests(string userId);
 
         void AddFriendRequest(string firstUser, string secondUser);

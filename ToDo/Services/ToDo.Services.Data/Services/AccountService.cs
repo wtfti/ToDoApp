@@ -92,12 +92,18 @@
 
         public IEnumerable<string> GetRegistratedUsers(string currentUserId)
         {
-            var exceptedUsers = this.friendsService.GetFriendshipsByUserId(currentUserId).ToList();
+            var existFriendshipUsers = this.friendsService.GetFriendshipsByUserId(currentUserId).ToList();
+            var existPendingRequestsUsers = this.friendsService.GetPendingFriendRequestsByUserId(currentUserId).ToList();
+            var existDeclinedRequestsUsers = this.friendsService.GetDeclinedFriendRequestsByUserId(currentUserId).ToList();
 
             var users = this.usersData
                 .All()
                 .ToList()
-                .Where(a => a.Id != currentUserId && exceptedUsers.All(e => e.Id != a.Id))
+                .Where(a => 
+                    a.Id != currentUserId && 
+                    existFriendshipUsers.All(e => e.Id != a.Id) &&
+                    existPendingRequestsUsers.All(x => x.Id != a.Id) &&
+                    existDeclinedRequestsUsers.All(d => d.Id != a.Id))
                 .Select(c => c.ProfileDetails.FullName);
 
             return users;

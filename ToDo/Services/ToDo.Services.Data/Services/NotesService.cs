@@ -143,14 +143,17 @@
 
         public int GetCompletedNotesCount(string id)
         {
-            int count = this.sharedNotesData
+            int countShared = this.sharedNotesData
                 .All()
                 .Where(a => a.IsComplete)
                 .ToList()
                 .Where(u => u.Users.Any(user => user.Id == id))
                 .Count();
 
-            return count;
+            int countPrivate = this.privateNotesData.All().Count(a => a.IsComplete && a.UserId == id);
+            int sum = countPrivate + countShared;
+
+            return sum;
         }
 
         public PrivateNote GetPrivateNoteById(string id)

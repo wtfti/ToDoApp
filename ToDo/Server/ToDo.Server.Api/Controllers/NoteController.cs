@@ -229,11 +229,11 @@
                 .ProjectTo<NoteResponseModel>()
                 .ToList();
 
-            List<NoteResponseModel> result = new List<NoteResponseModel>(privateNotes.Count + sharedNotes.Count);
-            result.AddRange(privateNotes);
-            result.AddRange(sharedNotes);
+            List<NoteResponseModel> concatNoteLists = new List<NoteResponseModel>(privateNotes.Count + sharedNotes.Count);
+            concatNoteLists.AddRange(privateNotes);
+            concatNoteLists.AddRange(sharedNotes);
 
-            return this.Ok(result);
+            return this.Ok(concatNoteLists);
         }
 
         [HttpGet]

@@ -2,6 +2,17 @@
     'use strict';
 
     var aboutPageController = function aboutPageController($scope, $uibModal, auth, $location) {
+        var vm = this;
+
+        this.isLogged = function () {
+            if (auth.isAuthenticated()) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
+
         $scope.openLoginModal = function () {
             $uibModal.open({
                 animation: true,

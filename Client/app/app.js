@@ -15,14 +15,14 @@
                 controller: 'DashboardPageController',
                 controllerAs: 'dashboardCtrl',
                 title: 'Dashboard',
-                css: ['content/dashboard.css', 'content/typeaheadjs.css', 'content/awesome-bootstrap-checkbox.css']
+                css: ['content/dashboard.css', 'content/awesome-bootstrap-checkbox.css']
             })
             .when('/settings', {
                 templateUrl: 'app/settings-page/settings-page-view.html',
                 controller: 'SettingsPageController',
                 controllerAs: 'settingsCtrl',
                 title: 'Settings',
-                css: ['content/settings.css', 'content/typeaheadjs.css', 'content/colorpicker.min.css']
+                css: ['content/settings.css', 'content/colorpicker.min.css']
             })
             .when('/about', {
                 templateUrl: 'app/about-page/about-page-view.html',
@@ -50,7 +50,6 @@
         if (auth.isAuthenticated()) {
             auth.getIdentity().then(function (identity) {
                 notifier.success('Welcome back, ' + identity.fullName + '!');
-                $location.path('/dashboard')
             });
         }
         else {

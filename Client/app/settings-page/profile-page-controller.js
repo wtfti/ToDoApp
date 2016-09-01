@@ -39,6 +39,7 @@
 
         this.sendChanges = function () {
             var image;
+            var hasError = false;
 
             if (vm.backgroundDropdown == 'Background color') {
                 var isOk = /^#[0-9A-F]{6}$/i.test(vm.colorPicker);
@@ -47,7 +48,8 @@
                         image = vm.colorPicker;
                     }
                     else {
-                        notifier.error('Color value is not valid!')
+                        notifier.error('Color value is not valid!');
+                        hasError = true;
                     }
                 }
             }
@@ -64,16 +66,18 @@
                 Image: image
             };
 
-            data.put('Account/Edit', details).then(function (response) {
-                notifier.success(response.data);
+            if (!hasError) {
+                data.put('Account/Edit', details).then(function (response) {
+                    notifier.success(response.data);
 
-                if (image) {
-                    background.setBackground(image);
-                    background.loadBackground();
-                }
-            }, function (error) {
-                notifier.error(error.data);
-            })
+                    if (image) {
+                        background.setBackground(image);
+                        background.loadBackground();
+                    }
+                }, function (error) {
+                    notifier.error(error.data);
+                })
+            }
         }
     };
 

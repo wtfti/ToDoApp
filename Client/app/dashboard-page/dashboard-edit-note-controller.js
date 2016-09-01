@@ -19,11 +19,12 @@
         this.sharedWith = noteDetails.sharedWith;
 
         this.sendChanges = function () {
+            var newExpireDate = dateTimePickerService.getDateTime();
             var note = {
                 Id: noteDetails.id,
                 Title: vm.title,
                 Content: vm.content,
-                ExpiredOn: vm.expired === undefined ? '' : vm.expired,
+                ExpiredOn: newExpireDate === undefined ? '' : newExpireDate,
                 SharedWith: noteDetails.sharedWith
             };
 

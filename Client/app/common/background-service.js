@@ -32,9 +32,11 @@
                 this.getBackground().then(function (backgroundBase64Image) {
                     if (backgroundBase64Image.indexOf('base64') > 0) {
                         $rootScope.backgroundImage = 'url(' + backgroundBase64Image + ')';
+                        $rootScope.backgroundColor = '';
                         deferred.resolve();
                     }
                     else {
+                        $rootScope.backgroundImage = '';
                         $rootScope.backgroundColor = backgroundBase64Image;
                         deferred.resolve();
                     }

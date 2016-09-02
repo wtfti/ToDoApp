@@ -4,6 +4,7 @@
     var signalRService = function signalRService(jQuery, $rootScope, globalConstants, notifier, $q, auth) {
         var proxy = null;
         var deferred = $q.defer();
+        var deferredProxy = $q.defer();
         var isInit = false;
         var connection;
 
@@ -18,6 +19,8 @@
                 connection = jQuery.hubConnection(globalConstants.signalRUrl, {useDefaultPath: false});
 
                 proxy = connection.createHubProxy('Friend');
+
+                deferredProxy.resolve(proxy);
 
                 proxy.on('acceptedRequest', function (name) {
                     notifier.success('You and ' + name + ' are now friends :)');
@@ -64,8 +67,8 @@
             acceptRequest: acceptRequest,
             newRequest: newRequest,
             stop: stopSignalR,
-            proxyy: function () {
-                return proxy;
+            getProxy: function () {
+                return deferredProxy.promise;
             }
         };
     };

@@ -23,10 +23,16 @@
         };
 
         getFriendRequests();
-        var proxy = signalR.proxyy()
-        proxy.on('newFriendRequest', function () {
-            getFriendRequests();
+
+
+        signalR.getProxy().then(function (proxy) {
+            proxy.on('newFriendRequest', function () {
+                getFriendRequests();
+            });
+        }, function () {
+            notifier.error('Cannot find proxy :(')
         });
+
     };
 
     angular

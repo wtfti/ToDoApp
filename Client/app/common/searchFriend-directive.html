@@ -1,6 +1,6 @@
 <input type="text" ng-model="searchFriendDirectiveCtrl.selectedFriend" placeholder="Search friends" uib-typeahead="user for user in getUsers($viewValue)" typeahead-loading="searchFriendDirectiveCtrl.getUsers" typeahead-no-results="noResults" class="form-control"
        typeahead-on-select="searchFriendDirectiveCtrl.onSelect($item)">
 <i ng-show="searchFriendDirectiveCtrl.getUsers" class="glyphicon glyphicon-refresh"></i>
-<div ng-show="noResults" id="noResultDiv">
+<div ng-show="noResults" id="noResultDiv" ng-style="{'color': 'white', 'display': 'inline-block'}">
     <i class="glyphicon glyphicon-remove"></i> No Results Found
 </div>

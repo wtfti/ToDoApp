@@ -84,8 +84,6 @@
             Assert.AreEqual(1, this.profileDetailsRepository.SaveChanges());
         }
 
-        // Test will create new file test.txt in C:\
-        // In last unit test for GetBackground method will be delete it.
         [TestMethod]
         public void EditShouldPassOption2()
         {
@@ -116,11 +114,14 @@
             Assert.AreEqual("background", result);
         }
 
-        // Test will throw exception if E:\test.txt is not exist
-        // Run test EditShouldPassOption2 to create it or create it manual
         [TestMethod]
         public void GetBackgroundShouldPass()
         {
+            using (StreamWriter sw = new StreamWriter("E:\\test.txt"))
+            {
+                sw.Write("test");
+            }
+
             var details = new ProfileDetails()
             {
                 Id = "test",
@@ -137,7 +138,7 @@
 
             string result = this.service.GetBackground("test");
 
-            Assert.AreEqual("background", result);
+            Assert.AreEqual("test", result);
 
             File.Delete("E:\\test.txt");
         }

@@ -85,22 +85,6 @@
         }
 
         [TestMethod]
-        public void EditShouldReturnInvalidModel()
-        {
-            var model = new UserProfileRequestModel()
-            {
-                Gender = GenderType.None
-            };
-
-            MyWebApi
-                .Controller<AccountController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.MockAccountService())
-                .Calling(a => a.Edit(model))
-                .ShouldHave()
-                .InvalidModelState();
-        }
-
-        [TestMethod]
         public void EditShouldReturnInvalidModelOption2()
         {
             var model = new UserProfileRequestModel()
@@ -121,7 +105,7 @@
         {
             var model = new UserProfileRequestModel()
             {
-                Age = 5
+                Age = -5
             };
 
             MyWebApi

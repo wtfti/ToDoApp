@@ -1,8 +1,11 @@
 ﻿namespace ToDo.Tests.Services.Data.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Moq;
+    using ToDo.Data.Common.Contracts;
     using ToDo.Data.Models;
     using ToDo.Data.Models.Account;
     using ToDo.Services.Data.Contracts;
@@ -23,11 +26,11 @@
         [TestInitialize]
         public void Initialize()
         {
-            this.privateNotesRepository = DepedencyObjectFactory.GetNoteRepository(notesCount);
+            this.privateNotesRepository = new InMemoryRepository<PrivateNote>();
             this.sharedNotesRepository = new InMemoryRepository<SharedNote>();
             this.profileDetailsRepository = new InMemoryRepository<ProfileDetails>();
             this.usersRepository = new InMemoryRepository<User>();
-            this.friendsService = new FriendsService(null , new InMemoryRepository<Friend>());
+            this.friendsService = new FriendsService(null, new InMemoryRepository<Friend>());
             this.accountService = new AccountService(this.profileDetailsRepository, this.usersRepository, this.friendsService);
             this.service = new NotesService(this.privateNotesRepository, this.sharedNotesRepository, this.accountService, this.friendsService);
         }
@@ -37,30 +40,31 @@
         {
             var result = this.service.All();
 
-            Assert.AreEqual(notesCount * 2, result.Count());
-            Assert.IsNotNull(result.ToList()[1]);
+            Assert.AreEqual(0, result.Count());
         }
 
         [TestMethod]
-        public void RemoveByIdShouldReturnCorrectResult()
+        public void RemovePrivateNoteByIdShouldReturnCorrectResult()
         {
-            var note = new PrivateNote()
+            for (int i = 0; i < 10; i++)
             {
-                Id = "1",
-                Title = "Title " + 1,
-                Content = "Content " + 1,
-                CreatedOn = DateTime.Now.AddDays(1),
-                ExpiredOn = DateTime.Now.AddDays(1 + 1),
-                UserId = 1.ToString()
-            };
+                this.privateNotesRepository.Add(new PrivateNote()
+                {
+                    Id = i.ToString(),
+                    Title = "title " + i,
+                    Content = "content " + i
+                });
+            }
 
-            int count = this.service.All().Count();
+            var note = this.service.GetPrivateNoteById("5");
+
+            Assert.IsNotNull(note);
 
             this.service.RemovePrivateNoteById(note);
 
-            Assert.AreEqual(count - 1, this.service.All().ToList().Count);
-            Assert.AreEqual(2, this.service.All().ToList()[0].Id);
             Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
+            Assert.AreEqual("title 5", note.Title);
+            Assert.AreEqual("content 5", note.Content);
         }
 
         [TestMethod]
@@ -69,11 +73,29 @@
             string userId = "10";
             int page = 1;
 
-            var result = this.service.GetNotes(userId, page);
+            string user = "UserTest";
 
-            Assert.AreEqual(1, result.ToList().Count);
-            Assert.AreEqual("Title 10", result.First().Title);
+            var mockedAccountService = new Mock<IAccountService>();
+            mockedAccountService.Setup(a => a.GetUserByUsername(It.IsAny<string>()))
+                .Returns(new User()
+                {
+                    UserName = user,
+                    Id = userId
+                });
+
+            var noteService = new NotesService(this.privateNotesRepository, null, mockedAccountService.Object, null);
+
+            for (int i = 0; i < 20; i++)
+            {
+                noteService.AddPrivateNote(user, "Title " + i, string.Empty);
+            }
+
+            var result = noteService.GetNotes(userId, page);
+
+            Assert.AreEqual(10, result.ToList().Count);
+            Assert.AreEqual("Title 0", result.First().Title);
             Assert.AreEqual(userId, result.First().UserId);
+            Assert.AreEqual(userId, result.Last().UserId);
         }
 
         [TestMethod]
@@ -81,20 +103,26 @@
         {
             string user = "UserTest";
 
+            var mockedAccountService = new Mock<IAccountService>();
+            mockedAccountService.Setup(a => a.GetUserByUsername(It.IsAny<string>()))
+                .Returns(new User()
+                {
+                    UserName = user,
+                    Id = user
+                });
+
+            var noteService = new NotesService(this.privateNotesRepository, null, mockedAccountService.Object, null);
             for (int i = 0; i < 20; i++)
             {
-                this.service.AddPrivateNote(user, string.Empty, string.Empty);
+                noteService.AddPrivateNote(user, string.Empty, string.Empty);
             }
 
-            var firstPageResult = this.service.GetNotes(user, 1);
-            var secondPageResult = this.service.GetNotes(user, 2);
+            var notes = this.privateNotesRepository.All();
 
-            Assert.IsNotNull(firstPageResult);
-            Assert.IsNotNull(secondPageResult);
-            Assert.AreEqual(firstPageResult.Last().UserId, user);
-            Assert.AreEqual(secondPageResult.Last().UserId, user);
-            Assert.AreEqual(10, firstPageResult.Count());
-            Assert.AreEqual(10, secondPageResult.Count());
+            Assert.IsNotNull(notes);
+            Assert.AreEqual(notes.Last().UserId, user);
+            Assert.AreEqual(20, notes.Count());
+            Assert.AreEqual(20, this.privateNotesRepository.SaveChanges());
         }
 
         [TestMethod]
@@ -103,11 +131,33 @@
             string userId = "8";
             int page = 1;
 
-            var result = this.service.GetNotes(userId, page);
+            var mockedAccountService = new Mock<IAccountService>();
+            mockedAccountService.Setup(a => a.GetUserByUsername(It.IsAny<string>()))
+                .Returns(new User()
+                {
+                    Id = userId
+                });
 
-            Assert.AreEqual(1, result.ToList().Count);
-            Assert.AreEqual("Title 8", result.First().Title);
-            Assert.IsNotNull(result.First().ExpiredOn);
+            var noteService = new NotesService(this.privateNotesRepository, null, mockedAccountService.Object, null);
+            for (int i = 0; i < 20; i++)
+            {
+                this.privateNotesRepository.Add(new PrivateNote()
+                {
+                    IsExpired = i % 2 == 0,
+                    Title = "Title " + i,
+                    UserId = userId
+                });
+            }
+
+            var result = noteService.GetPrivateNotesWithExpirationDate(userId, page).ToList();
+
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(result[i].IsExpired);
+            }
+
+            Assert.AreEqual(10, result.Count);
+            Assert.AreEqual("Title 0", result.First().Title);
             Assert.AreEqual(userId, result.First().UserId);
         }
 
@@ -115,24 +165,43 @@
         public void GetNotesWithExpiredDatePageTestingShouldReturnCorrectResult()
         {
             string user = "UserTest";
-            DateTime date = new DateTime(2010, 10, 10);
 
+            var mockedAccountService = new Mock<IAccountService>();
+            mockedAccountService.Setup(a => a.GetUserByUsername(It.IsAny<string>()))
+                .Returns(new User()
+                {
+                    Id = user
+                });
+
+            var noteService = new NotesService(this.privateNotesRepository, null, mockedAccountService.Object, null);
             for (int i = 0; i < 20; i++)
             {
-                this.service.AddPrivateNote(user, string.Empty, string.Empty, date);
+                this.privateNotesRepository.Add(new PrivateNote()
+                {
+                    IsExpired = i != 19,
+                    Title = "Title " + i,
+                    UserId = user
+                });
             }
 
-            var firstPageResult = this.service.GetNotes(user, 1);
-            var secondPageResult = this.service.GetNotes(user, 2);
+            var firstPage = noteService.GetPrivateNotesWithExpirationDate(user, 1).ToList();
+            var secondPage = noteService.GetPrivateNotesWithExpirationDate(user, 2).ToList();
 
-            Assert.IsNotNull(firstPageResult);
-            Assert.IsNotNull(secondPageResult);
-            Assert.AreEqual(firstPageResult.Last().UserId, user);
-            Assert.AreEqual(secondPageResult.Last().UserId, user);
-            Assert.AreEqual(10, firstPageResult.Count());
-            Assert.AreEqual(10, secondPageResult.Count());
-            Assert.AreEqual(date, firstPageResult.Last().ExpiredOn);
-            Assert.AreEqual(date, secondPageResult.First().ExpiredOn);
+            Assert.IsNotNull(firstPage);
+            Assert.IsNotNull(firstPage);
+
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(firstPage[i].IsExpired);
+            }
+
+            for (int i = 0; i < 9; i++)
+            {
+                Assert.IsTrue(secondPage[i].IsExpired);
+            }
+
+            Assert.AreEqual(firstPage.Last().UserId, user);
+            Assert.AreEqual(secondPage.Last().UserId, user);
         }
 
         [TestMethod]
@@ -142,11 +211,16 @@
             string title = "username title";
             string content = "some test content";
             int count = this.service.All().Count();
+            this.usersRepository.Add(new User()
+            {
+                UserName = "username",
+                Id = "123456"
+            });
 
             this.service.AddPrivateNote(user, title, content);
 
             Assert.AreEqual(count + 1, this.service.All().Count());
-            Assert.AreEqual(user, this.privateNotesRepository.All().Last().UserId);
+            Assert.AreEqual("123456", this.privateNotesRepository.All().Last().UserId);
             Assert.AreEqual(content, this.privateNotesRepository.All().Last().Content);
             Assert.AreEqual(1, this.privateNotesRepository.NumberOfSaves);
         }
@@ -183,17 +257,6 @@
             var result = this.service.GetPrivateNotesWithExpirationDate("101", 1);
 
             Assert.AreEqual(0, result.Count());
-        }
-
-        [TestMethod]
-        public void GetNotesWithExpiredDateShouldPass()
-        {
-            var note = this.service.GetPrivateNoteById("10");
-            note.IsExpired = true;
-            var result = this.service.GetPrivateNotesWithExpirationDate("expired", 1);
-
-            Assert.AreEqual(10, result.Count());
-            Assert.IsTrue(result.Any(a => a.UserId == "expired"));
         }
 
         [TestMethod]
@@ -333,7 +396,7 @@
 
             this.service.ChangePrivateNote(dbNote, newTitle, newContent, newExpirationDate);
 
-            Assert.AreEqual(0, this.privateNotesRepository.SaveChanges());
+            Assert.AreEqual(1, this.privateNotesRepository.SaveChanges());
         }
 
         [TestMethod]
@@ -396,17 +459,18 @@
         [TestMethod]
         public void GetNoteByIdShouldPass()
         {
-            var result = this.service.GetPrivateNoteById("4");
-
             var dbNote = new PrivateNote()
             {
-                Id = "5",
+                Id = "0",
                 Title = "Title " + 5,
                 Content = "Content " + 5,
                 CreatedOn = DateTime.Now.AddDays(5),
                 ExpiredOn = DateTime.Now.AddDays(5 + 5),
                 UserId = 5.ToString()
             };
+
+            this.privateNotesRepository.Add(dbNote);
+            var result = this.service.GetPrivateNoteById("0");
 
             Assert.AreEqual(result.Id, dbNote.Id);
             Assert.AreEqual(result.Title, dbNote.Title);
@@ -417,10 +481,10 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void GetNoteByIdShouldReturnNull()
         {
-            this.service.GetPrivateNoteById(string.Empty);
+            this.service.GetPrivateNoteById("0");
             this.service.GetPrivateNoteById("356");
         }
     }

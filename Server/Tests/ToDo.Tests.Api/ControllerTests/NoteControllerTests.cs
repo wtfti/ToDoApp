@@ -38,10 +38,18 @@
         [TestMethod]
         public void AddNoteShouldReturnProperResponse()
         {
+            var note = new NoteRequestModel()
+            {
+                Title = "title",
+                Content = "Content",
+                ExpiredOn = DateTime.Now.AddDays(1),
+                SharedWith = new string[2]
+            };
+
             MyWebApi
                 .Controller<NoteController>()
                 .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
-                .Calling(a => a.AddNote(new NoteRequestModel()))
+                .Calling(a => a.AddNote(note))
                 .ShouldReturn()
                 .Ok()
                 .WithResponseModel(MessageConstants.CreateNote);
@@ -155,7 +163,7 @@
                 .Calling(a => a.GetNotesWithExpirationDate(1))
                 .ShouldReturn()
                 .Ok()
-                .WithResponseModelOfType<IQueryable<NoteResponseModel>>();
+                .WithResponseModelOfType<ICollection<NoteResponseModel>>();
         }
 
         [TestMethod]
@@ -295,17 +303,40 @@
         [TestMethod]
         public void GetCompleteNotesShouldPass()
         {
+            var privateNotes = new List<PrivateNote>()
+            {
+                new PrivateNote()
+                {
+                    Id = "private note"
+                }
+            };
+            var sharedNotes = new List<SharedNote>()
+            {
+                new SharedNote()
+                {
+                    Id = "shared note"
+                }
+            };
+
+            var notesService = new Mock<INotesService>();
+            notesService.Setup(a => a.GetCompletedPrivateNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(privateNotes.AsQueryable());
+            notesService.Setup(a => a.GetCompletedSharedNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(sharedNotes.AsQueryable());
+
             MyWebApi
                 .Controller<NoteController>()
-                .WithResolvedDependencyFor(DependencyObjectFactory.MockNotesService())
+                .WithResolvedDependencyFor(notesService.Object)
                 .WithAuthenticatedUser(a => a.WithIdentifier("User"))
                 .Calling(q => q.GetCompletedNotes(1))
                 .ShouldReturn()
                 .Ok()
-                .WithResponseModelOfType<IQueryable<NoteResponseModel>>()
+                .WithResponseModelOfType<ICollection<NoteResponseModel>>()
                 .Passing(a =>
                 {
-                    Assert.AreEqual(50, a.Count());
+                    Assert.AreEqual(2, a.Count());
+                    Assert.AreEqual("private note", a.Single(x => x.Id == "private note").Id);
+                    Assert.AreEqual("shared note", a.Single(x => x.Id == "shared note").Id);
                 });
         }
 
@@ -330,11 +361,14 @@
         [TestMethod]
         public void GetCompletedNotesShouldReturnEmptyCollection()
         {
-            var notes = new List<PrivateNote>();
+            var privateNotes = new List<PrivateNote>();
+            var sharedNotes = new List<SharedNote>();
 
             var notesService = new Mock<INotesService>();
             notesService.Setup(a => a.GetCompletedPrivateNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(notes.AsQueryable());
+                .Returns(privateNotes.AsQueryable());
+            notesService.Setup(a => a.GetCompletedSharedNotes(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(sharedNotes.AsQueryable());
 
             MyWebApi
                 .Controller<NoteController>()
@@ -343,7 +377,7 @@
                 .Calling(q => q.GetCompletedNotes(1))
                 .ShouldReturn()
                 .Ok()
-                .WithResponseModelOfType<IQueryable<NoteResponseModel>>()
+                .WithResponseModelOfType<ICollection<NoteResponseModel>>()
                 .Passing(a =>
                 {
                     Assert.AreEqual(0, a.Count());
@@ -444,7 +478,7 @@
                 .Passing(a =>
                 {
                     Assert.AreEqual(notes.Count, a.Count());
-                    Assert.AreEqual(1000, a.First().Id);
+                    Assert.AreEqual("1000", a.First().Id);
                 });
         }
 

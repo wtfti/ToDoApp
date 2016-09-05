@@ -27,7 +27,7 @@
 
         IQueryable<PrivateNote> GetNotesFromToday(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
-        IQueryable<PrivateNote> GetNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
+        IQueryable<PrivateNote> GetNotes(string userId, int page, int pageSize = ValidationConstants.DefaultPageSize);
 
         IQueryable<SharedNote> GetSharedNotes(string user, int page, int pageSize = ValidationConstants.DefaultPageSize);
 

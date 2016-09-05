@@ -32,7 +32,7 @@
         public void NoteRequestModelBinderShouldPass()
         {
             this.httpControllerContext.Request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/someUri");
-            this.httpControllerContext.Request.Content = new StringContent("{\"Title\":\"unit test\",\"Content\":\"test content\",\"ExpiredOn\":\"28/07/2016 03:30\"}");
+            this.httpControllerContext.Request.Content = new StringContent("{\"Title\":\"unit test\",\"Content\":\"test content\",\"ExpiredOn\":\"28/07/2016 03:30\",\"SharedWith\":[\"testUser\"]}");
             var bindingContext = new ModelBindingContext();
             var metaData = new ModelMetadata(this.provider, null, null, typeof(NoteRequestModel), null);
             bindingContext.ModelMetadata = metaData;
@@ -45,7 +45,7 @@
         [TestMethod]
         public void NoteRequestModelBinderShouldPassOption2()
         {
-            this.httpControllerContext.Request.Content = new StringContent("{\"Id\":30,\"Title\":\"unit test\",\"Content\":\"test content\",\"ExpiredOn\":\"28/07/2016 03:30\"}");
+            this.httpControllerContext.Request.Content = new StringContent("{\"Id\":\"30\",\"Title\":\"unit test\",\"Content\":\"test content\",\"ExpiredOn\":\"28/07/2016 03:30\",\"SharedWith\":[\"testUser\"]}");
             var bindingContext = new ModelBindingContext();
             var metaData = new ModelMetadata(this.provider, null, null, typeof(NoteRequestModel), null);
             bindingContext.ModelMetadata = metaData;
@@ -58,7 +58,7 @@
         [TestMethod]
         public void NoteRequestModelBinderShouldPassOption3()
         {
-            this.httpControllerContext.Request.Content = new StringContent("{\"Id\":30,\"Title\":\"unit test\",\"Content\":\"test content\",\"ExpiredOn\":\"\"}");
+            this.httpControllerContext.Request.Content = new StringContent("{\"Id\":\"636085272491684492\",\"Title\":\"test\",\"Content\":\"test c\",\"ExpiredOn\":\"\",\"SharedWith\":[\"testUser\"]}");
             var bindingContext = new ModelBindingContext();
             var metaData = new ModelMetadata(this.provider, null, null, typeof(NoteRequestModel), null);
             bindingContext.ModelMetadata = metaData;
@@ -72,7 +72,7 @@
         public void NoteRequestModelBinderShouldPassOption4()
         {
             this.httpControllerContext.Request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/someUri");
-            this.httpControllerContext.Request.Content = new StringContent("{\"Title\":\"unit test\",\"Content\":\"test content\",\"ExpiredOn\":\"\"}");
+            this.httpControllerContext.Request.Content = new StringContent("{\"Title\":\"unit test\",\"Content\":\"test content\",\"ExpiredOn\":\"\",\"SharedWith\":[\"testUser\"]}");
             var bindingContext = new ModelBindingContext();
             var metaData = new ModelMetadata(this.provider, null, null, typeof(NoteRequestModel), null);
             bindingContext.ModelMetadata = metaData;

@@ -167,13 +167,13 @@
         }
 
         public IQueryable<PrivateNote> GetNotes(
-            string user, 
+            string userId, 
             int page, 
             int pageSize = ValidationConstants.DefaultPageSize)
         {
             var privateNotes = this.privateNotesData
                 .All()
-                .Where(a => a.UserId == user && !a.IsComplete && !a.IsExpired)
+                .Where(a => a.UserId == userId && !a.IsComplete && !a.IsExpired)
                 .OrderBy(q => q.CreatedOn)
                 .Skip((page * pageSize) - pageSize)
                 .Take(pageSize);

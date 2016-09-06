@@ -1,11 +1,9 @@
 ﻿namespace ToDo.Tests.Services.Data.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
-    using ToDo.Data.Common.Contracts;
     using ToDo.Data.Models;
     using ToDo.Data.Models.Account;
     using ToDo.Services.Data.Contracts;

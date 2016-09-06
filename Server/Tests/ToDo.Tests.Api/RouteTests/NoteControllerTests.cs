@@ -78,7 +78,7 @@
         }
 
         [TestMethod]
-        public void GetNotesFromToday()
+        public void GetNotesFromTodayRoute()
         {
             MyWebApi
                 .Routes()
@@ -88,7 +88,7 @@
         }
 
         [TestMethod]
-        public void ChangeNote()
+        public void ChangeNoteRoute()
         {
             MyWebApi
                 .Routes()
@@ -96,6 +96,56 @@
                 .WithHttpMethod(HttpMethod.Put)
                 .WithJsonContent(@"{""Title"": ""expire"", ""Content"": ""create content""}")
                 .To<NoteController>(a => a.ChangeNote(null));
+        }
+
+        [TestMethod]
+        public void GetSharedNotesCountRoute()
+        {
+            MyWebApi
+                .Routes()
+                .ShouldMap("api/Note/GetSharedNotesCount")
+                .WithHttpMethod(HttpMethod.Get)
+                .To<NoteController>(a => a.GetSharedNotesCount());
+        }
+
+        [TestMethod]
+        public void GetNotesFromTodayCountRoute()
+        {
+            MyWebApi
+                .Routes()
+                .ShouldMap("api/Note/GetNotesFromTodayCount")
+                .WithHttpMethod(HttpMethod.Get)
+                .To<NoteController>(a => a.GetNotesFromTodayCount());
+        }
+
+        [TestMethod]
+        public void GetCompletedNotesCountRoute()
+        {
+            MyWebApi
+                .Routes()
+                .ShouldMap("api/Note/GetCompletedNotesCount")
+                .WithHttpMethod(HttpMethod.Get)
+                .To<NoteController>(a => a.GetCompletedNotesCount());
+        }
+
+        [TestMethod]
+        public void GetNotesCountRoute()
+        {
+            MyWebApi
+                .Routes()
+                .ShouldMap("api/Note/GetNotesCount")
+                .WithHttpMethod(HttpMethod.Get)
+                .To<NoteController>(a => a.GetNotesCount());
+        }
+
+        [TestMethod]
+        public void GetNotesWithExparationDateCountRoute()
+        {
+            MyWebApi
+                .Routes()
+                .ShouldMap("api/Note/GetNotesWithExparationDateCount")
+                .WithHttpMethod(HttpMethod.Get)
+                .To<NoteController>(a => a.GetNotesWithExparationDateCount());
         }
     }
 }

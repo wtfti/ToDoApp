@@ -46,5 +46,15 @@
                 .WithHttpMethod(HttpMethod.Get)
                 .To<AccountController>(a => a.Background());
         }
+
+        [TestMethod]
+        public void IdentityRoute()
+        {
+            MyWebApi
+                .Routes()
+                .ShouldMap("api/Account/Identity")
+                .WithHttpMethod(HttpMethod.Get)
+                .To<AccountController>(a => a.Identity());
+        }
     }
 }

@@ -1,1 +1,1 @@
-
+With this application you can store private notes and also can share notes with friends(other users). You can edit already created notes, add a deadline when needed to be complete, customize your background, and other features.
